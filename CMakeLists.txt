@@ -4,22 +4,31 @@ project(opengl_boilerplate VERSION 1.0.0 LANGUAGES CXX)
 set(CMAKE_CXX_STANDARD 23)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
+# ----------------------------------------
 # GLFW
+# ----------------------------------------
 option(GLFW_BUILD_EXAMPLES OFF)
 option(GLFW_BUILD_TESTS OFF)
 option(GLFW_BUILD_DOCS OFF)
 option(GLFW_INSTALL OFF)
-
 add_subdirectory(third_party/glfw)
 
+# ----------------------------------------
+# GLAD
+# ----------------------------------------
+add_subdirectory(third_party/glad)
+
+# ----------------------------------------
 # Executable
+# ----------------------------------------
 add_executable(${PROJECT_NAME} src/main.cpp)
 
-# Linking
-target_link_libraries(${PROJECT_NAME} PRIVATE glfw)
+target_link_libraries(${PROJECT_NAME} PRIVATE
+  glfw
+  glad
+)
 
 if (APPLE)
-  find_library(OPEN_GL OpenGL)
   find_library(COCOA_LIBRARY Cocoa)
   find_library(IOKIT_LIBRARY IOKit)
   find_library(CORE_VIDEO_LIBRARY CoreVideo)

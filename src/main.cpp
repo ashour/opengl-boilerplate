@@ -1,10 +1,9 @@
-#ifdef __APPLE__
-#define GL_SILENCE_DEPRECATION
-#include <OpenGL/gl.h>
-#endif
+// clang-format off
+#include <glad/glad.h>
+// clang-format on
 #include <GLFW/glfw3.h>
-#include <OpenGL/OpenGL.h>
 #include <iostream>
+#include <ostream>
 
 int main()
 {
@@ -23,6 +22,12 @@ int main()
     }
 
     glfwMakeContextCurrent(window);
+
+    if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress))
+    {
+        std::cerr << "Failed to initialize GLAD" << std::endl;
+        return -1;
+    }
 
     while (!glfwWindowShouldClose(window))
     {
