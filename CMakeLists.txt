@@ -1,6 +1,33 @@
-cmake_minimum_required(VERSION 3.5)
+cmake_minimum_required(VERSION 3.15)
 project(opengl_boilerplate VERSION 1.0.0 LANGUAGES CXX)
 
 set(CMAKE_CXX_STANDARD 20)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
+# GLFW
+option(GLFW_BUILD_EXAMPLES OFF)
+option(GLFW_BUILD_TESTS OFF)
+option(GLFW_BUILD_DOCS OFF)
+option(GLFW_INSTALL OFF)
+
+add_subdirectory(third_party/glfw)
+
+# Executable
 add_executable(${PROJECT_NAME} src/main.cpp)
+
+# Linking
+target_link_libraries(${PROJECT_NAME} PRIVATE glfw)
+
+if (APPLE)
+  find_library(OPEN_GL OpenGL)
+  find_library(COCOA_LIBRARY Cocoa)
+  find_library(IOKIT_LIBRARY IOKit)
+  find_library(CORE_VIDEO_LIBRARY CoreVideo)
+
+  target_link_libraries(${PROJECT_NAME} PRIVATE
+    ${OPEN_GL}
+    ${COCOA_LIBRARY}
+    ${IOKIT_LIBRARY}
+    ${CORE_VIDEO_LIBRARY}
+  )
+endif()
