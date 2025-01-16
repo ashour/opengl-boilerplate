@@ -14,9 +14,10 @@ static constexpr std::string WINDOW_TITLE = "OpenGL Boilerplate";
 static constexpr unsigned int WINDOW_WIDTH = 480;
 static constexpr unsigned int WINDOW_HEIGHT = 480;
 
-static constexpr std::string VERTEX_SHADER_FILEPATH = "./shaders/default.vert";
-static constexpr std::string FRAGMENT_SHADER_FILEPATH =
-    "./shaders/default.frag";
+static constexpr const char* VERTEX_SHADER_FILEPATH =
+    "./resources/shaders/default.vert";
+static constexpr const char* FRAGMENT_SHADER_FILEPATH =
+    "./resources/shaders/default.frag";
 
 int main()
 {

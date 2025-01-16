@@ -22,7 +22,7 @@ add_subdirectory(third_party/glad)
 
 
 # ----------------------------------------
-# Executable
+# Executables
 # ----------------------------------------
 add_executable(${PROJECT_NAME}
   src/main.cpp
@@ -58,8 +58,11 @@ endif()
 # ----------------------------------------
 # Resources
 # ----------------------------------------
-add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
-  COMMAND ${CMAKE_COMMAND} -E copy_directory
-    ${CMAKE_CURRENT_SOURCE_DIR}/shaders
-    $<TARGET_FILE_DIR:${PROJECT_NAME}>/shaders
+add_custom_target(copy_resources ALL
+    COMMAND ${CMAKE_COMMAND} -E copy_directory
+        ${CMAKE_CURRENT_SOURCE_DIR}/resources
+        ${CMAKE_CURRENT_BINARY_DIR}/resources
+    COMMENT "Copying resources directory..."
 )
+
+add_dependencies(${PROJECT_NAME} copy_resources)
