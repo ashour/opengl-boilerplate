@@ -67,9 +67,9 @@ int main()
 
     // clang-format off
     float vertices[] = {
-        -0.5f, -0.413675f, 0.0f,
-         0.5f, -0.413675f, 0.0f,
-         0.0f,  0.45235f, 0.0f
+        -0.5f, -0.413675f, 0.0f, 176.0/255.0,  219.0/255.0, 67.0/255.0,
+         0.5f, -0.413675f, 0.0f,  84.0/255.0, 242.0/255.0, 242.0/255.0,
+         0.0f,  0.45235f,  0.0f, 239.0/255.0,  71.0/255.0, 111.0/255.0
     };
     // clang-format on
 
@@ -130,11 +130,19 @@ int main()
     }
 
     gldc(glVertexAttribPointer(
-        0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0));
+        0, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void*)0));
     gldc(glEnableVertexAttribArray(0));
+    gldc(glVertexAttribPointer(1,
+                               3,
+                               GL_FLOAT,
+                               GL_TRUE,
+                               6 * sizeof(float),
+                               (void*)(3 * sizeof(float))));
+    gldc(glEnableVertexAttribArray(1));
 
     while (!glfwWindowShouldClose(window))
     {
+        gldc(glClearColor(36.0 / 255.0, 22.0 / 255.0, 35 / 255.0, 1.0));
         gldc(glClear(GL_COLOR_BUFFER_BIT));
 
         gldc(glUseProgram(shader_program));
