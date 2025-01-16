@@ -22,6 +22,14 @@ add_subdirectory(third_party/glad)
 
 
 # ----------------------------------------
+# GLM
+# ----------------------------------------
+option(GLM_BUILD_TEST OFF)
+option(BUILD_SHARED_LIBS OFF)
+add_subdirectory(third_party/glm)
+
+
+# ----------------------------------------
 # Executables
 # ----------------------------------------
 add_executable(${PROJECT_NAME}
@@ -34,6 +42,7 @@ add_executable(${PROJECT_NAME}
 target_link_libraries(${PROJECT_NAME} PRIVATE
   glfw
   glad
+  glm
 )
 
 if (APPLE)

@@ -7,6 +7,7 @@
 #include "shader.h"
 #include "window.h"
 #include <GLFW/glfw3.h>
+#include <glm/vec4.hpp>
 #include <memory>
 #include <ostream>
 
@@ -77,7 +78,7 @@ int main()
         1, 3, GL_FLOAT, GL_TRUE, 6 * sizeof(float), (void*)(3 * sizeof(float))));
     gldc(glEnableVertexAttribArray(1));
 
-    window->set_clear_color(NCOLV(36.0), NCOLV(22.0), NCOLV(35), 1.0);
+    window->set_clear_color(glm::vec4{NCOLV(36.0), NCOLV(22.0), NCOLV(35), 1.0});
 
     while (!window->should_close())
     {

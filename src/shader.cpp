@@ -44,7 +44,7 @@ unsigned int Shader::create_shader(const GLenum type,
 {
     gldc(unsigned int shader = glCreateShader(type));
 
-    std::string source = file_to_string(filepath);
+    std::string source{file_to_string(filepath)};
     const char* source_cstr = source.c_str();
     gldc(glShaderSource(shader, 1, &source_cstr, nullptr));
 

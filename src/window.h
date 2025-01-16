@@ -1,6 +1,7 @@
 #pragma once
 
 #include "GLFW/glfw3.h"
+#include <glm/vec4.hpp>
 #include <stdexcept>
 #include <string>
 
@@ -18,7 +19,7 @@ class Window
     const int buffer_height() const { return _buffer_height; };
 
     bool should_close() const;
-    void set_clear_color(unsigned int r, unsigned int g, unsigned int b, unsigned int a) const;
+    void set_clear_color(const glm::vec4 color) const;
     void clear() const;
     void swap_buffers() const;
     void poll_events() const;
