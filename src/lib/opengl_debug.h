@@ -10,15 +10,15 @@
 #define DEBUG_BREAK __builtin_trap // Clang/GCC
 #endif
 
-#define ASSERT(x)                                                              \
-    if (!(x))                                                                  \
+#define ASSERT(x)                                                                                  \
+    if (!(x))                                                                                      \
         DEBUG_BREAK();
 
 // OpenGL debug call
 #if DEBUG
-#define gldc(x)                                                                \
-    _gl_clear_error();                                                         \
-    x;                                                                         \
+#define gldc(x)                                                                                    \
+    _gl_clear_error();                                                                             \
+    x;                                                                                             \
     ASSERT(_gl_log_call(#x, __FILE__, __LINE__))
 #else
 #define gldc(x) x
@@ -54,9 +54,8 @@ static bool _gl_log_call(const char* function, const char* file, int line)
 {
     while (GLenum errorCode = glGetError())
     {
-        std::cerr << "[OpenGL Error] (" << _gl_error_code_to_string(errorCode)
-                  << ") " << function << " " << file << ":" << line
-                  << std::endl;
+        std::cerr << "[OpenGL Error] (" << _gl_error_code_to_string(errorCode) << ") " << function
+                  << " " << file << ":" << line << std::endl;
         return false;
     }
     return true;

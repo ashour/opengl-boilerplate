@@ -14,6 +14,5 @@ std::string file_to_string(const std::string& file_path)
         return {};
     }
 
-    return std::string{std::istreambuf_iterator<char>{file},
-                       std::istreambuf_iterator<char>{}};
+    return std::string{std::istreambuf_iterator<char>{file}, std::istreambuf_iterator<char>{}};
 }
