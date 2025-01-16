@@ -18,6 +18,7 @@ add_subdirectory(third_party/glfw)
 # ----------------------------------------
 add_subdirectory(third_party/glad)
 
+
 # ----------------------------------------
 # Executable
 # ----------------------------------------
@@ -39,4 +40,12 @@ if (APPLE)
     ${IOKIT_LIBRARY}
     ${CORE_VIDEO_LIBRARY}
   )
+endif()
+
+
+# ----------------------------------------
+# Debug
+# ----------------------------------------
+if (CMAKE_BUILD_TYPE STREQUAL "Debug")
+  add_compile_definitions(DEBUG)
 endif()

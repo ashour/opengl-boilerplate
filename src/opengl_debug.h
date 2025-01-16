@@ -5,20 +5,24 @@
 #include <string>
 
 #ifdef _MSC_VER
-#define DEBUG_BREAK __debugbreak() // MSVC
+#define DEBUG_BREAK __debugbreak // MSVC
 #else
-#define DEBUG_BREAK __builtin_trap() // Clang/GCC
+#define DEBUG_BREAK __builtin_trap // Clang/GCC
 #endif
 
-#define ASSERT(x)                                                                                  \
-    if (!(x))                                                                                      \
-        DEBUG_BREAK;
+#define ASSERT(x)                                                              \
+    if (!(x))                                                                  \
+        DEBUG_BREAK();
 
 // OpenGL debug call
-#define gldc(x)                                                                                    \
-    _gl_clear_error();                                                                             \
-    x;                                                                                             \
+#if DEBUG
+#define gldc(x)                                                                \
+    _gl_clear_error();                                                         \
+    x;                                                                         \
     ASSERT(_gl_log_call(#x, __FILE__, __LINE__))
+#else
+#define gldc(x) x
+#endif
 
 static void _gl_clear_error()
 {
@@ -50,8 +54,9 @@ static bool _gl_log_call(const char *function, const char *file, int line)
 {
     while (GLenum errorCode = glGetError())
     {
-        std::cerr << "[OpenGL Error] (" << _gl_error_code_to_string(errorCode) << ") " << function
-                  << " " << file << ":" << line << std::endl;
+        std::cerr << "[OpenGL Error] (" << _gl_error_code_to_string(errorCode)
+                  << ") " << function << " " << file << ":" << line
+                  << std::endl;
         return false;
     }
     return true;
