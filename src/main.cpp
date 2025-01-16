@@ -22,7 +22,7 @@ static constexpr const char* FRAGMENT_SHADER_FILEPATH = "./resources/shaders/def
 
 int main()
 {
-    LOG_T("=== Main Start ===");
+    LOG_H("Main Start");
 
     std::unique_ptr<Window> window;
 
@@ -37,7 +37,7 @@ int main()
         return -1;
     }
 
-    LOG_T("=== Initialization Complete ===");
+    LOG_H("Initialization Complete");
     LOG("OpenGL version " << window->opengl_version());
 
     // clang-format off
