@@ -1,6 +1,7 @@
 // clang-format off
 #include <glad/glad.h>
 // clang-format on
+#include "lib/color.h"
 #include "lib/file_to_string.h"
 #include "lib/opengl_debug.h"
 #include <GLFW/glfw3.h>
@@ -65,15 +66,15 @@ int main()
 
     // clang-format off
     float vertices[] = {
-        -0.5f, -0.5f, 0.0f, 176.0/255.0, 219.0/255.0,  67.0/255.0,
-         0.5f, -0.5f, 0.0f, 255.0/255.0, 181.0/255.0,  99.0/255.0,
-         0.5f,  0.5f, 0.0f, 239.0/255.0,  71.0/255.0, 111.0/255.0,
-        -0.5f,  0.5f, 0.0f,  84.0/255.0, 242.0/255.0, 242.0/255.0,
+        -0.5f, -0.5f, 0.0f, NCOLV(239.0),  NCOLV(71.0), NCOLV(111.0),
+         0.5f, -0.5f, 0.0f, NCOLV(255.0), NCOLV(181.0),  NCOLV(99.0),
+         0.5f,  0.5f, 0.0f, NCOLV(176.0), NCOLV(219.0),  NCOLV(67.0),
+        -0.5f,  0.5f, 0.0f,  NCOLV(84.0), NCOLV(242.0), NCOLV(242.0),
     };
 
     unsigned int indices[] = {
         0, 1, 2,
-        2, 0, 3
+        2, 3, 0
     };
     // clang-format on
 
@@ -140,7 +141,7 @@ int main()
 
     while (!glfwWindowShouldClose(window))
     {
-        gldc(glClearColor(36.0 / 255.0, 22.0 / 255.0, 35 / 255.0, 1.0));
+        gldc(glClearColor(NCOLV(36.0), NCOLV(22.0), NCOLV(35), 1.0));
         gldc(glClear(GL_COLOR_BUFFER_BIT));
 
         gldc(glUseProgram(shader_program));
