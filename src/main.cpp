@@ -1,6 +1,7 @@
 // clang-format off
 #include <glad/glad.h>
 // clang-format on
+#include "file_to_string.h"
 #include "opengl_debug.h"
 #include <GLFW/glfw3.h>
 #include <iostream>
@@ -9,31 +10,12 @@
 static constexpr unsigned int OPENGL_MAJOR_VERSION = 4;
 static constexpr unsigned int OPENGL_MINOR_VERSION = 1;
 
-static const char *WINDOW_TITLE = "OpenGL Boilerplate";
+static constexpr std::string WINDOW_TITLE = "OpenGL Boilerplate";
 static constexpr unsigned int WINDOW_WIDTH = 480;
 static constexpr unsigned int WINDOW_HEIGHT = 480;
 
-const char *vertex_shader_source = R"(
-#version 410 core
-
-layout (location = 0) in vec3 i_position;
-
-void main()
-{
-  gl_Position = vec4(i_position.x, i_position.y, i_position.z, 1.0);
-}
-)";
-
-const char *fragment_shader_source = R"(
-#version 410 core
-
-out vec4 o_color;
-
-void main()
-{
-  o_color = vec4(1.0f, 0.5f, 0.2f, 1.0f);
-}
-)";
+static constexpr std::string VERTEX_SHADER_FILEPATH = "./shaders/default.vert";
+static constexpr std::string FRAGMENT_SHADER_FILEPATH = "./shaders/default.frag";
 
 int main()
 {
@@ -55,7 +37,7 @@ int main()
 #endif
 
     GLFWwindow *window =
-        glfwCreateWindow(WINDOW_WIDTH, WINDOW_HEIGHT, WINDOW_TITLE, nullptr, nullptr);
+        glfwCreateWindow(WINDOW_WIDTH, WINDOW_HEIGHT, WINDOW_TITLE.c_str(), nullptr, nullptr);
     if (!window)
     {
         std::cerr << "Failed to create GLFW window" << std::endl;
@@ -99,7 +81,10 @@ int main()
     gldc(glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW));
 
     gldc(unsigned int vertex_shader = glCreateShader(GL_VERTEX_SHADER));
-    gldc(glShaderSource(vertex_shader, 1, &vertex_shader_source, nullptr));
+
+    std::string vertex_shader_source = file_to_string(VERTEX_SHADER_FILEPATH);
+    const char *vertex_shader_source_cstr = vertex_shader_source.c_str();
+    gldc(glShaderSource(vertex_shader, 1, &vertex_shader_source_cstr, nullptr));
     gldc(glCompileShader(vertex_shader));
 
     int success;
@@ -112,7 +97,9 @@ int main()
     }
 
     gldc(unsigned int fragment_shader = glCreateShader(GL_FRAGMENT_SHADER));
-    gldc(glShaderSource(fragment_shader, 1, &fragment_shader_source, nullptr));
+    std::string fragment_shader_source = file_to_string(FRAGMENT_SHADER_FILEPATH);
+    const char *fragment_shader_source_cstr = fragment_shader_source.c_str();
+    gldc(glShaderSource(fragment_shader, 1, &fragment_shader_source_cstr, nullptr));
     gldc(glCompileShader(fragment_shader));
 
     gldc(glGetShaderiv(fragment_shader, GL_COMPILE_STATUS, &success));

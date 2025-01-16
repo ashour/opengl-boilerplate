@@ -4,6 +4,7 @@ project(opengl_boilerplate VERSION 1.0.0 LANGUAGES CXX)
 set(CMAKE_CXX_STANDARD 23)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
+
 # ----------------------------------------
 # GLFW
 # ----------------------------------------
@@ -12,6 +13,7 @@ option(GLFW_BUILD_TESTS OFF)
 option(GLFW_BUILD_DOCS OFF)
 option(GLFW_INSTALL OFF)
 add_subdirectory(third_party/glfw)
+
 
 # ----------------------------------------
 # GLAD
@@ -35,7 +37,6 @@ if (APPLE)
   find_library(CORE_VIDEO_LIBRARY CoreVideo)
 
   target_link_libraries(${PROJECT_NAME} PRIVATE
-    ${OPEN_GL}
     ${COCOA_LIBRARY}
     ${IOKIT_LIBRARY}
     ${CORE_VIDEO_LIBRARY}
@@ -49,3 +50,13 @@ endif()
 if (CMAKE_BUILD_TYPE STREQUAL "Debug")
   add_compile_definitions(DEBUG)
 endif()
+
+
+# ----------------------------------------
+# Resources
+# ----------------------------------------
+add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
+  COMMAND ${CMAKE_COMMAND} -E copy_directory
+    ${CMAKE_CURRENT_SOURCE_DIR}/shaders
+    $<TARGET_FILE_DIR:${PROJECT_NAME}>/shaders
+)
