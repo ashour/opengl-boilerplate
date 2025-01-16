@@ -50,7 +50,7 @@ static std::string _gl_error_code_to_string(const GLenum errorCode)
     }
 }
 
-static bool _gl_log_call(const char *function, const char *file, int line)
+static bool _gl_log_call(const char* function, const char* file, int line)
 {
     while (GLenum errorCode = glGetError())
     {

@@ -6,7 +6,7 @@
 #include <ostream>
 #include <string>
 
-inline std::string file_to_string(const std::string &file_path)
+inline std::string file_to_string(const std::string& file_path)
 {
     std::ifstream file{file_path};
     if (!file.is_open())
@@ -15,5 +15,6 @@ inline std::string file_to_string(const std::string &file_path)
         return {};
     }
 
-    return std::string{std::istreambuf_iterator<char>{file}, std::istreambuf_iterator<char>{}};
+    return std::string{std::istreambuf_iterator<char>{file},
+                       std::istreambuf_iterator<char>{}};
 }

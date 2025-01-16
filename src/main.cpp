@@ -15,7 +15,8 @@ static constexpr unsigned int WINDOW_WIDTH = 480;
 static constexpr unsigned int WINDOW_HEIGHT = 480;
 
 static constexpr std::string VERTEX_SHADER_FILEPATH = "./shaders/default.vert";
-static constexpr std::string FRAGMENT_SHADER_FILEPATH = "./shaders/default.frag";
+static constexpr std::string FRAGMENT_SHADER_FILEPATH =
+    "./shaders/default.frag";
 
 int main()
 {
@@ -36,8 +37,8 @@ int main()
     glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
 #endif
 
-    GLFWwindow *window =
-        glfwCreateWindow(WINDOW_WIDTH, WINDOW_HEIGHT, WINDOW_TITLE.c_str(), nullptr, nullptr);
+    GLFWwindow* window = glfwCreateWindow(
+        WINDOW_WIDTH, WINDOW_HEIGHT, WINDOW_TITLE.c_str(), nullptr, nullptr);
     if (!window)
     {
         std::cerr << "Failed to create GLFW window" << std::endl;
@@ -78,12 +79,13 @@ int main()
     unsigned int VBO;
     gldc(glGenBuffers(1, &VBO));
     gldc(glBindBuffer(GL_ARRAY_BUFFER, VBO));
-    gldc(glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW));
+    gldc(glBufferData(
+        GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW));
 
     gldc(unsigned int vertex_shader = glCreateShader(GL_VERTEX_SHADER));
 
     std::string vertex_shader_source = file_to_string(VERTEX_SHADER_FILEPATH);
-    const char *vertex_shader_source_cstr = vertex_shader_source.c_str();
+    const char* vertex_shader_source_cstr = vertex_shader_source.c_str();
     gldc(glShaderSource(vertex_shader, 1, &vertex_shader_source_cstr, nullptr));
     gldc(glCompileShader(vertex_shader));
 
@@ -93,20 +95,24 @@ int main()
     if (!success)
     {
         gldc(glGetShaderInfoLog(vertex_shader, 512, nullptr, info_log));
-        std::cerr << "Failed to compile vertex shader: " << info_log << std::endl;
+        std::cerr << "Failed to compile vertex shader: " << info_log
+                  << std::endl;
     }
 
     gldc(unsigned int fragment_shader = glCreateShader(GL_FRAGMENT_SHADER));
-    std::string fragment_shader_source = file_to_string(FRAGMENT_SHADER_FILEPATH);
-    const char *fragment_shader_source_cstr = fragment_shader_source.c_str();
-    gldc(glShaderSource(fragment_shader, 1, &fragment_shader_source_cstr, nullptr));
+    std::string fragment_shader_source =
+        file_to_string(FRAGMENT_SHADER_FILEPATH);
+    const char* fragment_shader_source_cstr = fragment_shader_source.c_str();
+    gldc(glShaderSource(
+        fragment_shader, 1, &fragment_shader_source_cstr, nullptr));
     gldc(glCompileShader(fragment_shader));
 
     gldc(glGetShaderiv(fragment_shader, GL_COMPILE_STATUS, &success));
     if (!success)
     {
         gldc(glGetShaderInfoLog(fragment_shader, 512, nullptr, info_log));
-        std::cerr << "Failed to compile fragment shader: " << info_log << std::endl;
+        std::cerr << "Failed to compile fragment shader: " << info_log
+                  << std::endl;
     }
 
     gldc(unsigned int shader_program = glCreateProgram());
@@ -118,10 +124,12 @@ int main()
     if (!success)
     {
         gldc(glGetShaderInfoLog(shader_program, 512, nullptr, info_log));
-        std::cerr << "Failed to attach or link shaders to program: " << info_log << std::endl;
+        std::cerr << "Failed to attach or link shaders to program: " << info_log
+                  << std::endl;
     }
 
-    gldc(glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void *)0));
+    gldc(glVertexAttribPointer(
+        0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0));
     gldc(glEnableVertexAttribArray(0));
 
     while (!glfwWindowShouldClose(window))
