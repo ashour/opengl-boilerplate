@@ -1,8 +1,8 @@
 // clang-format off
 #include <glad/glad.h>
 // clang-format on
-#include "file_to_string.h"
-#include "opengl_debug.h"
+#include "lib/file_to_string.h"
+#include "lib/opengl_debug.h"
 #include <GLFW/glfw3.h>
 #include <iostream>
 #include <ostream>
