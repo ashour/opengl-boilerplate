@@ -6,6 +6,13 @@
 #include <iostream>
 #include <ostream>
 
+static constexpr unsigned int OPENGL_MAJOR_VERSION = 4;
+static constexpr unsigned int OPENGL_MINOR_VERSION = 1;
+
+static const char *WINDOW_TITLE = "OpenGL Boilerplate";
+static constexpr unsigned int WINDOW_WIDTH = 480;
+static constexpr unsigned int WINDOW_HEIGHT = 480;
+
 const char *vertex_shader_source = R"(
 #version 410 core
 
@@ -38,8 +45,8 @@ int main()
         return -1;
     }
 
-    glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
-    glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 1);
+    glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, OPENGL_MAJOR_VERSION);
+    glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, OPENGL_MINOR_VERSION);
     glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 
 #ifdef __APPLE__
@@ -47,7 +54,8 @@ int main()
     glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
 #endif
 
-    GLFWwindow *window = glfwCreateWindow(960, 540, "OpenGL Boilerplate", nullptr, nullptr);
+    GLFWwindow *window =
+        glfwCreateWindow(WINDOW_WIDTH, WINDOW_HEIGHT, WINDOW_TITLE, nullptr, nullptr);
     if (!window)
     {
         std::cerr << "Failed to create GLFW window" << std::endl;
@@ -68,11 +76,16 @@ int main()
     std::cout << std::endl << "=== INITIALIZATION COMPLETE ===" << std::endl;
     std::cout << "OpenGL version " << glGetString(GL_VERSION) << std::endl;
 
+    int buffer_width;
+    int buffer_height;
+    glfwGetFramebufferSize(window, &buffer_width, &buffer_height);
+    gldc(glViewport(0, 0, buffer_width, buffer_height));
+
     // clang-format off
     float vertices[] = {
-        0.0f,  0.5f, 0.0f,
-       -0.5f, -0.5f, 0.0f,
-        0.5f, -0.5f, 0.0f
+        -0.5f, -0.413675f, 0.0f,
+         0.5f, -0.413675f, 0.0f,
+         0.0f,  0.45235f, 0.0f
     };
     // clang-format on
 
