@@ -2,9 +2,9 @@
 #include <glad/glad.h>
 // clang-format on
 #include "GLFW/glfw3.h"
+#include "lib/log.h"
 #include "lib/opengl_debug.h"
 #include "window.h"
-#include <iostream>
 
 Window::Window(const unsigned int width,
                const unsigned int height,
@@ -22,7 +22,7 @@ Window::Window(const unsigned int width,
     glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 
 #ifdef __APPLE__
-    std::cout << "Apple env detected" << std::endl;
+    LOG("Apple environment detected");
     glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
 #endif
 

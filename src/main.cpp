@@ -3,10 +3,10 @@
 // clang-format on
 #include "lib/color.h"
 #include "lib/file_to_string.h"
+#include "lib/log.h"
 #include "lib/opengl_debug.h"
 #include "window.h"
 #include <GLFW/glfw3.h>
-#include <iostream>
 #include <memory>
 #include <ostream>
 
@@ -22,7 +22,7 @@ static constexpr const char* FRAGMENT_SHADER_FILEPATH = "./resources/shaders/def
 
 int main()
 {
-    std::cout << std::endl << "=== MAIN START ===" << std::endl;
+    LOG_T("=== Main Start ===");
 
     std::unique_ptr<Window> window;
 
@@ -33,12 +33,12 @@ int main()
     }
     catch (const WindowException& e)
     {
-        std::cerr << e.what() << std::endl;
+        LOG_ERR(e.what());
         return -1;
     }
 
-    std::cout << std::endl << "=== INITIALIZATION COMPLETE ===" << std::endl;
-    std::cout << "OpenGL version " << window->opengl_version() << std::endl;
+    LOG_T("=== Initialization Complete ===");
+    LOG("OpenGL version " << window->opengl_version());
 
     // clang-format off
     float vertices[] = {
@@ -81,7 +81,7 @@ int main()
     if (!success)
     {
         gldc(glGetShaderInfoLog(vertex_shader, 512, nullptr, info_log));
-        std::cerr << "Failed to compile vertex shader: " << info_log << std::endl;
+        LOG_ERR("Failed to compile vertex shader: " << info_log);
     }
 
     gldc(unsigned int fragment_shader = glCreateShader(GL_FRAGMENT_SHADER));
@@ -94,7 +94,7 @@ int main()
     if (!success)
     {
         gldc(glGetShaderInfoLog(fragment_shader, 512, nullptr, info_log));
-        std::cerr << "Failed to compile fragment shader: " << info_log << std::endl;
+        LOG_ERR("Failed to compile fragment shader: " << info_log);
     }
 
     gldc(unsigned int shader_program = glCreateProgram());
@@ -106,7 +106,7 @@ int main()
     if (!success)
     {
         gldc(glGetShaderInfoLog(shader_program, 512, nullptr, info_log));
-        std::cerr << "Failed to attach or link shaders to program: " << info_log << std::endl;
+        LOG_ERR("Failed to attach or link shaders to program: " << info_log);
     }
 
     gldc(glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void*)0));

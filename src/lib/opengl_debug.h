@@ -1,5 +1,6 @@
 #pragma once
 
+#include "log.h"
 #include <glad/glad.h>
 #include <iostream>
 #include <string>
@@ -54,8 +55,8 @@ static bool _gl_log_call(const char* function, const char* file, int line)
 {
     while (GLenum errorCode = glGetError())
     {
-        std::cerr << "[OpenGL Error] (" << _gl_error_code_to_string(errorCode) << ") " << function
-                  << " " << file << ":" << line << std::endl;
+        LOG_ERR("[OpenGL Error] (" << _gl_error_code_to_string(errorCode) << ") " << function << " "
+                                   << file << ":" << line);
         return false;
     }
     return true;
