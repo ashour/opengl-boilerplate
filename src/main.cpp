@@ -4,8 +4,10 @@
 #include "lib/color.h"
 #include "lib/file_to_string.h"
 #include "lib/opengl_debug.h"
+#include "window.h"
 #include <GLFW/glfw3.h>
 #include <iostream>
+#include <memory>
 #include <ostream>
 
 static constexpr unsigned int OPENGL_MAJOR_VERSION = 4;
@@ -22,47 +24,21 @@ int main()
 {
     std::cout << std::endl << "=== MAIN START ===" << std::endl;
 
-    if (!glfwInit())
+    std::unique_ptr<Window> window;
+
+    try
     {
-        std::cerr << "Failed to initialize GLFW" << std::endl;
-        return -1;
+        window = std::unique_ptr<Window>{new Window{
+            WINDOW_WIDTH, WINDOW_HEIGHT, WINDOW_TITLE, OPENGL_MAJOR_VERSION, OPENGL_MINOR_VERSION}};
     }
-
-    glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, OPENGL_MAJOR_VERSION);
-    glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, OPENGL_MINOR_VERSION);
-    glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
-
-#ifdef __APPLE__
-    std::cout << "Apple env detected" << std::endl;
-    glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
-#endif
-
-    GLFWwindow* window =
-        glfwCreateWindow(WINDOW_WIDTH, WINDOW_HEIGHT, WINDOW_TITLE.c_str(), nullptr, nullptr);
-    if (!window)
+    catch (const WindowException& e)
     {
-        std::cerr << "Failed to create GLFW window" << std::endl;
-        glfwTerminate();
-        return -1;
-    }
-
-    glfwMakeContextCurrent(window);
-
-    if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress))
-    {
-        std::cerr << "Failed to initialize GLAD" << std::endl;
-        glfwDestroyWindow(window);
-        glfwTerminate();
+        std::cerr << e.what() << std::endl;
         return -1;
     }
 
     std::cout << std::endl << "=== INITIALIZATION COMPLETE ===" << std::endl;
-    std::cout << "OpenGL version " << glGetString(GL_VERSION) << std::endl;
-
-    int buffer_width;
-    int buffer_height;
-    glfwGetFramebufferSize(window, &buffer_width, &buffer_height);
-    gldc(glViewport(0, 0, buffer_width, buffer_height));
+    std::cout << "OpenGL version " << window->opengl_version() << std::endl;
 
     // clang-format off
     float vertices[] = {
@@ -139,22 +115,20 @@ int main()
         1, 3, GL_FLOAT, GL_TRUE, 6 * sizeof(float), (void*)(3 * sizeof(float))));
     gldc(glEnableVertexAttribArray(1));
 
-    while (!glfwWindowShouldClose(window))
+    window->set_clear_color(NCOLV(36.0), NCOLV(22.0), NCOLV(35), 1.0);
+
+    while (!window->should_close())
     {
-        gldc(glClearColor(NCOLV(36.0), NCOLV(22.0), NCOLV(35), 1.0));
-        gldc(glClear(GL_COLOR_BUFFER_BIT));
+        window->clear();
 
         gldc(glUseProgram(shader_program));
         gldc(glBindVertexArray(VAO));
         gldc(glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO));
         gldc(glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0));
 
-        glfwSwapBuffers(window);
-
-        glfwPollEvents();
+        window->swap_buffers();
+        window->poll_events();
     }
 
-    glfwDestroyWindow(window);
-    glfwTerminate();
     return 0;
 }
