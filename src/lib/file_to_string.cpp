@@ -5,12 +5,12 @@
 #include <ostream>
 #include <string>
 
-std::string file_to_string(const std::string& file_path)
+std::string file_to_string(const std::string& filepath)
 {
-    std::ifstream file{file_path};
+    std::ifstream file{filepath};
     if (!file.is_open())
     {
-        std::cerr << "Could not open file (" << file_path << ")" << std::endl;
+        std::cerr << "Could not open file (" << filepath << ")" << std::endl;
         return {};
     }
 

@@ -27,6 +27,7 @@ add_subdirectory(third_party/glad)
 add_executable(${PROJECT_NAME}
   src/main.cpp
   src/lib/file_to_string.cpp
+  src/shader.cpp
   src/window.cpp
 )
 
