@@ -3,8 +3,8 @@
 #include "lib/opengl_debug.h"
 #include "shader.h"
 #include <glad/glad.h>
-#include <glm/gtc/type_ptr.hpp>
-#include <glm/mat4x4.hpp>
+#include <glm/ext.hpp>
+#include <glm/glm.hpp>
 #include <string>
 
 Shader::Shader(const std::string& vertex_shader_filepath,

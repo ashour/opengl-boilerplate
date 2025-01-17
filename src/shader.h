@@ -1,7 +1,7 @@
 #pragma once
 
-#include "glm/ext/matrix_float4x4.hpp"
 #include <glad/glad.h>
+#include <glm/glm.hpp>
 #include <string>
 
 class Shader

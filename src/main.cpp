@@ -1,17 +1,14 @@
 // clang-format off
 #include <glad/glad.h>
 // clang-format on
-#include "glm/trigonometric.hpp"
 #include "lib/color.h"
 #include "lib/log.h"
 #include "lib/opengl_debug.h"
 #include "shader.h"
 #include "window.h"
 #include <GLFW/glfw3.h>
-#include <glm/ext/matrix_clip_space.hpp>
-#include <glm/gtc/matrix_transform.hpp>
-#include <glm/gtc/type_ptr.hpp>
-#include <glm/vec4.hpp>
+#include <glm/ext.hpp>
+#include <glm/glm.hpp>
 
 static constexpr unsigned int OPENGL_MAJOR_VERSION = 4;
 static constexpr unsigned int OPENGL_MINOR_VERSION = 1;
@@ -111,10 +108,6 @@ int main()
     unsigned int u_view = shader.uniform_location_for("u_view");
     unsigned int u_projection = shader.uniform_location_for("u_projection");
 
-    glm::mat4 view{1.0f};
-    view = glm::translate(view, glm::vec3{0.0f, 0.0f, -4.5f});
-    shader.set_uniform_mat4(u_view, view);
-
     glm::mat4 projection{
         glm::perspective(glm::radians(45.0f),
                          (float)window->buffer_width() / (float)window->buffer_height(),
@@ -123,11 +116,20 @@ int main()
     shader.set_uniform_mat4(u_projection, projection);
     Shader::unuse_all();
 
+    const float camera_radius = 10.0f;
+
     while (!window->should_close())
     {
         window->clear();
 
         shader.use();
+
+        glm::mat4 view{1.0f};
+        float camera_x = glm::sin(glfwGetTime()) * camera_radius;
+        float camera_z = glm::cos(glfwGetTime()) * camera_radius;
+        view = glm::lookAt(
+            glm::vec3(camera_x, 0.0, camera_z), glm::vec3(0.0f), glm::vec3(0.0f, 1.0f, 0.0f));
+        shader.set_uniform_mat4(u_view, view);
 
         glm::mat4 model{1.0f};
         model = glm::rotate(
@@ -136,6 +138,14 @@ int main()
 
         gldc(glBindVertexArray(VAO));
         gldc(glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO));
+        gldc(glDrawElements(GL_TRIANGLES, 36, GL_UNSIGNED_INT, 0));
+
+        model = {1.0f};
+        model = glm::translate(model, glm::vec3{2.0f, 0.0, 0.0});
+        model = glm::rotate(
+            model, (float)glfwGetTime() * glm::radians(50.0f), glm::vec3(0.5f, 1.0f, 0.0f));
+        shader.set_uniform_mat4(u_model, model);
+
         gldc(glDrawElements(GL_TRIANGLES, 36, GL_UNSIGNED_INT, 0));
 
         window->swap_buffers();

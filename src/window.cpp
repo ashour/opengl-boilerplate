@@ -1,10 +1,10 @@
 // clang-format off
 #include <glad/glad.h>
 // clang-format on
-#include "GLFW/glfw3.h"
 #include "lib/log.h"
 #include "lib/opengl_debug.h"
 #include "window.h"
+#include <GLFW/glfw3.h>
 #include <glm/vec4.hpp>
 
 Window::Window(const unsigned int width,
@@ -60,7 +60,7 @@ void Window::set_clear_color(const glm::vec4 color) const
     gldc(glClearColor(color.r, color.g, color.b, color.a));
 }
 
-void Window::clear() const { gldc(glClear(GL_COLOR_BUFFER_BIT)); }
+void Window::clear() const { gldc(glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT)); }
 
 void Window::swap_buffers() const { glfwSwapBuffers(_glfw_window); }
 

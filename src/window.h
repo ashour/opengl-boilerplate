@@ -1,7 +1,7 @@
 #pragma once
 
-#include "GLFW/glfw3.h"
-#include <glm/vec4.hpp>
+#include <GLFW/glfw3.h>
+#include <glm/glm.hpp>
 #include <stdexcept>
 #include <string>
 
