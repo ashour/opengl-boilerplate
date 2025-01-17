@@ -45,15 +45,37 @@ int main()
 
     // clang-format off
     float vertices[] = {
-        -0.5f, -0.5f, 0.0f, NCOLV(239.0),  NCOLV(71.0), NCOLV(111.0),
-         0.5f, -0.5f, 0.0f, NCOLV(255.0), NCOLV(181.0),  NCOLV(99.0),
-         0.5f,  0.5f, 0.0f, NCOLV(176.0), NCOLV(219.0),  NCOLV(67.0),
-        -0.5f,  0.5f, 0.0f,  NCOLV(84.0), NCOLV(242.0), NCOLV(242.0),
+        // Front face
+        -0.5f, -0.5f,  0.5f,  (float)rand()/RAND_MAX, (float)rand()/RAND_MAX, (float)rand()/RAND_MAX, // 0
+         0.5f, -0.5f,  0.5f,  (float)rand()/RAND_MAX, (float)rand()/RAND_MAX, (float)rand()/RAND_MAX, // 1
+         0.5f,  0.5f,  0.5f,  (float)rand()/RAND_MAX, (float)rand()/RAND_MAX, (float)rand()/RAND_MAX, // 2
+        -0.5f,  0.5f,  0.5f,  (float)rand()/RAND_MAX, (float)rand()/RAND_MAX, (float)rand()/RAND_MAX, // 3
+        // Back face
+        -0.5f, -0.5f, -0.5f,  (float)rand()/RAND_MAX, (float)rand()/RAND_MAX, (float)rand()/RAND_MAX, // 4
+         0.5f, -0.5f, -0.5f,  (float)rand()/RAND_MAX, (float)rand()/RAND_MAX, (float)rand()/RAND_MAX, // 5
+         0.5f,  0.5f, -0.5f,  (float)rand()/RAND_MAX, (float)rand()/RAND_MAX, (float)rand()/RAND_MAX, // 6
+        -0.5f,  0.5f, -0.5f,  (float)rand()/RAND_MAX, (float)rand()/RAND_MAX, (float)rand()/RAND_MAX  // 7
     };
 
     unsigned int indices[] = {
+        // Front
         0, 1, 2,
-        2, 3, 0
+        2, 3, 0,
+        // Right
+        1, 5, 6,
+        6, 2, 1,
+        // Back
+        7, 6, 5,
+        5, 4, 7,
+        // Left
+        4, 0, 3,
+        3, 7, 4,
+        // Top
+        3, 2, 6,
+        6, 7, 3,
+        // Bottom
+        4, 5, 1,
+        1, 0, 4
     };
     // clang-format on
 
@@ -97,11 +119,12 @@ int main()
         shader.use();
 
         glm::mat4 model{1.0f};
-        model = glm::rotate(model, glm::radians(-65.0f), glm::vec3(1.0f, 0.0f, 0.0f));
+        model = glm::rotate(
+            model, (float)glfwGetTime() * glm::radians(50.0f), glm::vec3(0.5f, 1.0f, 0.0f));
         shader.set_uniform_mat4(u_model, model);
 
         glm::mat4 view{1.0f};
-        view = glm::translate(view, glm::vec3{0.0f, -0.25f, -3.0f});
+        view = glm::translate(view, glm::vec3{0.0f, 0.0f, -4.5f});
         shader.set_uniform_mat4(u_view, view);
 
         glm::mat4 projection{
@@ -113,7 +136,7 @@ int main()
 
         gldc(glBindVertexArray(VAO));
         gldc(glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO));
-        gldc(glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0));
+        gldc(glDrawElements(GL_TRIANGLES, 36, GL_UNSIGNED_INT, 0));
 
         window->swap_buffers();
         window->poll_events();
