@@ -7,16 +7,16 @@
 #include "shader.h"
 #include "window.h"
 #include <GLFW/glfw3.h>
+#include <glm/gtc/matrix_transform.hpp>
+#include <glm/gtc/type_ptr.hpp>
 #include <glm/vec4.hpp>
-#include <memory>
-#include <ostream>
 
 static constexpr unsigned int OPENGL_MAJOR_VERSION = 4;
 static constexpr unsigned int OPENGL_MINOR_VERSION = 1;
 
 static constexpr std::string WINDOW_TITLE = "OpenGL Boilerplate";
-static constexpr unsigned int WINDOW_WIDTH = 480;
-static constexpr unsigned int WINDOW_HEIGHT = 480;
+static constexpr unsigned int WINDOW_WIDTH = 640;
+static constexpr unsigned int WINDOW_HEIGHT = 640;
 
 static constexpr const char* VERTEX_SHADER_FILEPATH = "./resources/shaders/default.vert";
 static constexpr const char* FRAGMENT_SHADER_FILEPATH = "./resources/shaders/default.frag";
@@ -72,6 +72,8 @@ int main()
     Shader shader(VERTEX_SHADER_FILEPATH, FRAGMENT_SHADER_FILEPATH);
     shader.build();
 
+    shader.use();
+
     gldc(glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void*)0));
     gldc(glEnableVertexAttribArray(0));
     gldc(glVertexAttribPointer(
@@ -85,6 +87,11 @@ int main()
         window->clear();
 
         shader.use();
+        glm::mat4 transform{1.0f};
+        transform = glm::scale(transform, glm::vec3(0.5f, 0.5f, 0.5f));
+        transform = glm::rotate(transform, (float)glfwGetTime(), glm::vec3(0.0f, 0.0f, 1.0f));
+        unsigned int u_transform = shader.uniform_location_for("transform");
+        shader.set_uniform_mat4(u_transform, transform);
 
         gldc(glBindVertexArray(VAO));
         gldc(glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO));

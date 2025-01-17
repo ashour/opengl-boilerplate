@@ -3,6 +3,8 @@
 #include "lib/opengl_debug.h"
 #include "shader.h"
 #include <glad/glad.h>
+#include <glm/gtc/type_ptr.hpp>
+#include <glm/mat4x4.hpp>
 #include <string>
 
 Shader::Shader(const std::string& vertex_shader_filepath,
@@ -36,6 +38,19 @@ void Shader::build()
 }
 
 void Shader::use() const { gldc(glUseProgram(_shader_program)); }
+
+void Shader::unuse_all() { gldc(glUseProgram(0)); }
+
+unsigned int Shader::uniform_location_for(const std::string& variable) const
+{
+    gldc(unsigned int name = glGetUniformLocation(_shader_program, variable.c_str()));
+    return name;
+}
+
+void Shader::set_uniform_mat4(const unsigned int location, const glm::mat4 value) const
+{
+    gldc(glUniformMatrix4fv(location, 1, GL_FALSE, glm::value_ptr(value)))
+}
 
 unsigned int Shader::create_shader(const GLenum type,
                                    const std::string& filepath,

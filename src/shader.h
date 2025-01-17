@@ -1,5 +1,6 @@
 #pragma once
 
+#include "glm/ext/matrix_float4x4.hpp"
 #include <glad/glad.h>
 #include <string>
 
@@ -11,6 +12,11 @@ class Shader
 
     void build();
     void use() const;
+    static void unuse_all();
+
+    unsigned int uniform_location_for(const std::string& variable) const;
+
+    void set_uniform_mat4(const unsigned int location, const glm::mat4 value) const;
 
   private:
     const std::string _vertex_shader_filepath;
