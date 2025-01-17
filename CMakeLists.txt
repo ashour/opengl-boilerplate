@@ -36,8 +36,10 @@ add_executable(${PROJECT_NAME}
   src/main.cpp
   src/lib/file_to_string.cpp
   src/shader.cpp
-  src/window.cpp
+  src/system/window.cpp
 )
+
+target_include_directories(${PROJECT_NAME} PRIVATE src)
 
 target_link_libraries(${PROJECT_NAME} PRIVATE
   glfw

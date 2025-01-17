@@ -5,7 +5,7 @@
 #include "lib/log.h"
 #include "lib/opengl_debug.h"
 #include "shader.h"
-#include "window.h"
+#include "system/window.h"
 #include <GLFW/glfw3.h>
 #include <glm/ext.hpp>
 #include <glm/glm.hpp>
