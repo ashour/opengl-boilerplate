@@ -1,6 +1,7 @@
 // clang-format off
 #include <glad/glad.h>
 // clang-format on
+#include "input.h"
 #include "lib/log.h"
 #include "lib/opengl_debug.h"
 #include "window.h"
@@ -34,6 +35,8 @@ Window::Window(const unsigned int width,
         throw WindowException("Could not create GLFW window");
     }
 
+    glfwSetKeyCallback(_glfw_window, Input::key_callback);
+
     glfwMakeContextCurrent(_glfw_window);
 
     glfwGetFramebufferSize(_glfw_window, &_buffer_width, &_buffer_height);
@@ -42,6 +45,8 @@ Window::Window(const unsigned int width,
     {
         throw WindowException{"Failed to initialize GLAD"};
     }
+
+    gldc(glEnable(GL_CULL_FACE));
 
     gldc(glViewport(0, 0, _buffer_width, _buffer_height));
 }

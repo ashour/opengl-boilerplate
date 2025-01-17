@@ -1,10 +1,12 @@
 // clang-format off
 #include <glad/glad.h>
 // clang-format on
+#include "glm/fwd.hpp"
 #include "lib/color.h"
 #include "lib/log.h"
 #include "lib/opengl_debug.h"
 #include "shader.h"
+#include "system/input.h"
 #include "system/window.h"
 #include <GLFW/glfw3.h>
 #include <glm/ext.hpp>
@@ -116,19 +118,45 @@ int main()
     shader.set_uniform_mat4(u_projection, projection);
     Shader::unuse_all();
 
-    const float camera_radius = 10.0f;
+    glm::vec3 camera_position{0.0f, 0.0f, 10.0f};
+    const glm::vec3 camera_front{0.0f, 0.0f, -1.0f};
+    const glm::vec3 camera_up{0.0f, 1.0f, 0.0f};
+    const float camera_speed = 2.5f;
+
+    float last_frame_time = 0.0f;
 
     while (!window->should_close())
     {
+        float current_frame_time = glfwGetTime();
+        float delta_time = current_frame_time - last_frame_time;
+        last_frame_time = current_frame_time;
+
+        window->poll_events();
         window->clear();
+
+        if (Input::key_pressed(Key::up))
+        {
+            camera_position += camera_front * camera_speed * delta_time;
+        }
+        if (Input::key_pressed(Key::down))
+        {
+            camera_position -= camera_front * camera_speed * delta_time;
+        }
+        if (Input::key_pressed(Key::left))
+        {
+            camera_position -=
+                glm::normalize(glm::cross(camera_front, camera_up)) * camera_speed * delta_time;
+        }
+        if (Input::key_pressed(Key::right))
+        {
+            camera_position +=
+                glm::normalize(glm::cross(camera_front, camera_up)) * camera_speed * delta_time;
+        }
 
         shader.use();
 
         glm::mat4 view{1.0f};
-        float camera_x = glm::sin(glfwGetTime()) * camera_radius;
-        float camera_z = glm::cos(glfwGetTime()) * camera_radius;
-        view = glm::lookAt(
-            glm::vec3(camera_x, 0.0, camera_z), glm::vec3(0.0f), glm::vec3(0.0f, 1.0f, 0.0f));
+        view = glm::lookAt(camera_position, camera_position + camera_front, camera_up);
         shader.set_uniform_mat4(u_view, view);
 
         glm::mat4 model{1.0f};
@@ -149,7 +177,6 @@ int main()
         gldc(glDrawElements(GL_TRIANGLES, 36, GL_UNSIGNED_INT, 0));
 
         window->swap_buffers();
-        window->poll_events();
     }
 
     return 0;

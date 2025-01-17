@@ -36,6 +36,7 @@ add_executable(${PROJECT_NAME}
   src/main.cpp
   src/lib/file_to_string.cpp
   src/shader.cpp
+  src/system/input.cpp
   src/system/window.cpp
 )
 
