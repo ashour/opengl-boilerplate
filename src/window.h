@@ -19,7 +19,7 @@ class Window
     const int buffer_height() const { return _buffer_height; };
 
     bool should_close() const;
-    void set_clear_color(const glm::vec4 color) const;
+    void set_clear_color(const glm::vec4& color) const;
     void clear() const;
     void swap_buffers() const;
     void poll_events() const;

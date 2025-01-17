@@ -5,7 +5,7 @@
 #include "lib/opengl_debug.h"
 #include "window.h"
 #include <GLFW/glfw3.h>
-#include <glm/vec4.hpp>
+#include <glm/glm.hpp>
 
 Window::Window(const unsigned int width,
                const unsigned int height,
@@ -55,7 +55,7 @@ Window::~Window()
 
 bool Window::should_close() const { return glfwWindowShouldClose(_glfw_window); }
 
-void Window::set_clear_color(const glm::vec4 color) const
+void Window::set_clear_color(const glm::vec4& color) const
 {
     gldc(glClearColor(color.r, color.g, color.b, color.a));
 }

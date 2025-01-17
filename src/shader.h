@@ -16,7 +16,7 @@ class Shader
 
     unsigned int uniform_location_for(const std::string& variable) const;
 
-    void set_uniform_mat4(const unsigned int location, const glm::mat4 value) const;
+    void set_uniform_mat4(const unsigned int location, const glm::mat4& value) const;
 
   private:
     const std::string _vertex_shader_filepath;
