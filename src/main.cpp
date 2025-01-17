@@ -110,6 +110,17 @@ int main()
     unsigned int u_model = shader.uniform_location_for("u_model");
     unsigned int u_view = shader.uniform_location_for("u_view");
     unsigned int u_projection = shader.uniform_location_for("u_projection");
+
+    glm::mat4 view{1.0f};
+    view = glm::translate(view, glm::vec3{0.0f, 0.0f, -4.5f});
+    shader.set_uniform_mat4(u_view, view);
+
+    glm::mat4 projection{
+        glm::perspective(glm::radians(45.0f),
+                         (float)window->buffer_width() / (float)window->buffer_height(),
+                         0.1f,
+                         100.0f)};
+    shader.set_uniform_mat4(u_projection, projection);
     Shader::unuse_all();
 
     while (!window->should_close())
@@ -122,17 +133,6 @@ int main()
         model = glm::rotate(
             model, (float)glfwGetTime() * glm::radians(50.0f), glm::vec3(0.5f, 1.0f, 0.0f));
         shader.set_uniform_mat4(u_model, model);
-
-        glm::mat4 view{1.0f};
-        view = glm::translate(view, glm::vec3{0.0f, 0.0f, -4.5f});
-        shader.set_uniform_mat4(u_view, view);
-
-        glm::mat4 projection{
-            glm::perspective(glm::radians(45.0f),
-                             (float)window->buffer_width() / (float)window->buffer_height(),
-                             0.1f,
-                             100.0f)};
-        shader.set_uniform_mat4(u_projection, projection);
 
         gldc(glBindVertexArray(VAO));
         gldc(glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO));
