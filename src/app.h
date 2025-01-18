@@ -3,20 +3,9 @@
 #include "system/window.h"
 #include <array>
 #include <memory>
-#include <string>
 
 namespace eo
 {
-
-static constexpr unsigned int OPENGL_MAJOR_VERSION = 4;
-static constexpr unsigned int OPENGL_MINOR_VERSION = 1;
-
-static constexpr std::string WINDOW_TITLE = "OpenGL Boilerplate";
-static constexpr unsigned int WINDOW_WIDTH = 800;
-static constexpr unsigned int WINDOW_HEIGHT = 600;
-
-static constexpr const char* VERTEX_SHADER_FILEPATH = "./resources/shaders/default.vert";
-static constexpr const char* FRAGMENT_SHADER_FILEPATH = "./resources/shaders/default.frag";
 
 class App
 {

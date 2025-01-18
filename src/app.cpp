@@ -1,5 +1,5 @@
 #include "app.h"
-#include "lib/color.h"
+#include "config.h"
 #include "lib/log.h"
 #include "lib/random.h"
 #include "objects/cube.h"
@@ -51,7 +51,7 @@ bool App::init_window()
 
 void App::init_rendering()
 {
-    _window->set_clear_color(glm::vec4{NCOLV(179), NCOLV(195), NCOLV(239), 1.0});
+    _window->set_clear_color(SCENE_CLEAR_COLOR);
 
     _shader = std::make_unique<Shader>(VERTEX_SHADER_FILEPATH, FRAGMENT_SHADER_FILEPATH);
     _shader->build();
