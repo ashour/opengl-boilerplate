@@ -38,6 +38,7 @@ add_executable(${PROJECT_NAME}
   src/rendering/camera.cpp
   src/rendering/mesh.cpp
   src/rendering/shader.cpp
+  src/rendering/transform.cpp
   src/system/input.cpp
   src/system/window.cpp
 )

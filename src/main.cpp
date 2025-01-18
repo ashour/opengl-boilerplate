@@ -8,6 +8,7 @@
 #include "rendering/camera.h"
 #include "rendering/mesh.h"
 #include "rendering/shader.h"
+#include "rendering/transform.h"
 #include "system/input.h"
 #include "system/window.h"
 #include <GLFW/glfw3.h>
@@ -28,27 +29,23 @@ void render_scene(eo::Shader& shader)
 {
     eo::Mesh cube{eo::cube};
 
-    glm::mat4 model{1.0f};
-    model = glm::translate(model, glm::vec3{0.0f, 7.5f, -5.f});
-    model =
-        glm::rotate(model, (float)glfwGetTime() * glm::radians(50.0f), glm::vec3{0.5f, 1.0f, 0.0f});
+    eo::Transform cube_transform{};
+    cube_transform.position({0.0f, 7.5f, -5.0f});
+    cube_transform.rotation(static_cast<float>(glfwGetTime()) * glm::radians(50.0f),
+                            {0.5f, 1.0f, 0.0f});
     unsigned int u_model = shader.uniform_location_for("u_model");
-    shader.set_uniform_mat4(u_model, model);
+    shader.set_uniform_mat4(u_model, cube_transform.matrix());
 
     cube.draw();
 
-    model = {1.0f};
-    model = glm::translate(model, glm::vec3{2.0f, 7.5f, -5.0f});
-    model =
-        glm::rotate(model, (float)glfwGetTime() * glm::radians(50.0f), glm::vec3{0.5f, 1.0f, 0.0f});
-    shader.set_uniform_mat4(u_model, model);
+    cube_transform.position({2.0f, 7.5f, -5.0f});
+    shader.set_uniform_mat4(u_model, cube_transform.matrix());
 
     cube.draw();
 
     eo::Mesh plane{eo::plane};
 
-    model = {1.0f};
-    shader.set_uniform_mat4(u_model, model);
+    shader.set_uniform_mat4(u_model, glm::mat4{1.0f});
 
     plane.draw();
 }
