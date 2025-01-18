@@ -4,7 +4,7 @@
 #include "lib/color.h"
 #include "lib/log.h"
 #include "lib/opengl_debug.h"
-#include "shader.h"
+#include "rendering/shader.h"
 #include "system/input.h"
 #include "system/window.h"
 #include <GLFW/glfw3.h>
