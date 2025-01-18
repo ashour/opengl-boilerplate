@@ -1,6 +1,7 @@
 #include "app.h"
 #include "lib/color.h"
 #include "lib/log.h"
+#include "lib/random.h"
 #include "objects/cube.h"
 #include "objects/plane.h"
 #include "rendering/camera.h"
@@ -23,6 +24,7 @@ int App::run()
     }
     init_rendering();
     init_input();
+    init_cube_positions();
 
     LOG_H("Initialization Complete");
     LOG("OpenGL version " << _window->opengl_version());
@@ -72,6 +74,18 @@ void App::init_input()
         { _camera->look(current_mouse_position, last_mouse_position); });
 }
 
+void App::init_cube_positions()
+{
+    for (size_t i = 0; i < _cube_positions.size(); i += 1)
+    {
+        _cube_positions[i] = {
+            random_float(-90.0f, 90.0f),
+            random_float(0.0f, 10.0f),
+            random_float(-90.0f, 90.0f),
+        };
+    }
+}
+
 void App::loop()
 {
     bool is_running = true;
@@ -116,22 +130,21 @@ void App::render_scene()
     _shader->use();
     _shader->set_uniform_mat4(_u_view, _camera->view());
 
-    Mesh cube{eo::cube};
-    Transform cube_transform{};
-    cube_transform.position({0.0f, 7.5f, -5.0f});
-    cube_transform.rotation(static_cast<float>(glfwGetTime()) * glm::radians(50.0f),
-                            {0.5f, 1.0f, 0.0f});
     unsigned int u_model = _shader->uniform_location_for("u_model");
-    _shader->set_uniform_mat4(u_model, cube_transform.matrix());
-    cube.draw();
-
-    cube_transform.position({2.0f, 7.5f, -5.0f});
-    _shader->set_uniform_mat4(u_model, cube_transform.matrix());
-    cube.draw();
 
     Mesh plane{eo::plane};
     _shader->set_uniform_mat4(u_model, glm::mat4{1.0f});
-
     plane.draw();
+
+    Mesh cube{eo::cube};
+    Transform cube_transform{};
+    cube_transform.rotation(Time::current_time() * glm::radians(50.0f), {0.5f, 1.0f, 0.0f});
+
+    for (glm::vec3 position : _cube_positions)
+    {
+        cube_transform.position(position);
+        _shader->set_uniform_mat4(u_model, cube_transform.matrix());
+        cube.draw();
+    }
 }
 } // namespace eo

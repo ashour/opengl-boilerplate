@@ -1,6 +1,7 @@
 #include "rendering/camera.h"
 #include "rendering/shader.h"
 #include "system/window.h"
+#include <array>
 #include <memory>
 #include <string>
 
@@ -26,6 +27,7 @@ class App
     bool init_window();
     void init_rendering();
     void init_input();
+    void init_cube_positions();
 
     void loop();
     void handle_input();
@@ -36,5 +38,7 @@ class App
     std::unique_ptr<Shader> _shader;
 
     unsigned int _u_view;
+
+    std::array<glm::vec3, 180> _cube_positions{};
 };
 } // namespace eo
