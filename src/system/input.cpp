@@ -1,10 +1,11 @@
 #include "input.h"
 #include <GLFW/glfw3.h>
 #include <array>
+#include <functional>
 
 std::array<bool, Input::KEYS_SIZE> Input::_keys{};
+std::function<void(glm::vec2, glm::vec2)> Input::_on_mouse_moved{};
 
-void (*Input::_on_mouse_moved)(glm::vec2, glm::vec2){};
 glm::vec2 Input::_last_mouse_position{};
 glm::vec2 Input::_current_mouse_position{};
 bool Input::_is_first_mouse_movement{true};
@@ -28,7 +29,7 @@ void Input::key_callback(GLFWwindow* window, int key, int scancode, int action, 
 
 bool Input::action_pressed(Action action) { return _keys[static_cast<int>(action)]; }
 
-void Input::register_mouse_move_handler(void (*on_mouse_moved)(glm::vec2, glm::vec2))
+void Input::register_mouse_move_handler(std::function<void(glm::vec2, glm::vec2)> on_mouse_moved)
 {
     _on_mouse_moved = on_mouse_moved;
 }

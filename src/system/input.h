@@ -2,6 +2,7 @@
 
 #include <GLFW/glfw3.h>
 #include <array>
+#include <functional>
 #include <glm/glm.hpp>
 
 // clang-format off
@@ -21,7 +22,7 @@ class Input
     static void key_callback(GLFWwindow* window, int key, int scancode, int action, int mods);
     static bool action_pressed(Action action);
 
-    static void register_mouse_move_handler(void (*on_mouse_moved)(glm::vec2, glm::vec2));
+    static void register_mouse_move_handler(std::function<void(glm::vec2, glm::vec2)>);
     static void mouse_callback(GLFWwindow* window, double x_position, double y_position);
     static glm::vec2 mouse_position() { return _current_mouse_position; }
 
@@ -29,7 +30,7 @@ class Input
     static constexpr size_t KEYS_SIZE = 1024;
     static std::array<bool, KEYS_SIZE> _keys;
 
-    static void (*_on_mouse_moved)(glm::vec2, glm::vec2);
+    static std::function<void(glm::vec2, glm::vec2)> _on_mouse_moved;
     static bool _is_first_mouse_movement;
     static glm::vec2 _last_mouse_position;
     static glm::vec2 _current_mouse_position;

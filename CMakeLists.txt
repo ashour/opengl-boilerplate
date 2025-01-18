@@ -35,6 +35,7 @@ add_subdirectory(third_party/glm)
 add_executable(${PROJECT_NAME}
   src/main.cpp
   src/lib/file_to_string.cpp
+  src/rendering/camera.cpp
   src/rendering/shader.cpp
   src/system/input.cpp
   src/system/window.cpp
@@ -67,7 +68,6 @@ endif()
 if (CMAKE_BUILD_TYPE STREQUAL "Debug")
   add_compile_definitions(DEBUG)
 endif()
-
 
 # ----------------------------------------
 # Resources

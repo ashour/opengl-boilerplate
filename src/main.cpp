@@ -4,6 +4,7 @@
 #include "lib/color.h"
 #include "lib/log.h"
 #include "lib/opengl_debug.h"
+#include "rendering/camera.h"
 #include "rendering/shader.h"
 #include "system/input.h"
 #include "system/window.h"
@@ -20,36 +21,6 @@ static constexpr unsigned int WINDOW_HEIGHT = 600;
 
 static constexpr const char* VERTEX_SHADER_FILEPATH = "./resources/shaders/default.vert";
 static constexpr const char* FRAGMENT_SHADER_FILEPATH = "./resources/shaders/default.frag";
-
-const glm::vec3 world_up{0.0f, 1.0f, 0.0f};
-glm::vec3 camera_front{0.0f, 0.0f, -1.0f};
-glm::vec3 camera_up{0.0f, 1.0f, 0.0f};
-float pitch = 0.0f;
-float yaw = -90.0f;
-
-void on_mouse_moved(glm::vec2 current_mouse_position, glm::vec2 last_mouse_position)
-{
-    glm::vec2 mouse_offset{current_mouse_position.x - last_mouse_position.x,
-                           last_mouse_position.y - current_mouse_position.y};
-
-    yaw += (mouse_offset.x * 0.1f);
-    pitch += (mouse_offset.y * 0.1f);
-
-    if (pitch > 89.0f)
-    {
-        pitch = 89.0f;
-    }
-    else if (pitch < -89.0f)
-    {
-        pitch = -89.0f;
-    }
-
-    glm::vec3 direction{cos(glm::radians(yaw)) * cos(glm::radians(pitch)),
-                        sin(glm::radians(pitch)),
-                        sin(glm::radians(yaw)) * cos(glm::radians(pitch))};
-
-    camera_front = glm::normalize(direction);
-}
 
 int main()
 {
@@ -124,8 +95,6 @@ int main()
     Shader shader(VERTEX_SHADER_FILEPATH, FRAGMENT_SHADER_FILEPATH);
     shader.build();
 
-    shader.use();
-
     gldc(glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void*)0));
     gldc(glEnableVertexAttribArray(0));
     gldc(glVertexAttribPointer(
@@ -139,21 +108,16 @@ int main()
     unsigned int u_view = shader.uniform_location_for("u_view");
     unsigned int u_projection = shader.uniform_location_for("u_projection");
 
-    glm::mat4 projection{
-        glm::perspective(glm::radians(45.0f),
-                         (float)window->buffer_width() / (float)window->buffer_height(),
-                         0.1f,
-                         100.0f)};
-    shader.set_uniform_mat4(u_projection, projection);
+    Camera camera{
+        static_cast<float>(window->buffer_width() / static_cast<float>(window->buffer_height()))};
+    shader.set_uniform_mat4(u_projection, camera.projection());
     Shader::unuse_all();
 
-    glm::vec3 camera_position{0.0f, 0.0f, 10.0f};
-    const float camera_speed = 2.5f;
+    Input::register_mouse_move_handler(
+        [&camera](glm::vec2 current_mouse_position, glm::vec2 last_mouse_position) -> void
+        { camera.look(current_mouse_position, last_mouse_position); });
 
     float last_frame_time = 0.0f;
-
-    Input::register_mouse_move_handler(on_mouse_moved);
-
     bool is_running = true;
     while (is_running)
     {
@@ -166,28 +130,23 @@ int main()
 
         if (Input::action_pressed(Action::move_forward))
         {
-            camera_position += camera_front * camera_speed * delta_time;
+            camera.strafe(Strafe::forward, delta_time);
         }
         if (Input::action_pressed(Action::move_back))
         {
-            camera_position -= camera_front * camera_speed * delta_time;
+            camera.strafe(Strafe::back, delta_time);
         }
         if (Input::action_pressed(Action::move_left))
         {
-            camera_position -=
-                glm::normalize(glm::cross(camera_front, camera_up)) * camera_speed * delta_time;
+            camera.strafe(Strafe::left, delta_time);
         }
         if (Input::action_pressed(Action::move_right))
         {
-            camera_position +=
-                glm::normalize(glm::cross(camera_front, camera_up)) * camera_speed * delta_time;
+            camera.strafe(Strafe::right, delta_time);
         }
 
         shader.use();
-
-        glm::mat4 view{1.0f};
-        view = glm::lookAt(camera_position, camera_position + camera_front, camera_up);
-        shader.set_uniform_mat4(u_view, view);
+        shader.set_uniform_mat4(u_view, camera.view());
 
         glm::mat4 model{1.0f};
         model = glm::rotate(
