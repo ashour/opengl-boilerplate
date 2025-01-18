@@ -28,7 +28,7 @@ class Camera
     glm::mat4 _projection{};
 
     float _speed{2.5f};
-    glm::vec3 _position{0.0f, 0.0f, 10.0f};
+    glm::vec3 _position{0.0f, 5.0f, 30.0f};
     glm::vec3 _front{0.0f, 0.0f, -1.0f};
     glm::vec3 _world_up{0.0f, 1.0f, 0.0f};
 

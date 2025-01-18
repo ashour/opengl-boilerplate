@@ -6,15 +6,14 @@ inline const Object<8 * 6, 6 * 6> cube{
     .vertices = {
         // Front face
         -0.5f, -0.5f,  0.5f,  (float)rand()/RAND_MAX, (float)rand()/RAND_MAX, (float)rand()/RAND_MAX, // 0
-        0.5f, -0.5f,  0.5f,  (float)rand()/RAND_MAX, (float)rand()/RAND_MAX, (float)rand()/RAND_MAX, // 1
-        0.5f,  0.5f,  0.5f,  (float)rand()/RAND_MAX, (float)rand()/RAND_MAX, (float)rand()/RAND_MAX, // 2
+         0.5f, -0.5f,  0.5f,  (float)rand()/RAND_MAX, (float)rand()/RAND_MAX, (float)rand()/RAND_MAX, // 1
+         0.5f,  0.5f,  0.5f,  (float)rand()/RAND_MAX, (float)rand()/RAND_MAX, (float)rand()/RAND_MAX, // 2
         -0.5f,  0.5f,  0.5f,  (float)rand()/RAND_MAX, (float)rand()/RAND_MAX, (float)rand()/RAND_MAX, // 3
         // Back face
         -0.5f, -0.5f, -0.5f,  (float)rand()/RAND_MAX, (float)rand()/RAND_MAX, (float)rand()/RAND_MAX, // 4
-        0.5f, -0.5f, -0.5f,  (float)rand()/RAND_MAX, (float)rand()/RAND_MAX, (float)rand()/RAND_MAX, // 5
-        0.5f,  0.5f, -0.5f,  (float)rand()/RAND_MAX, (float)rand()/RAND_MAX, (float)rand()/RAND_MAX, // 6
+         0.5f, -0.5f, -0.5f,  (float)rand()/RAND_MAX, (float)rand()/RAND_MAX, (float)rand()/RAND_MAX, // 5
+         0.5f,  0.5f, -0.5f,  (float)rand()/RAND_MAX, (float)rand()/RAND_MAX, (float)rand()/RAND_MAX, // 6
         -0.5f,  0.5f, -0.5f,  (float)rand()/RAND_MAX, (float)rand()/RAND_MAX, (float)rand()/RAND_MAX  // 7
-
     },
     .indices = {
         // Front

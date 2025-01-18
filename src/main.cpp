@@ -5,6 +5,7 @@
 #include "lib/log.h"
 #include "lib/opengl_debug.h"
 #include "objects/cube.h"
+#include "objects/plane.h"
 #include "rendering/camera.h"
 #include "rendering/shader.h"
 #include "system/input.h"
@@ -22,6 +23,85 @@ static constexpr unsigned int WINDOW_HEIGHT = 600;
 
 static constexpr const char* VERTEX_SHADER_FILEPATH = "./resources/shaders/default.vert";
 static constexpr const char* FRAGMENT_SHADER_FILEPATH = "./resources/shaders/default.frag";
+
+void render_scene(Shader& shader)
+{
+    unsigned int CUBE_VAO;
+    gldc(glGenVertexArrays(1, &CUBE_VAO));
+    gldc(glBindVertexArray(CUBE_VAO));
+
+    unsigned int CUBE_VBO;
+    gldc(glGenBuffers(1, &CUBE_VBO));
+    gldc(glBindBuffer(GL_ARRAY_BUFFER, CUBE_VBO));
+    gldc(glBufferData(GL_ARRAY_BUFFER,
+                      sizeof(float) * cube.vertices.size(),
+                      cube.vertices.data(),
+                      GL_STATIC_DRAW));
+
+    unsigned int CUBE_EBO;
+    gldc(glGenBuffers(1, &CUBE_EBO));
+    gldc(glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, CUBE_EBO));
+    gldc(glBufferData(GL_ELEMENT_ARRAY_BUFFER,
+                      sizeof(unsigned int) * cube.indices.size(),
+                      cube.indices.data(),
+                      GL_STATIC_DRAW));
+
+    gldc(glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void*)0));
+    gldc(glEnableVertexAttribArray(0));
+    gldc(glVertexAttribPointer(
+        1, 3, GL_FLOAT, GL_TRUE, 6 * sizeof(float), (void*)(3 * sizeof(float))));
+    gldc(glEnableVertexAttribArray(1));
+
+    glm::mat4 model{1.0f};
+    model = glm::translate(model, glm::vec3{0.0f, 7.5f, -5.f});
+    model =
+        glm::rotate(model, (float)glfwGetTime() * glm::radians(50.0f), glm::vec3{0.5f, 1.0f, 0.0f});
+    unsigned int u_model = shader.uniform_location_for("u_model");
+    shader.set_uniform_mat4(u_model, model);
+
+    gldc(glBindVertexArray(CUBE_VAO));
+    gldc(glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, CUBE_EBO));
+    gldc(glDrawElements(GL_TRIANGLES, 36, GL_UNSIGNED_INT, 0));
+
+    model = {1.0f};
+    model = glm::translate(model, glm::vec3{2.0f, 7.5f, -5.0f});
+    model =
+        glm::rotate(model, (float)glfwGetTime() * glm::radians(50.0f), glm::vec3{0.5f, 1.0f, 0.0f});
+    shader.set_uniform_mat4(u_model, model);
+
+    gldc(glDrawElements(GL_TRIANGLES, cube.indices.size(), GL_UNSIGNED_INT, 0));
+
+    unsigned int PLANE_VAO;
+    gldc(glGenVertexArrays(1, &PLANE_VAO));
+    gldc(glBindVertexArray(PLANE_VAO));
+
+    unsigned int PLANE_VBO;
+    gldc(glGenBuffers(1, &PLANE_VBO));
+    gldc(glBindBuffer(GL_ARRAY_BUFFER, PLANE_VBO));
+    gldc(glBufferData(GL_ARRAY_BUFFER,
+                      sizeof(float) * plane.vertices.size(),
+                      plane.vertices.data(),
+                      GL_STATIC_DRAW));
+
+    unsigned int PLANE_EBO;
+    gldc(glGenBuffers(1, &PLANE_EBO));
+    gldc(glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, PLANE_EBO));
+    gldc(glBufferData(GL_ELEMENT_ARRAY_BUFFER,
+                      sizeof(unsigned int) * plane.indices.size(),
+                      plane.indices.data(),
+                      GL_STATIC_DRAW));
+
+    gldc(glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void*)0));
+    gldc(glEnableVertexAttribArray(0));
+    gldc(glVertexAttribPointer(
+        1, 3, GL_FLOAT, GL_TRUE, 6 * sizeof(float), (void*)(3 * sizeof(float))));
+    gldc(glEnableVertexAttribArray(1));
+
+    model = {1.0f};
+    shader.set_uniform_mat4(u_model, model);
+
+    gldc(glDrawElements(GL_TRIANGLES, plane.indices.size(), GL_UNSIGNED_INT, 0));
+}
 
 int main()
 {
@@ -43,39 +123,12 @@ int main()
     LOG_H("Initialization Complete");
     LOG("OpenGL version " << window->opengl_version());
 
-    unsigned int VAO;
-    gldc(glGenVertexArrays(1, &VAO));
-    gldc(glBindVertexArray(VAO));
-
-    unsigned int VBO;
-    gldc(glGenBuffers(1, &VBO));
-    gldc(glBindBuffer(GL_ARRAY_BUFFER, VBO));
-    gldc(glBufferData(GL_ARRAY_BUFFER,
-                      sizeof(float) * cube.vertices.size(),
-                      cube.vertices.data(),
-                      GL_STATIC_DRAW));
-
-    unsigned int EBO;
-    gldc(glGenBuffers(1, &EBO));
-    gldc(glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO));
-    gldc(glBufferData(GL_ELEMENT_ARRAY_BUFFER,
-                      sizeof(unsigned int) * cube.indices.size(),
-                      cube.indices.data(),
-                      GL_STATIC_DRAW));
-
     Shader shader(VERTEX_SHADER_FILEPATH, FRAGMENT_SHADER_FILEPATH);
     shader.build();
-
-    gldc(glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void*)0));
-    gldc(glEnableVertexAttribArray(0));
-    gldc(glVertexAttribPointer(
-        1, 3, GL_FLOAT, GL_TRUE, 6 * sizeof(float), (void*)(3 * sizeof(float))));
-    gldc(glEnableVertexAttribArray(1));
 
     window->set_clear_color(glm::vec4{NCOLV(36.0), NCOLV(22.0), NCOLV(35), 1.0});
 
     shader.use();
-    unsigned int u_model = shader.uniform_location_for("u_model");
     unsigned int u_view = shader.uniform_location_for("u_view");
     unsigned int u_projection = shader.uniform_location_for("u_projection");
 
@@ -119,22 +172,7 @@ int main()
         shader.use();
         shader.set_uniform_mat4(u_view, camera.view());
 
-        glm::mat4 model{1.0f};
-        model = glm::rotate(
-            model, (float)glfwGetTime() * glm::radians(50.0f), glm::vec3(0.5f, 1.0f, 0.0f));
-        shader.set_uniform_mat4(u_model, model);
-
-        gldc(glBindVertexArray(VAO));
-        gldc(glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO));
-        gldc(glDrawElements(GL_TRIANGLES, 36, GL_UNSIGNED_INT, 0));
-
-        model = {1.0f};
-        model = glm::translate(model, glm::vec3{2.0f, 0.0, 0.0});
-        model = glm::rotate(
-            model, (float)glfwGetTime() * glm::radians(50.0f), glm::vec3(0.5f, 1.0f, 0.0f));
-        shader.set_uniform_mat4(u_model, model);
-
-        gldc(glDrawElements(GL_TRIANGLES, cube.indices.size(), GL_UNSIGNED_INT, 0));
+        render_scene(shader);
 
         window->swap_buffers();
 
