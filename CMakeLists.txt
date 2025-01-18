@@ -34,6 +34,7 @@ add_subdirectory(third_party/glm)
 # ----------------------------------------
 add_executable(${PROJECT_NAME}
   src/main.cpp
+  src/app.cpp
   src/lib/file_to_string.cpp
   src/rendering/camera.cpp
   src/rendering/mesh.cpp
