@@ -21,4 +21,4 @@ void Input::key_callback(GLFWwindow* window, int key, int scancode, int action, 
     }
 }
 
-bool Input::key_pressed(Key key) { return _keys[static_cast<int>(key)]; }
+bool Input::action_pressed(Action action) { return _keys[static_cast<int>(action)]; }

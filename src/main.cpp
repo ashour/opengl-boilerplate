@@ -134,20 +134,20 @@ int main()
         window->poll_events();
         window->clear();
 
-        if (Input::key_pressed(Key::up))
+        if (Input::action_pressed(Action::move_forward))
         {
             camera_position += camera_front * camera_speed * delta_time;
         }
-        if (Input::key_pressed(Key::down))
+        if (Input::action_pressed(Action::move_back))
         {
             camera_position -= camera_front * camera_speed * delta_time;
         }
-        if (Input::key_pressed(Key::left))
+        if (Input::action_pressed(Action::move_left))
         {
             camera_position -=
                 glm::normalize(glm::cross(camera_front, camera_up)) * camera_speed * delta_time;
         }
-        if (Input::key_pressed(Key::right))
+        if (Input::action_pressed(Action::move_right))
         {
             camera_position +=
                 glm::normalize(glm::cross(camera_front, camera_up)) * camera_speed * delta_time;

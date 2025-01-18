@@ -4,12 +4,12 @@
 #include <array>
 
 // clang-format off
-enum class Key
+enum class Action
 {
-       up = GLFW_KEY_W,
-     down = GLFW_KEY_S,
-     left = GLFW_KEY_A,
-    right = GLFW_KEY_D
+    move_forward = GLFW_KEY_W,
+       move_back = GLFW_KEY_S,
+       move_left = GLFW_KEY_A,
+      move_right = GLFW_KEY_D
 };
 // clang-format on
 
@@ -17,7 +17,7 @@ class Input
 {
   public:
     static void key_callback(GLFWwindow* window, int key, int scancode, int action, int mods);
-    static bool key_pressed(Key key);
+    static bool action_pressed(Action action);
 
   private:
     static constexpr size_t KEYS_SIZE = 256;
