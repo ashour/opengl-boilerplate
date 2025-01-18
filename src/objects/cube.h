@@ -1,5 +1,5 @@
+#include "lib/color.h"
 #include "object.h"
-#include <cstdlib>
 
 namespace eo
 {
@@ -7,15 +7,15 @@ namespace eo
 inline const Object<8 * 6, 6 * 6> cube{
     .vertices = {
         // Front face
-        -0.5f, -0.5f,  0.5f,  (float)rand()/RAND_MAX, (float)rand()/RAND_MAX, (float)rand()/RAND_MAX, // 0
-         0.5f, -0.5f,  0.5f,  (float)rand()/RAND_MAX, (float)rand()/RAND_MAX, (float)rand()/RAND_MAX, // 1
-         0.5f,  0.5f,  0.5f,  (float)rand()/RAND_MAX, (float)rand()/RAND_MAX, (float)rand()/RAND_MAX, // 2
-        -0.5f,  0.5f,  0.5f,  (float)rand()/RAND_MAX, (float)rand()/RAND_MAX, (float)rand()/RAND_MAX, // 3
+        -0.5f, -0.5f,  0.5f,  NCOLV(42),  NCOLV(15),  NCOLV(83),  // 0
+         0.5f, -0.5f,  0.5f,  NCOLV(171), NCOLV(32),  NCOLV(101), // 1
+         0.5f,  0.5f,  0.5f,  NCOLV(255), NCOLV(79),  NCOLV(105), // 2
+        -0.5f,  0.5f,  0.5f,  NCOLV(255), NCOLV(247), NCOLV(248), // 3
         // Back face
-        -0.5f, -0.5f, -0.5f,  (float)rand()/RAND_MAX, (float)rand()/RAND_MAX, (float)rand()/RAND_MAX, // 4
-         0.5f, -0.5f, -0.5f,  (float)rand()/RAND_MAX, (float)rand()/RAND_MAX, (float)rand()/RAND_MAX, // 5
-         0.5f,  0.5f, -0.5f,  (float)rand()/RAND_MAX, (float)rand()/RAND_MAX, (float)rand()/RAND_MAX, // 6
-        -0.5f,  0.5f, -0.5f,  (float)rand()/RAND_MAX, (float)rand()/RAND_MAX, (float)rand()/RAND_MAX  // 7
+        -0.5f, -0.5f, -0.5f,  NCOLV(255), NCOLV(129), NCOLV(65),  // 4
+         0.5f, -0.5f, -0.5f,  NCOLV(255), NCOLV(218), NCOLV(69),  // 5
+         0.5f,  0.5f, -0.5f,  NCOLV(51),  NCOLV(104), NCOLV(220), // 6
+        -0.5f,  0.5f, -0.5f,  NCOLV(73),  NCOLV(231), NCOLV(236),  // 7
     },
     .indices = {
         // Front
