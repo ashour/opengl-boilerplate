@@ -15,7 +15,7 @@ enum class Strafe
 class Camera
 {
   public:
-    Camera(const float aspect_ratio);
+    explicit Camera(const float aspect_ratio);
 
     void strafe(Strafe direction, float delta_time);
     void look(glm::vec2 current_mouse_position, glm::vec2 last_mouse_position);
