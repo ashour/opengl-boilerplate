@@ -8,3 +8,5 @@ BinPackParameters: false
 PointerAlignment: Left
 ReferenceAlignment: Left
 InsertBraces: true
+ConstructorInitializerAllOnOneLineOrOnePerLine: true
+AlwaysBreakTemplateDeclarations: true

@@ -4,6 +4,7 @@
 #include "lib/color.h"
 #include "lib/log.h"
 #include "lib/opengl_debug.h"
+#include "objects/cube.h"
 #include "rendering/camera.h"
 #include "rendering/shader.h"
 #include "system/input.h"
@@ -42,42 +43,6 @@ int main()
     LOG_H("Initialization Complete");
     LOG("OpenGL version " << window->opengl_version());
 
-    // clang-format off
-    float vertices[] = {
-        // Front face
-        -0.5f, -0.5f,  0.5f,  (float)rand()/RAND_MAX, (float)rand()/RAND_MAX, (float)rand()/RAND_MAX, // 0
-         0.5f, -0.5f,  0.5f,  (float)rand()/RAND_MAX, (float)rand()/RAND_MAX, (float)rand()/RAND_MAX, // 1
-         0.5f,  0.5f,  0.5f,  (float)rand()/RAND_MAX, (float)rand()/RAND_MAX, (float)rand()/RAND_MAX, // 2
-        -0.5f,  0.5f,  0.5f,  (float)rand()/RAND_MAX, (float)rand()/RAND_MAX, (float)rand()/RAND_MAX, // 3
-        // Back face
-        -0.5f, -0.5f, -0.5f,  (float)rand()/RAND_MAX, (float)rand()/RAND_MAX, (float)rand()/RAND_MAX, // 4
-         0.5f, -0.5f, -0.5f,  (float)rand()/RAND_MAX, (float)rand()/RAND_MAX, (float)rand()/RAND_MAX, // 5
-         0.5f,  0.5f, -0.5f,  (float)rand()/RAND_MAX, (float)rand()/RAND_MAX, (float)rand()/RAND_MAX, // 6
-        -0.5f,  0.5f, -0.5f,  (float)rand()/RAND_MAX, (float)rand()/RAND_MAX, (float)rand()/RAND_MAX  // 7
-    };
-
-    unsigned int indices[] = {
-        // Front
-        0, 1, 2,
-        2, 3, 0,
-        // Right
-        1, 5, 6,
-        6, 2, 1,
-        // Back
-        7, 6, 5,
-        5, 4, 7,
-        // Left
-        4, 0, 3,
-        3, 7, 4,
-        // Top
-        3, 2, 6,
-        6, 7, 3,
-        // Bottom
-        4, 5, 1,
-        1, 0, 4
-    };
-    // clang-format on
-
     unsigned int VAO;
     gldc(glGenVertexArrays(1, &VAO));
     gldc(glBindVertexArray(VAO));
@@ -85,12 +50,18 @@ int main()
     unsigned int VBO;
     gldc(glGenBuffers(1, &VBO));
     gldc(glBindBuffer(GL_ARRAY_BUFFER, VBO));
-    gldc(glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW));
+    gldc(glBufferData(GL_ARRAY_BUFFER,
+                      sizeof(float) * cube.vertices.size(),
+                      cube.vertices.data(),
+                      GL_STATIC_DRAW));
 
     unsigned int EBO;
     gldc(glGenBuffers(1, &EBO));
     gldc(glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO));
-    gldc(glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW));
+    gldc(glBufferData(GL_ELEMENT_ARRAY_BUFFER,
+                      sizeof(unsigned int) * cube.indices.size(),
+                      cube.indices.data(),
+                      GL_STATIC_DRAW));
 
     Shader shader(VERTEX_SHADER_FILEPATH, FRAGMENT_SHADER_FILEPATH);
     shader.build();
@@ -163,7 +134,7 @@ int main()
             model, (float)glfwGetTime() * glm::radians(50.0f), glm::vec3(0.5f, 1.0f, 0.0f));
         shader.set_uniform_mat4(u_model, model);
 
-        gldc(glDrawElements(GL_TRIANGLES, 36, GL_UNSIGNED_INT, 0));
+        gldc(glDrawElements(GL_TRIANGLES, cube.indices.size(), GL_UNSIGNED_INT, 0));
 
         window->swap_buffers();
 
