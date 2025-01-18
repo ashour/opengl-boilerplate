@@ -51,6 +51,7 @@ Window::Window(const unsigned int width,
         throw WindowException{"Failed to initialize GLAD"};
     }
 
+    gldc(glEnable(GL_DEPTH_TEST));
     gldc(glEnable(GL_CULL_FACE));
 
     gldc(glViewport(0, 0, _buffer_width, _buffer_height));
