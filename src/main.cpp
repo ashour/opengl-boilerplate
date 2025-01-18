@@ -3,10 +3,10 @@
 // clang-format on
 #include "lib/color.h"
 #include "lib/log.h"
-#include "lib/opengl_debug.h"
 #include "objects/cube.h"
 #include "objects/plane.h"
 #include "rendering/camera.h"
+#include "rendering/mesh.h"
 #include "rendering/shader.h"
 #include "system/input.h"
 #include "system/window.h"
@@ -26,31 +26,7 @@ static constexpr const char* FRAGMENT_SHADER_FILEPATH = "./resources/shaders/def
 
 void render_scene(eo::Shader& shader)
 {
-    unsigned int CUBE_VAO;
-    gldc(glGenVertexArrays(1, &CUBE_VAO));
-    gldc(glBindVertexArray(CUBE_VAO));
-
-    unsigned int CUBE_VBO;
-    gldc(glGenBuffers(1, &CUBE_VBO));
-    gldc(glBindBuffer(GL_ARRAY_BUFFER, CUBE_VBO));
-    gldc(glBufferData(GL_ARRAY_BUFFER,
-                      sizeof(float) * eo::cube.vertices.size(),
-                      eo::cube.vertices.data(),
-                      GL_STATIC_DRAW));
-
-    unsigned int CUBE_EBO;
-    gldc(glGenBuffers(1, &CUBE_EBO));
-    gldc(glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, CUBE_EBO));
-    gldc(glBufferData(GL_ELEMENT_ARRAY_BUFFER,
-                      sizeof(unsigned int) * eo::cube.indices.size(),
-                      eo::cube.indices.data(),
-                      GL_STATIC_DRAW));
-
-    gldc(glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void*)0));
-    gldc(glEnableVertexAttribArray(0));
-    gldc(glVertexAttribPointer(
-        1, 3, GL_FLOAT, GL_TRUE, 6 * sizeof(float), (void*)(3 * sizeof(float))));
-    gldc(glEnableVertexAttribArray(1));
+    eo::Mesh cube{eo::cube};
 
     glm::mat4 model{1.0f};
     model = glm::translate(model, glm::vec3{0.0f, 7.5f, -5.f});
@@ -59,9 +35,7 @@ void render_scene(eo::Shader& shader)
     unsigned int u_model = shader.uniform_location_for("u_model");
     shader.set_uniform_mat4(u_model, model);
 
-    gldc(glBindVertexArray(CUBE_VAO));
-    gldc(glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, CUBE_EBO));
-    gldc(glDrawElements(GL_TRIANGLES, 36, GL_UNSIGNED_INT, 0));
+    cube.draw();
 
     model = {1.0f};
     model = glm::translate(model, glm::vec3{2.0f, 7.5f, -5.0f});
@@ -69,38 +43,14 @@ void render_scene(eo::Shader& shader)
         glm::rotate(model, (float)glfwGetTime() * glm::radians(50.0f), glm::vec3{0.5f, 1.0f, 0.0f});
     shader.set_uniform_mat4(u_model, model);
 
-    gldc(glDrawElements(GL_TRIANGLES, eo::cube.indices.size(), GL_UNSIGNED_INT, 0));
+    cube.draw();
 
-    unsigned int PLANE_VAO;
-    gldc(glGenVertexArrays(1, &PLANE_VAO));
-    gldc(glBindVertexArray(PLANE_VAO));
-
-    unsigned int PLANE_VBO;
-    gldc(glGenBuffers(1, &PLANE_VBO));
-    gldc(glBindBuffer(GL_ARRAY_BUFFER, PLANE_VBO));
-    gldc(glBufferData(GL_ARRAY_BUFFER,
-                      sizeof(float) * eo::plane.vertices.size(),
-                      eo::plane.vertices.data(),
-                      GL_STATIC_DRAW));
-
-    unsigned int PLANE_EBO;
-    gldc(glGenBuffers(1, &PLANE_EBO));
-    gldc(glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, PLANE_EBO));
-    gldc(glBufferData(GL_ELEMENT_ARRAY_BUFFER,
-                      sizeof(unsigned int) * eo::plane.indices.size(),
-                      eo::plane.indices.data(),
-                      GL_STATIC_DRAW));
-
-    gldc(glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void*)0));
-    gldc(glEnableVertexAttribArray(0));
-    gldc(glVertexAttribPointer(
-        1, 3, GL_FLOAT, GL_TRUE, 6 * sizeof(float), (void*)(3 * sizeof(float))));
-    gldc(glEnableVertexAttribArray(1));
+    eo::Mesh plane{eo::plane};
 
     model = {1.0f};
     shader.set_uniform_mat4(u_model, model);
 
-    gldc(glDrawElements(GL_TRIANGLES, eo::plane.indices.size(), GL_UNSIGNED_INT, 0));
+    plane.draw();
 }
 
 int main()
