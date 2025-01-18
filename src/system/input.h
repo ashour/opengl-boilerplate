@@ -5,6 +5,8 @@
 #include <functional>
 #include <glm/glm.hpp>
 
+namespace eo
+{
 // clang-format off
 enum class Action
 {
@@ -35,3 +37,4 @@ class Input
     static glm::vec2 _last_mouse_position;
     static glm::vec2 _current_mouse_position;
 };
+} // namespace eo

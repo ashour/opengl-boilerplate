@@ -8,6 +8,8 @@
 #include <GLFW/glfw3.h>
 #include <glm/glm.hpp>
 
+namespace eo
+{
 Window::Window(const unsigned int width,
                const unsigned int height,
                const std::string& title,
@@ -75,3 +77,4 @@ void Window::swap_buffers() const { glfwSwapBuffers(_glfw_window); }
 void Window::poll_events() const { glfwPollEvents(); }
 
 const unsigned char* Window::opengl_version() const { return glGetString(GL_VERSION); }
+} // namespace eo

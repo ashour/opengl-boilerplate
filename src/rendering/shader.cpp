@@ -7,6 +7,8 @@
 #include <glm/glm.hpp>
 #include <string>
 
+namespace eo
+{
 Shader::Shader(const std::string& vertex_shader_filepath,
                const std::string& fragment_shader_filepath)
     : _vertex_shader_filepath{vertex_shader_filepath},
@@ -99,3 +101,4 @@ unsigned int Shader::create_program(const unsigned int vertex_shader,
 
     return program;
 }
+} // namespace eo

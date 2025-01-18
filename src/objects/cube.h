@@ -1,6 +1,8 @@
 #include "object.h"
 #include <cstdlib>
 
+namespace eo
+{
 // clang-format off
 inline const Object<8 * 6, 6 * 6> cube{
     .vertices = {
@@ -37,3 +39,4 @@ inline const Object<8 * 6, 6 * 6> cube{
     }
 };
 // clang-format on
+} // namespace eo

@@ -24,7 +24,7 @@ static constexpr unsigned int WINDOW_HEIGHT = 600;
 static constexpr const char* VERTEX_SHADER_FILEPATH = "./resources/shaders/default.vert";
 static constexpr const char* FRAGMENT_SHADER_FILEPATH = "./resources/shaders/default.frag";
 
-void render_scene(Shader& shader)
+void render_scene(eo::Shader& shader)
 {
     unsigned int CUBE_VAO;
     gldc(glGenVertexArrays(1, &CUBE_VAO));
@@ -34,16 +34,16 @@ void render_scene(Shader& shader)
     gldc(glGenBuffers(1, &CUBE_VBO));
     gldc(glBindBuffer(GL_ARRAY_BUFFER, CUBE_VBO));
     gldc(glBufferData(GL_ARRAY_BUFFER,
-                      sizeof(float) * cube.vertices.size(),
-                      cube.vertices.data(),
+                      sizeof(float) * eo::cube.vertices.size(),
+                      eo::cube.vertices.data(),
                       GL_STATIC_DRAW));
 
     unsigned int CUBE_EBO;
     gldc(glGenBuffers(1, &CUBE_EBO));
     gldc(glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, CUBE_EBO));
     gldc(glBufferData(GL_ELEMENT_ARRAY_BUFFER,
-                      sizeof(unsigned int) * cube.indices.size(),
-                      cube.indices.data(),
+                      sizeof(unsigned int) * eo::cube.indices.size(),
+                      eo::cube.indices.data(),
                       GL_STATIC_DRAW));
 
     gldc(glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void*)0));
@@ -69,7 +69,7 @@ void render_scene(Shader& shader)
         glm::rotate(model, (float)glfwGetTime() * glm::radians(50.0f), glm::vec3{0.5f, 1.0f, 0.0f});
     shader.set_uniform_mat4(u_model, model);
 
-    gldc(glDrawElements(GL_TRIANGLES, cube.indices.size(), GL_UNSIGNED_INT, 0));
+    gldc(glDrawElements(GL_TRIANGLES, eo::cube.indices.size(), GL_UNSIGNED_INT, 0));
 
     unsigned int PLANE_VAO;
     gldc(glGenVertexArrays(1, &PLANE_VAO));
@@ -79,16 +79,16 @@ void render_scene(Shader& shader)
     gldc(glGenBuffers(1, &PLANE_VBO));
     gldc(glBindBuffer(GL_ARRAY_BUFFER, PLANE_VBO));
     gldc(glBufferData(GL_ARRAY_BUFFER,
-                      sizeof(float) * plane.vertices.size(),
-                      plane.vertices.data(),
+                      sizeof(float) * eo::plane.vertices.size(),
+                      eo::plane.vertices.data(),
                       GL_STATIC_DRAW));
 
     unsigned int PLANE_EBO;
     gldc(glGenBuffers(1, &PLANE_EBO));
     gldc(glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, PLANE_EBO));
     gldc(glBufferData(GL_ELEMENT_ARRAY_BUFFER,
-                      sizeof(unsigned int) * plane.indices.size(),
-                      plane.indices.data(),
+                      sizeof(unsigned int) * eo::plane.indices.size(),
+                      eo::plane.indices.data(),
                       GL_STATIC_DRAW));
 
     gldc(glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void*)0));
@@ -100,21 +100,21 @@ void render_scene(Shader& shader)
     model = {1.0f};
     shader.set_uniform_mat4(u_model, model);
 
-    gldc(glDrawElements(GL_TRIANGLES, plane.indices.size(), GL_UNSIGNED_INT, 0));
+    gldc(glDrawElements(GL_TRIANGLES, eo::plane.indices.size(), GL_UNSIGNED_INT, 0));
 }
 
 int main()
 {
     LOG_H("Main Start");
 
-    std::unique_ptr<Window> window;
+    std::unique_ptr<eo::Window> window;
 
     try
     {
-        window = std::unique_ptr<Window>{new Window{
+        window = std::unique_ptr<eo::Window>{new eo::Window{
             WINDOW_WIDTH, WINDOW_HEIGHT, WINDOW_TITLE, OPENGL_MAJOR_VERSION, OPENGL_MINOR_VERSION}};
     }
-    catch (const WindowException& e)
+    catch (const eo::WindowException& e)
     {
         LOG_ERR(e.what());
         return -1;
@@ -123,7 +123,7 @@ int main()
     LOG_H("Initialization Complete");
     LOG("OpenGL version " << window->opengl_version());
 
-    Shader shader(VERTEX_SHADER_FILEPATH, FRAGMENT_SHADER_FILEPATH);
+    eo::Shader shader(VERTEX_SHADER_FILEPATH, FRAGMENT_SHADER_FILEPATH);
     shader.build();
 
     window->set_clear_color(glm::vec4{NCOLV(36.0), NCOLV(22.0), NCOLV(35), 1.0});
@@ -132,12 +132,12 @@ int main()
     unsigned int u_view = shader.uniform_location_for("u_view");
     unsigned int u_projection = shader.uniform_location_for("u_projection");
 
-    Camera camera{
+    eo::Camera camera{
         static_cast<float>(window->buffer_width() / static_cast<float>(window->buffer_height()))};
     shader.set_uniform_mat4(u_projection, camera.projection());
-    Shader::unuse_all();
+    eo::Shader::unuse_all();
 
-    Input::register_mouse_move_handler(
+    eo::Input::register_mouse_move_handler(
         [&camera](glm::vec2 current_mouse_position, glm::vec2 last_mouse_position) -> void
         { camera.look(current_mouse_position, last_mouse_position); });
 
@@ -152,21 +152,21 @@ int main()
         window->poll_events();
         window->clear();
 
-        if (Input::action_pressed(Action::move_forward))
+        if (eo::Input::action_pressed(eo::Action::move_forward))
         {
-            camera.strafe(Strafe::forward, delta_time);
+            camera.strafe(eo::Strafe::forward, delta_time);
         }
-        if (Input::action_pressed(Action::move_back))
+        if (eo::Input::action_pressed(eo::Action::move_back))
         {
-            camera.strafe(Strafe::back, delta_time);
+            camera.strafe(eo::Strafe::back, delta_time);
         }
-        if (Input::action_pressed(Action::move_left))
+        if (eo::Input::action_pressed(eo::Action::move_left))
         {
-            camera.strafe(Strafe::left, delta_time);
+            camera.strafe(eo::Strafe::left, delta_time);
         }
-        if (Input::action_pressed(Action::move_right))
+        if (eo::Input::action_pressed(eo::Action::move_right))
         {
-            camera.strafe(Strafe::right, delta_time);
+            camera.strafe(eo::Strafe::right, delta_time);
         }
 
         shader.use();
@@ -176,7 +176,7 @@ int main()
 
         window->swap_buffers();
 
-        is_running = !(window->should_close() || Input::action_pressed(Action::quit_app));
+        is_running = !(window->should_close() || eo::Input::action_pressed(eo::Action::quit_app));
     }
 
     return 0;

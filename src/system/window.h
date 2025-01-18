@@ -5,6 +5,8 @@
 #include <stdexcept>
 #include <string>
 
+namespace eo
+{
 class Window
 {
   public:
@@ -37,3 +39,4 @@ class WindowException : public std::runtime_error
   public:
     explicit WindowException(const char* message) : std::runtime_error(message) {}
 };
+} // namespace eo

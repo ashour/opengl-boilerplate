@@ -4,6 +4,8 @@
 #include <glm/glm.hpp>
 #include <string>
 
+namespace eo
+{
 class Shader
 {
   public:
@@ -35,3 +37,4 @@ class Shader
                                 char* log_buffer,
                                 const size_t log_buffer_size) const;
 };
+} // namespace eo

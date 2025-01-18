@@ -3,6 +3,8 @@
 #include <array>
 #include <functional>
 
+namespace eo
+{
 std::array<bool, Input::KEYS_SIZE> Input::_keys{};
 std::function<void(glm::vec2, glm::vec2)> Input::_on_mouse_moved{};
 
@@ -53,3 +55,4 @@ void Input::mouse_callback(GLFWwindow* window, double x_position, double y_posit
 
     _last_mouse_position = _current_mouse_position;
 }
+} // namespace eo

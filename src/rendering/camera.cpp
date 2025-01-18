@@ -3,6 +3,8 @@
 #include <glm/ext.hpp>
 #include <glm/glm.hpp>
 
+namespace eo
+{
 Camera::Camera(const float aspect_ratio)
     : _projection{glm::perspective(glm::radians(_fov), aspect_ratio, _near_plane, _far_plane)}
 {
@@ -45,3 +47,4 @@ void Camera::look(glm::vec2 current_mouse_position, glm::vec2 last_mouse_positio
 }
 
 glm::mat4 Camera::view() const { return glm::lookAt(_position, _position + _front, _world_up); }
+} // namespace eo

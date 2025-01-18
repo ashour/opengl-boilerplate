@@ -2,6 +2,8 @@
 
 #include <glm/glm.hpp>
 
+namespace eo
+{
 enum class Strafe
 {
     forward,
@@ -38,3 +40,4 @@ class Camera
     float _pitch{};
     float _yaw{-90.0f};
 };
+} // namespace eo

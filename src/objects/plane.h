@@ -1,5 +1,7 @@
 #include "object.h"
 
+namespace eo
+{
 // clang-format off
 inline const Object<4*6, 6> plane{
     .vertices = {
@@ -14,3 +16,4 @@ inline const Object<4*6, 6> plane{
     }
 };
 // clang-format on
+} // namespace eo
