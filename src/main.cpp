@@ -10,6 +10,7 @@
 #include "rendering/shader.h"
 #include "rendering/transform.h"
 #include "system/input.h"
+#include "system/time.h"
 #include "system/window.h"
 #include <GLFW/glfw3.h>
 #include <glm/ext.hpp>
@@ -88,32 +89,29 @@ int main()
         [&camera](glm::vec2 current_mouse_position, glm::vec2 last_mouse_position) -> void
         { camera.look(current_mouse_position, last_mouse_position); });
 
-    float last_frame_time = 0.0f;
     bool is_running = true;
     while (is_running)
     {
-        float current_frame_time = glfwGetTime();
-        float delta_time = current_frame_time - last_frame_time;
-        last_frame_time = current_frame_time;
+        eo::Time::update();
 
         window->poll_events();
         window->clear();
 
         if (eo::Input::action_pressed(eo::Action::move_forward))
         {
-            camera.strafe(eo::Strafe::forward, delta_time);
+            camera.strafe(eo::Strafe::forward, eo::Time::delta_time());
         }
         if (eo::Input::action_pressed(eo::Action::move_back))
         {
-            camera.strafe(eo::Strafe::back, delta_time);
+            camera.strafe(eo::Strafe::back, eo::Time::delta_time());
         }
         if (eo::Input::action_pressed(eo::Action::move_left))
         {
-            camera.strafe(eo::Strafe::left, delta_time);
+            camera.strafe(eo::Strafe::left, eo::Time::delta_time());
         }
         if (eo::Input::action_pressed(eo::Action::move_right))
         {
-            camera.strafe(eo::Strafe::right, delta_time);
+            camera.strafe(eo::Strafe::right, eo::Time::delta_time());
         }
 
         shader.use();

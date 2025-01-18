@@ -21,6 +21,8 @@ enum class Action
 class Input
 {
   public:
+    Input() = delete;
+
     static void key_callback(GLFWwindow* window, int key, int scancode, int action, int mods);
     static bool action_pressed(Action action);
 

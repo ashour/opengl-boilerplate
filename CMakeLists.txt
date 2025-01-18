@@ -40,6 +40,7 @@ add_executable(${PROJECT_NAME}
   src/rendering/shader.cpp
   src/rendering/transform.cpp
   src/system/input.cpp
+  src/system/time.cpp
   src/system/window.cpp
 )
 
