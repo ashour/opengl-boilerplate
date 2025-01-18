@@ -37,6 +37,9 @@ Window::Window(const unsigned int width,
 
     glfwSetKeyCallback(_glfw_window, Input::key_callback);
 
+    glfwSetInputMode(_glfw_window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+    glfwSetCursorPosCallback(_glfw_window, Input::mouse_callback);
+
     glfwMakeContextCurrent(_glfw_window);
 
     glfwGetFramebufferSize(_glfw_window, &_buffer_width, &_buffer_height);

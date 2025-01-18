@@ -1,7 +1,6 @@
 // clang-format off
 #include <glad/glad.h>
 // clang-format on
-#include "glm/fwd.hpp"
 #include "lib/color.h"
 #include "lib/log.h"
 #include "lib/opengl_debug.h"
@@ -21,6 +20,36 @@ static constexpr unsigned int WINDOW_HEIGHT = 600;
 
 static constexpr const char* VERTEX_SHADER_FILEPATH = "./resources/shaders/default.vert";
 static constexpr const char* FRAGMENT_SHADER_FILEPATH = "./resources/shaders/default.frag";
+
+const glm::vec3 world_up{0.0f, 1.0f, 0.0f};
+glm::vec3 camera_front{0.0f, 0.0f, -1.0f};
+glm::vec3 camera_up{0.0f, 1.0f, 0.0f};
+float pitch = 0.0f;
+float yaw = -90.0f;
+
+void on_mouse_moved(glm::vec2 current_mouse_position, glm::vec2 last_mouse_position)
+{
+    glm::vec2 mouse_offset{current_mouse_position.x - last_mouse_position.x,
+                           last_mouse_position.y - current_mouse_position.y};
+
+    yaw += (mouse_offset.x * 0.1f);
+    pitch += (mouse_offset.y * 0.1f);
+
+    if (pitch > 89.0f)
+    {
+        pitch = 89.0f;
+    }
+    else if (pitch < -89.0f)
+    {
+        pitch = -89.0f;
+    }
+
+    glm::vec3 direction{cos(glm::radians(yaw)) * cos(glm::radians(pitch)),
+                        sin(glm::radians(pitch)),
+                        sin(glm::radians(yaw)) * cos(glm::radians(pitch))};
+
+    camera_front = glm::normalize(direction);
+}
 
 int main()
 {
@@ -119,13 +148,14 @@ int main()
     Shader::unuse_all();
 
     glm::vec3 camera_position{0.0f, 0.0f, 10.0f};
-    const glm::vec3 camera_front{0.0f, 0.0f, -1.0f};
-    const glm::vec3 camera_up{0.0f, 1.0f, 0.0f};
     const float camera_speed = 2.5f;
 
     float last_frame_time = 0.0f;
 
-    while (!window->should_close())
+    Input::register_mouse_move_handler(on_mouse_moved);
+
+    bool is_running = true;
+    while (is_running)
     {
         float current_frame_time = glfwGetTime();
         float delta_time = current_frame_time - last_frame_time;
@@ -177,6 +207,8 @@ int main()
         gldc(glDrawElements(GL_TRIANGLES, 36, GL_UNSIGNED_INT, 0));
 
         window->swap_buffers();
+
+        is_running = !(window->should_close() || Input::action_pressed(Action::quit_app));
     }
 
     return 0;
