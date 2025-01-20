@@ -7,9 +7,9 @@
 inline constexpr unsigned int OPENGL_MAJOR_VERSION = 4;
 inline constexpr unsigned int OPENGL_MINOR_VERSION = 1;
 
-inline constexpr std::string WINDOW_TITLE = "OpenGL Boilerplate";
-inline constexpr unsigned int WINDOW_WIDTH = 800;
-inline constexpr unsigned int WINDOW_HEIGHT = 600;
+inline const std::string WINDOW_TITLE = "OpenGL Boilerplate";
+inline constexpr unsigned int WINDOW_WIDTH = 1920;
+inline constexpr unsigned int WINDOW_HEIGHT = 1080;
 
 inline constexpr const char* VERTEX_SHADER_FILEPATH = "./resources/shaders/default.vert";
 inline constexpr const char* FRAGMENT_SHADER_FILEPATH = "./resources/shaders/default.frag";

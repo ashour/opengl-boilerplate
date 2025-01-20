@@ -32,16 +32,25 @@ add_subdirectory(third_party/glm)
 # ----------------------------------------
 # Executables
 # ----------------------------------------
-add_executable(${PROJECT_NAME}
+add_executable(${PROJECT_NAME} 
   src/main.cpp
+  src/app.h
   src/app.cpp
+  src/lib/file_to_string.h
   src/lib/file_to_string.cpp
+  src/rendering/camera.h
   src/rendering/camera.cpp
+  src/rendering/mesh.h
   src/rendering/mesh.cpp
+  src/rendering/shader.h
   src/rendering/shader.cpp
+  src/rendering/transform.h
   src/rendering/transform.cpp
+  src/system/input.h
   src/system/input.cpp
+  src/system/time.h
   src/system/time.cpp
+  src/system/window.h
   src/system/window.cpp
 )
 
