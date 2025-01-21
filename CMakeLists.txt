@@ -30,6 +30,12 @@ add_subdirectory(third_party/glm)
 
 
 # ----------------------------------------
+# stb_image
+# ----------------------------------------
+include_directories(third_party/stb)
+
+
+# ----------------------------------------
 # Executables
 # ----------------------------------------
 file (GLOB_RECURSE SOURCES

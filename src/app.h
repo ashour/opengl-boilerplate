@@ -15,6 +15,7 @@ class App
   private:
     bool init_window();
     void init_rendering();
+    void init_texture();
     void init_input();
     void init_cube_positions();
 
@@ -29,5 +30,7 @@ class App
     unsigned int _u_view;
 
     std::array<glm::vec3, 180> _cube_positions{};
+
+    unsigned int _texture;
 };
 } // namespace eo

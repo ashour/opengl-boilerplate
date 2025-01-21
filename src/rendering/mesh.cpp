@@ -21,11 +21,16 @@ void Mesh::init(const float* vertices,
     gldc(glBufferData(
         GL_ELEMENT_ARRAY_BUFFER, sizeof(unsigned int) * index_count, indices, GL_STATIC_DRAW));
 
-    gldc(glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void*)0));
+    gldc(glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)0));
     gldc(glEnableVertexAttribArray(0));
+
     gldc(glVertexAttribPointer(
-        1, 3, GL_FLOAT, GL_TRUE, 6 * sizeof(float), (void*)(3 * sizeof(float))));
+        1, 3, GL_FLOAT, GL_TRUE, 8 * sizeof(float), (void*)(3 * sizeof(float))));
     gldc(glEnableVertexAttribArray(1));
+
+    gldc(glVertexAttribPointer(
+        2, 2, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(6 * sizeof(float))));
+    gldc(glEnableVertexAttribArray(2));
 }
 
 Mesh::~Mesh()
