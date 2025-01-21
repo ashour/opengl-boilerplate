@@ -1,5 +1,6 @@
 #include "rendering/camera.h"
 #include "rendering/shader.h"
+#include "rendering/texture.h"
 #include "system/window.h"
 #include <array>
 #include <memory>
@@ -15,7 +16,6 @@ class App
   private:
     bool init_window();
     void init_rendering();
-    void init_texture();
     void init_input();
     void init_cube_positions();
 
@@ -27,10 +27,10 @@ class App
     std::unique_ptr<Camera> _camera;
     std::unique_ptr<Shader> _shader;
 
+    std::unique_ptr<Texture> _texture;
+
     unsigned int _u_view;
 
     std::array<glm::vec3, 180> _cube_positions{};
-
-    unsigned int _texture;
 };
 } // namespace eo

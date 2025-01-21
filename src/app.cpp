@@ -1,7 +1,6 @@
 #include "app.h"
 #include "config.h"
 #include "lib/log.h"
-#include "lib/opengl_debug.h"
 #include "lib/random.h"
 #include "objects/cube.h"
 #include "objects/plane.h"
@@ -12,11 +11,8 @@
 #include "system/input.h"
 #include "system/time.h"
 #include "system/window.h"
-#include <glad/glad.h>
 #include <glm/glm.hpp>
 #include <memory>
-#define STB_IMAGE_IMPLEMENTATION
-#include <stb_image.h>
 
 namespace eo
 {
@@ -27,7 +23,6 @@ int App::run()
         return -1;
     }
     init_rendering();
-    init_texture();
     init_input();
     init_cube_positions();
 
@@ -71,36 +66,8 @@ void App::init_rendering()
 
     _shader->set_uniform_mat4(u_projection, _camera->projection());
     Shader::unuse_all();
-}
 
-void App::init_texture()
-{
-    gldc(glGenTextures(1, &_texture));
-    gldc(glBindTexture(GL_TEXTURE_2D, _texture));
-
-    gldc(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT));
-    gldc(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT));
-    gldc(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR));
-    gldc(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR));
-
-    int width;
-    int height;
-    int channel_count;
-    stbi_set_flip_vertically_on_load(true);
-    unsigned char* data =
-        stbi_load((TEXTURE_DIR + "wall.jpg").c_str(), &width, &height, &channel_count, 0);
-    if (data)
-    {
-        LOG("Loaded texture " << TEXTURE_DIR << "wall.jpg successfully");
-        gldc(glTexImage2D(
-            GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, data));
-        gldc(glGenerateMipmap(GL_TEXTURE_2D));
-    }
-    else
-    {
-        LOG_ERR("Failed to load texture " << TEXTURE_DIR << "wall.jpg");
-    }
-    stbi_image_free(data);
+    _texture = std::make_unique<Texture>(TEXTURE_DIR + "wall.jpg");
 }
 
 void App::init_input()
@@ -170,8 +137,7 @@ void App::render_scene()
 
     Mesh plane{eo::plane};
     _shader->set_uniform_mat4(u_model, glm::mat4{1.0f});
-    gldc(glActiveTexture(GL_TEXTURE0));
-    gldc(glBindTexture(GL_TEXTURE_2D, _texture));
+    _texture->bind(TextureUnit::TEXUNIT0);
     plane.draw();
 
     Mesh cube{eo::cube};
