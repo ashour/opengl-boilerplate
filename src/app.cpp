@@ -53,7 +53,8 @@ void App::init_rendering()
 {
     _window->set_clear_color(SCENE_CLEAR_COLOR);
 
-    _shader = std::make_unique<Shader>(VERTEX_SHADER_FILEPATH, FRAGMENT_SHADER_FILEPATH);
+    _shader =
+        std::make_unique<Shader>(DEFAULT_VERTEX_SHADER_FILEPATH, DEFAULT_FRAGMENT_SHADER_FILEPATH);
     _shader->build();
 
     _shader->use();
@@ -80,7 +81,7 @@ void App::init_cube_positions()
     {
         _cube_positions[i] = {
             random_float(-90.0f, 90.0f),
-            random_float(0.0f, 10.0f),
+            random_float(2.0f, 20.0f),
             random_float(-90.0f, 90.0f),
         };
     }

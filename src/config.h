@@ -11,7 +11,8 @@ inline const std::string WINDOW_TITLE = "OpenGL Boilerplate";
 inline constexpr unsigned int WINDOW_WIDTH = 1920;
 inline constexpr unsigned int WINDOW_HEIGHT = 1080;
 
-inline constexpr const char* VERTEX_SHADER_FILEPATH = "./resources/shaders/default.vert";
-inline constexpr const char* FRAGMENT_SHADER_FILEPATH = "./resources/shaders/default.frag";
+inline const std::string SHADER_DIR = "./resources/shaders/";
+inline const std::string DEFAULT_VERTEX_SHADER_FILEPATH = SHADER_DIR + "default.vert";
+inline const std::string DEFAULT_FRAGMENT_SHADER_FILEPATH = SHADER_DIR + "default.frag";
 
 inline constexpr glm::vec4 SCENE_CLEAR_COLOR{NCOLV(179), NCOLV(195), NCOLV(239), 1.0};
