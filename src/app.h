@@ -27,7 +27,8 @@ class App
     std::unique_ptr<Camera> _camera;
     std::unique_ptr<Shader> _shader;
 
-    std::unique_ptr<Texture> _texture;
+    std::unique_ptr<Texture> _wall_texture;
+    std::unique_ptr<Texture> _dirt_texture;
 
     unsigned int _u_view;
 

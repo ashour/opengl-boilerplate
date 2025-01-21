@@ -8,7 +8,7 @@
 namespace eo
 {
 
-Texture::Texture(const std::string& file_path)
+Texture::Texture(const std::string& file_path, const Format& format)
 {
     gldc(glGenTextures(1, &_id));
     gldc(glBindTexture(GL_TEXTURE_2D, _id));
@@ -26,8 +26,15 @@ Texture::Texture(const std::string& file_path)
     unsigned char* data = stbi_load(file_path.c_str(), &width, &height, &channel_count, 0);
     if (data)
     {
-        gldc(glTexImage2D(
-            GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, data));
+        gldc(glTexImage2D(GL_TEXTURE_2D,
+                          0,
+                          GL_RGB,
+                          width,
+                          height,
+                          0,
+                          static_cast<GLenum>(format),
+                          GL_UNSIGNED_BYTE,
+                          data));
         gldc(glGenerateMipmap(GL_TEXTURE_2D));
     }
     else

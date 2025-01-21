@@ -10,10 +10,16 @@ enum class TextureUnit
     TEXUNIT0 = GL_TEXTURE0
 };
 
+enum class Format
+{
+    RGB = GL_RGB,
+    RGBA = GL_RGBA
+};
+
 class Texture
 {
   public:
-    explicit Texture(const std::string& file_path);
+    explicit Texture(const std::string& file_path, const Format& format);
     ~Texture();
 
     void bind(TextureUnit unit) const;
