@@ -5,12 +5,15 @@
 #include "lib/random.h"
 #include "objects/primitive.h"
 #include "rendering/camera.h"
+#include "rendering/material.h"
 #include "rendering/mesh.h"
 #include "rendering/shader.h"
 #include "rendering/transform.h"
 #include "system/input.h"
 #include "system/time.h"
 #include "system/window.h"
+#include <cmath>
+#include <glm/ext.hpp>
 #include <glm/glm.hpp>
 #include <memory>
 
@@ -76,6 +79,18 @@ void App::init_rendering()
     _shader->set_uniform_vec3(u_light_ambient, glm::vec3(NCOLV(233), NCOLV(238), NCOLV(250)));
     _shader->set_uniform_vec3(u_light_diffuse, glm::vec3(1.0f, 1.0f, 1.0f));
     _shader->set_uniform_vec3(u_light_specular, glm::vec3(NCOLV(255), NCOLV(204), NCOLV(107)));
+
+    _mat_green_clay = std::make_unique<Material>(*_shader,
+                                                 glm::vec3(0.2f),
+                                                 glm::vec3(0.1f, 0.35f, 0.1f),
+                                                 glm::vec3(0.45f, 0.55f, 0.45f),
+                                                 25.0f);
+
+    _mat_gold = std::make_unique<Material>(*_shader,
+                                           glm::vec3(0.24725f, 0.1995f, 0.0745f),
+                                           glm::vec3(0.75164f, 0.60648f, 0.22648f),
+                                           glm::vec3(0.628281f, 0.555802f, 0.366065f),
+                                           25.0f);
     Shader::unuse_all();
 
     _wall_texture = std::make_unique<Texture>(TEXTURE_DIR + "wall.jpg", Format::RGB);
@@ -150,8 +165,7 @@ void App::render_scene()
     _shader->set_uniform_vec3(_u_view_position, _camera->position());
 
     constexpr float light_orbit_radius = 50.0f;
-    float light_angle = glm::radians(Time::current_time() * 20.0f);
-    LOG(light_angle);
+    float light_angle = std::fmod(glm::radians(Time::current_time() * 20.0f), glm::two_pi<float>());
     _shader->set_uniform_vec3(_u_light_position,
                               glm::vec3(light_orbit_radius * glm::cos(light_angle),
                                         light_orbit_radius * glm::sin(light_angle),
@@ -164,24 +178,14 @@ void App::render_scene()
     plane_transform.scale(glm::vec3(200.0f, 1.0f, 200.0f));
     _shader->set_uniform_mat4(u_model, plane_transform.matrix());
     _shader->set_uniform_1f(u_texture_scale, 0.02f);
-    auto u_ambient = _shader->uniform_location_for("u_material.ambient_color");
-    auto u_diffuse = _shader->uniform_location_for("u_material.diffuse_color");
-    auto u_specular = _shader->uniform_location_for("u_material.specular_color");
-    auto u_shininess = _shader->uniform_location_for("u_material.shininess");
-    _shader->set_uniform_vec3(u_ambient, glm::vec3(0.2f));
-    _shader->set_uniform_vec3(u_diffuse, glm::vec3(0.1f, 0.35f, 0.1f));
-    _shader->set_uniform_vec3(u_specular, glm::vec3(0.45f, 0.55f, 0.45f));
-    _shader->set_uniform_1f(u_shininess, 25.0f);
+    _mat_green_clay->use();
     _dirt_texture->bind(TextureUnit::TEXUNIT0);
     _plane->draw();
 
     Transform cube_transform{};
     cube_transform.rotation(Time::current_time() * glm::radians(50.0f), {0.5f, 1.0f, 0.0f});
     _shader->set_uniform_1f(u_texture_scale, 1.0f);
-    _shader->set_uniform_vec3(u_ambient, glm::vec3(0.24725f, 0.1995f, 0.0745f));
-    _shader->set_uniform_vec3(u_diffuse, glm::vec3(0.75164f, 0.60648f, 0.22648f));
-    _shader->set_uniform_vec3(u_specular, glm::vec3(0.628281f, 0.555802f, 0.366065f));
-    _shader->set_uniform_1f(u_shininess, 500.0f);
+    _mat_gold->use();
     _wall_texture->bind(TextureUnit::TEXUNIT0);
 
     for (glm::vec3 position : _cube_positions)
