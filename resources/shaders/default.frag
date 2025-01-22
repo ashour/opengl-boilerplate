@@ -13,6 +13,10 @@ uniform vec3 u_ambient_color = vec3(1.0);
 uniform vec3 u_directional_light_position = vec3(-100.0, 100.0, 0.0);
 uniform vec3 u_directional_light_color = vec3(0.8);
 
+uniform vec3 u_view_position;
+uniform float u_specular_intensity = 0.5;
+uniform vec3 u_specular_light_color = vec3(1.0);
+
 const float MIN_TEXTURE_SCALE = 0.0001;
 uniform sampler2D u_texture;
 uniform float u_texture_scale = 1.0;
@@ -29,6 +33,11 @@ void main()
     vec3 light_direction = normalize(u_directional_light_position - v_frag_position);
     vec3 diffuse_light_color = max(dot(v_normal, light_direction), 0.0) * u_directional_light_color;
 
-    o_color =
-        texture_color * vec4(v_color, 1.0) * vec4(ambient_light_color + diffuse_light_color, 1.0);
+    vec3 view_direction = normalize(u_view_position - v_frag_position);
+    vec3 reflection_direction = reflect(-light_direction, v_normal);
+    float shine = pow(max(dot(view_direction, reflection_direction), 0.0), 32);
+    vec3 specular_light_color = u_specular_intensity * shine * u_specular_light_color;
+
+    o_color = texture_color * vec4(v_color, 1.0) *
+              vec4(ambient_light_color + diffuse_light_color + specular_light_color, 1.0);
 }

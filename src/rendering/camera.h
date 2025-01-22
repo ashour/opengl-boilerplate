@@ -20,6 +20,7 @@ class Camera
     void strafe(Strafe direction, float delta_time);
     void look(glm::vec2 current_mouse_position, glm::vec2 last_mouse_position);
 
+    glm::vec3 position() const { return _position; }
     glm::mat4 projection() const { return _projection; }
     glm::mat4 view() const;
 

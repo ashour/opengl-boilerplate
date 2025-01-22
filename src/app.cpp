@@ -57,13 +57,15 @@ void App::init_rendering()
     _shader->build();
 
     _shader->use();
-    _u_view = _shader->uniform_location_for("u_view");
-    unsigned int u_projection = _shader->uniform_location_for("u_projection");
+    _u_view_matrix = _shader->uniform_location_for("u_view");
+    _u_view_position = _shader->uniform_location_for("u_view_position");
 
     _camera = std::make_unique<Camera>(
         static_cast<float>(_window->buffer_width() / static_cast<float>(_window->buffer_height())));
 
+    unsigned int u_projection = _shader->uniform_location_for("u_projection");
     _shader->set_uniform_mat4(u_projection, _camera->projection());
+
     Shader::unuse_all();
 
     _wall_texture = std::make_unique<Texture>(TEXTURE_DIR + "wall.jpg", Format::RGB);
@@ -134,7 +136,8 @@ void App::handle_input()
 void App::render_scene()
 {
     _shader->use();
-    _shader->set_uniform_mat4(_u_view, _camera->view());
+    _shader->set_uniform_mat4(_u_view_matrix, _camera->view());
+    _shader->set_uniform_vec3(_u_view_position, _camera->position());
 
     unsigned int u_model = _shader->uniform_location_for("u_model");
     unsigned int u_texture_scale = _shader->uniform_location_for("u_texture_scale");

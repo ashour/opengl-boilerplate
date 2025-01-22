@@ -31,7 +31,8 @@ class App
     std::unique_ptr<Texture> _wall_texture;
     std::unique_ptr<Texture> _dirt_texture;
 
-    unsigned int _u_view;
+    unsigned int _u_view_matrix;
+    unsigned int _u_view_position;
 
     std::unique_ptr<Mesh> _cube;
     std::unique_ptr<Mesh> _plane;
