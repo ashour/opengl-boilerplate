@@ -38,7 +38,10 @@ void Transform::update_matrix()
 {
     _model_matrix = glm::mat4{1.0f};
     _model_matrix = glm::translate(_model_matrix, _position);
-    _model_matrix = glm::rotate(_model_matrix, _rotation_angle, _rotation_axis);
+    if (_rotation_angle != 0.0f)
+    {
+        _model_matrix = glm::rotate(_model_matrix, _rotation_angle, _rotation_axis);
+    }
     _model_matrix = glm::scale(_model_matrix, _scale);
 
     _dirty = false;
