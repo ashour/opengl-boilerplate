@@ -1,4 +1,5 @@
 #include "rendering/camera.h"
+#include "rendering/light.h"
 #include "rendering/material.h"
 #include "rendering/mesh.h"
 #include "rendering/shader.h"
@@ -28,8 +29,7 @@ class App
     std::unique_ptr<Window> _window;
     std::unique_ptr<Camera> _camera;
     std::shared_ptr<Shader> _shader;
-
-    unsigned int _u_light_position;
+    std::shared_ptr<Light> _light;
 
     std::unique_ptr<Texture> _wall_texture;
     std::unique_ptr<Texture> _dirt_texture;

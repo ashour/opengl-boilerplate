@@ -70,15 +70,11 @@ void App::init_rendering()
     auto u_projection = _shader->uniform_location_for("u_projection");
     _shader->set_uniform_mat4(u_projection, _camera->projection());
 
-    _u_light_position = _shader->uniform_location_for("u_light.position");
-    auto u_light_ambient = _shader->uniform_location_for("u_light.ambient_color");
-    auto u_light_diffuse = _shader->uniform_location_for("u_light.diffuse_color");
-    auto u_light_specular = _shader->uniform_location_for("u_light.specular_color");
-
-    _shader->set_uniform_vec3(_u_light_position, glm::vec3(10.0f, 50.0f, -10.0f));
-    _shader->set_uniform_vec3(u_light_ambient, glm::vec3(NCOLV(233), NCOLV(238), NCOLV(250)));
-    _shader->set_uniform_vec3(u_light_diffuse, glm::vec3(1.0f, 1.0f, 1.0f));
-    _shader->set_uniform_vec3(u_light_specular, glm::vec3(NCOLV(255), NCOLV(204), NCOLV(107)));
+    _light = std::make_unique<Light>(*_shader,
+                                     glm::vec3(10.0f, 50.0f, -10.0f),
+                                     glm::vec3(NCOLV(233), NCOLV(238), NCOLV(250)),
+                                     glm::vec3(1.0f, 1.0f, 1.0f),
+                                     glm::vec3(NCOLV(255), NCOLV(204), NCOLV(107)));
 
     _mat_green_clay = std::make_unique<Material>(*_shader,
                                                  glm::vec3(0.2f),
@@ -166,10 +162,9 @@ void App::render_scene()
 
     constexpr float light_orbit_radius = 50.0f;
     float light_angle = std::fmod(glm::radians(Time::current_time() * 20.0f), glm::two_pi<float>());
-    _shader->set_uniform_vec3(_u_light_position,
-                              glm::vec3(light_orbit_radius * glm::cos(light_angle),
-                                        light_orbit_radius * glm::sin(light_angle),
-                                        0.0f));
+    _light->set_position(glm::vec3(light_orbit_radius * glm::cos(light_angle),
+                                   light_orbit_radius * glm::sin(light_angle),
+                                   0.0f));
 
     unsigned int u_model = _shader->uniform_location_for("u_model");
     unsigned int u_texture_scale = _shader->uniform_location_for("u_texture_scale");
