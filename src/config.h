@@ -12,8 +12,8 @@ inline constexpr unsigned int WINDOW_WIDTH = 960;
 inline constexpr unsigned int WINDOW_HEIGHT = 640;
 
 inline const std::string SHADER_DIR = "./resources/shaders/";
-inline const std::string DEFAULT_VERTEX_SHADER_FILEPATH = SHADER_DIR + "default.vert";
-inline const std::string DEFAULT_FRAGMENT_SHADER_FILEPATH = SHADER_DIR + "default.frag";
+inline const std::string DEFAULT_VERTEX_SHADER_FILEPATH = SHADER_DIR + "phong.vert";
+inline const std::string DEFAULT_FRAGMENT_SHADER_FILEPATH = SHADER_DIR + "phong.frag";
 
 inline const std::string TEXTURE_DIR = "./resources/textures/";
 
