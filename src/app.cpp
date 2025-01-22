@@ -1,5 +1,6 @@
 #include "app.h"
 #include "config.h"
+#include "lib/color.h"
 #include "lib/log.h"
 #include "lib/random.h"
 #include "objects/primitive.h"
@@ -63,9 +64,17 @@ void App::init_rendering()
     _camera = std::make_unique<Camera>(
         static_cast<float>(_window->buffer_width() / static_cast<float>(_window->buffer_height())));
 
-    unsigned int u_projection = _shader->uniform_location_for("u_projection");
+    auto u_projection = _shader->uniform_location_for("u_projection");
     _shader->set_uniform_mat4(u_projection, _camera->projection());
 
+    auto u_light_position = _shader->uniform_location_for("u_light.position");
+    auto u_light_ambient = _shader->uniform_location_for("u_light.ambient_color");
+    auto u_light_diffuse = _shader->uniform_location_for("u_light.diffuse_color");
+    auto u_light_specular = _shader->uniform_location_for("u_light.specular_color");
+    _shader->set_uniform_vec3(u_light_position, glm::vec3(10.0f, 50.0f, -10.0f));
+    _shader->set_uniform_vec3(u_light_ambient, glm::vec3(NCOLV(179), NCOLV(195), NCOLV(239)));
+    _shader->set_uniform_vec3(u_light_diffuse, glm::vec3(1.0f, 1.0f, 1.0f));
+    _shader->set_uniform_vec3(u_light_specular, glm::vec3(NCOLV(255), NCOLV(204), NCOLV(107)));
     Shader::unuse_all();
 
     _wall_texture = std::make_unique<Texture>(TEXTURE_DIR + "wall.jpg", Format::RGB);
