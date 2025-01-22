@@ -1,32 +1,20 @@
 #pragma once
 
+#include "objects/object_attribute.h"
 #include <glad/glad.h>
 
 namespace eo
 {
-enum class VertexAttributeType
-{
-    FLOAT = GL_FLOAT
-};
-
-struct VertexAttributeProps
-{
-    const unsigned int index;
-    const unsigned int size;
-    const VertexAttributeType type;
-    const bool is_normalized;
-    const unsigned int stride;
-    const void* pointer;
-};
-
-class VertexAttribute
+class VertexAttr
 {
   public:
-    VertexAttribute(const VertexAttributeProps& props);
-    void init();
+    VertexAttr(const ObjectAttr& object_attribute);
+
     void enable();
 
   private:
-    const VertexAttributeProps& _props;
+    static GLenum to_gl_enum(const ObjectAttrType& type);
+
+    const ObjectAttr& _object_attribute;
 };
 } // namespace eo

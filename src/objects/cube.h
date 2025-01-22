@@ -3,8 +3,8 @@
 namespace eo
 {
 // clang-format off
-inline const Object<24 * 8, 6 * 6> cube{
-    .vertices = {
+inline const Object cube{
+    .vertices{
        -0.5f, -0.5f, -0.5f, 1.0f, 1.0f, 1.0f, 0.0f, 0.0f,  // A 0
         0.5f, -0.5f, -0.5f, 1.0f, 1.0f, 1.0f, 1.0f, 0.0f,  // B 1
         0.5f,  0.5f, -0.5f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f,  // C 2
@@ -32,7 +32,7 @@ inline const Object<24 * 8, 6 * 6> cube{
         -0.5f,  0.5f,  0.5f,  1.0f, 1.0f, 1.0f, 1.0f, 1.0f,  // H 22
          0.5f,  0.5f,  0.5f,   1.0f, 1.0f, 1.0f, 0.0f, 1.0f, // G 23
     },
-    .indices = {
+    .indices{
          // front and back
         0, 3, 2,
         2, 1, 0,
@@ -48,6 +48,11 @@ inline const Object<24 * 8, 6 * 6> cube{
         18, 19, 16,
         20, 21, 22,
         22, 23, 20
+    },
+    .attributes {
+        {0, 3, ObjectAttrType::FLOAT, false, 8 * sizeof(float), (void*)0},
+        {1, 3, ObjectAttrType::FLOAT, true, 8 * sizeof(float), (void*)(3 * sizeof(float))},
+        {2, 2, ObjectAttrType::FLOAT, false, 8 * sizeof(float), (void*)(6 * sizeof(float))}
     }
 };
 // clang-format on
