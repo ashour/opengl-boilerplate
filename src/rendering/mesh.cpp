@@ -1,13 +1,15 @@
 #include "lib/opengl_debug.h"
 #include "mesh.h"
 #include <glad/glad.h>
+#include <vector>
 
 namespace eo
 {
 void Mesh::init(const float* vertices,
                 const size_t vertex_count,
                 const unsigned int* indices,
-                const size_t index_count)
+                const size_t index_count,
+                const std::vector<VertexAttribute>& attributes)
 {
     gldc(glGenVertexArrays(1, &_vao));
     gldc(glBindVertexArray(_vao));
@@ -21,16 +23,11 @@ void Mesh::init(const float* vertices,
     gldc(glBufferData(
         GL_ELEMENT_ARRAY_BUFFER, sizeof(unsigned int) * index_count, indices, GL_STATIC_DRAW));
 
-    gldc(glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)0));
-    gldc(glEnableVertexAttribArray(0));
-
-    gldc(glVertexAttribPointer(
-        1, 3, GL_FLOAT, GL_TRUE, 8 * sizeof(float), (void*)(3 * sizeof(float))));
-    gldc(glEnableVertexAttribArray(1));
-
-    gldc(glVertexAttribPointer(
-        2, 2, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(6 * sizeof(float))));
-    gldc(glEnableVertexAttribArray(2));
+    for (auto attribute : attributes)
+    {
+        attribute.init();
+        attribute.enable();
+    }
 }
 
 Mesh::~Mesh()

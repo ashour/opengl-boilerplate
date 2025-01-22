@@ -8,11 +8,13 @@
 #include "rendering/mesh.h"
 #include "rendering/shader.h"
 #include "rendering/transform.h"
+#include "rendering/vertex_attribute.h"
 #include "system/input.h"
 #include "system/time.h"
 #include "system/window.h"
 #include <glm/glm.hpp>
 #include <memory>
+#include <vector>
 
 namespace eo
 {
@@ -136,21 +138,42 @@ void App::render_scene()
 
     unsigned int u_model = _shader->uniform_location_for("u_model");
 
-    Mesh plane{eo::plane};
+    Mesh plane{eo::plane,
+               std::vector<VertexAttribute>{
+                   VertexAttribute{{.index = 0,
+                                    .size = 3,
+                                    .type = VertexAttributeType::FLOAT,
+                                    .is_normalized = false,
+                                    .stride = 8 * sizeof(float),
+                                    .pointer = (void*)0}},
+                   VertexAttribute{{.index = 1,
+                                    .size = 3,
+                                    .type = VertexAttributeType::FLOAT,
+                                    .is_normalized = true,
+                                    .stride = 8 * sizeof(float),
+                                    .pointer = (void*)(3 * sizeof(float))}},
+                   VertexAttribute{{.index = 2,
+                                    .size = 2,
+                                    .type = VertexAttributeType::FLOAT,
+                                    .is_normalized = false,
+                                    .stride = 8 * sizeof(float),
+                                    .pointer = (void*)(6 * sizeof(float))}},
+               }};
+
     _shader->set_uniform_mat4(u_model, glm::mat4{1.0f});
     _dirt_texture->bind(TextureUnit::TEXUNIT0);
     plane.draw();
 
-    Mesh cube{eo::cube};
-    Transform cube_transform{};
-    cube_transform.rotation(Time::current_time() * glm::radians(50.0f), {0.5f, 1.0f, 0.0f});
-    _wall_texture->bind(TextureUnit::TEXUNIT0);
+    // Mesh cube{eo::cube};
+    // Transform cube_transform{};
+    // cube_transform.rotation(Time::current_time() * glm::radians(50.0f), {0.5f, 1.0f, 0.0f});
+    // _wall_texture->bind(TextureUnit::TEXUNIT0);
 
-    for (glm::vec3 position : _cube_positions)
-    {
-        cube_transform.position(position);
-        _shader->set_uniform_mat4(u_model, cube_transform.matrix());
-        cube.draw();
-    }
+    // for (glm::vec3 position : _cube_positions)
+    // {
+    //     cube_transform.position(position);
+    //     _shader->set_uniform_mat4(u_model, cube_transform.matrix());
+    //     cube.draw();
+    // }
 }
 } // namespace eo
