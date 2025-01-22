@@ -67,12 +67,13 @@ void App::init_rendering()
     auto u_projection = _shader->uniform_location_for("u_projection");
     _shader->set_uniform_mat4(u_projection, _camera->projection());
 
-    auto u_light_position = _shader->uniform_location_for("u_light.position");
+    _u_light_position = _shader->uniform_location_for("u_light.position");
     auto u_light_ambient = _shader->uniform_location_for("u_light.ambient_color");
     auto u_light_diffuse = _shader->uniform_location_for("u_light.diffuse_color");
     auto u_light_specular = _shader->uniform_location_for("u_light.specular_color");
-    _shader->set_uniform_vec3(u_light_position, glm::vec3(10.0f, 50.0f, -10.0f));
-    _shader->set_uniform_vec3(u_light_ambient, glm::vec3(NCOLV(179), NCOLV(195), NCOLV(239)));
+
+    _shader->set_uniform_vec3(_u_light_position, glm::vec3(10.0f, 50.0f, -10.0f));
+    _shader->set_uniform_vec3(u_light_ambient, glm::vec3(NCOLV(233), NCOLV(238), NCOLV(250)));
     _shader->set_uniform_vec3(u_light_diffuse, glm::vec3(1.0f, 1.0f, 1.0f));
     _shader->set_uniform_vec3(u_light_specular, glm::vec3(NCOLV(255), NCOLV(204), NCOLV(107)));
     Shader::unuse_all();
@@ -148,6 +149,14 @@ void App::render_scene()
     _shader->set_uniform_mat4(_u_view_matrix, _camera->view());
     _shader->set_uniform_vec3(_u_view_position, _camera->position());
 
+    constexpr float light_orbit_radius = 50.0f;
+    float light_angle = glm::radians(Time::current_time() * 20.0f);
+    LOG(light_angle);
+    _shader->set_uniform_vec3(_u_light_position,
+                              glm::vec3(light_orbit_radius * glm::cos(light_angle),
+                                        light_orbit_radius * glm::sin(light_angle),
+                                        0.0f));
+
     unsigned int u_model = _shader->uniform_location_for("u_model");
     unsigned int u_texture_scale = _shader->uniform_location_for("u_texture_scale");
 
@@ -159,7 +168,7 @@ void App::render_scene()
     auto u_diffuse = _shader->uniform_location_for("u_material.diffuse_color");
     auto u_specular = _shader->uniform_location_for("u_material.specular_color");
     auto u_shininess = _shader->uniform_location_for("u_material.shininess");
-    _shader->set_uniform_vec3(u_ambient, glm::vec3(0.0f));
+    _shader->set_uniform_vec3(u_ambient, glm::vec3(0.2f));
     _shader->set_uniform_vec3(u_diffuse, glm::vec3(0.1f, 0.35f, 0.1f));
     _shader->set_uniform_vec3(u_specular, glm::vec3(0.45f, 0.55f, 0.45f));
     _shader->set_uniform_1f(u_shininess, 25.0f);

@@ -28,6 +28,8 @@ class App
     std::unique_ptr<Camera> _camera;
     std::unique_ptr<Shader> _shader;
 
+    unsigned int _u_light_position;
+
     std::unique_ptr<Texture> _wall_texture;
     std::unique_ptr<Texture> _dirt_texture;
 
