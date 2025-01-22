@@ -27,7 +27,7 @@ class Camera
   private:
     float _fov{45.0};
     float _near_plane{0.1f};
-    float _far_plane{100.0f};
+    float _far_plane{200.0f};
     glm::mat4 _projection{};
 
     float _speed{2.5f};
