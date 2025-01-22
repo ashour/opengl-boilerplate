@@ -1,4 +1,5 @@
 #include "rendering/camera.h"
+#include "rendering/mesh.h"
 #include "rendering/shader.h"
 #include "rendering/texture.h"
 #include "system/window.h"
@@ -32,6 +33,8 @@ class App
 
     unsigned int _u_view;
 
+    std::unique_ptr<Mesh> _cube;
+    std::unique_ptr<Mesh> _plane;
     std::array<glm::vec3, 180> _cube_positions{};
 };
 } // namespace eo
