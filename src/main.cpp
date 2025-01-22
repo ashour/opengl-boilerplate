@@ -3,7 +3,7 @@
 
 int main()
 {
-    LOG_H("Main Start");
+    EO_LOG_HEADING("Main Start");
 
     eo::App app;
     return app.run();

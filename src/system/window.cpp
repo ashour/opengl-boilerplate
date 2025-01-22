@@ -26,7 +26,7 @@ Window::Window(const unsigned int width,
     glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 
 #ifdef __APPLE__
-    LOG("Apple environment detected");
+    EO_LOG_INFO("Apple environment detected");
     glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
 #endif
 

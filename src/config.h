@@ -17,4 +17,4 @@ inline const std::string DEFAULT_FRAGMENT_SHADER_FILEPATH = SHADER_DIR + "phong.
 
 inline const std::string TEXTURE_DIR = "./resources/textures/";
 
-inline constexpr glm::vec4 SCENE_CLEAR_COLOR{NCOLV(179), NCOLV(195), NCOLV(239), 1.0};
+inline constexpr glm::vec4 SCENE_CLEAR_COLOR{EO_NCOLV(179), EO_NCOLV(195), EO_NCOLV(239), 1.0};

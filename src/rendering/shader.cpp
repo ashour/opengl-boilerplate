@@ -82,7 +82,7 @@ unsigned int Shader::create_shader(const GLenum type,
     if (!success)
     {
         gldc(glGetShaderInfoLog(shader, log_buffer_size, nullptr, log_buffer));
-        LOG_ERR("Failed to compile shader: " << log_buffer);
+        EO_LOG_ERROR("Failed to compile shader: " << log_buffer);
     }
 
     return shader;
@@ -106,7 +106,7 @@ unsigned int Shader::create_program(const unsigned int vertex_shader,
     if (!success)
     {
         gldc(glGetShaderInfoLog(program, log_buffer_size, nullptr, log_buffer));
-        LOG_ERR("Failed to attach or link shaders to program: " << log_buffer);
+        EO_LOG_ERROR("Failed to attach or link shaders to program: " << log_buffer);
     }
 
     return program;

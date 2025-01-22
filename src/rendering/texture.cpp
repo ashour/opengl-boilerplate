@@ -39,7 +39,7 @@ Texture::Texture(const std::string& file_path, const Format& format)
     }
     else
     {
-        LOG_ERR("Failed to load texture " << file_path);
+        EO_LOG_ERROR("Failed to load texture " << file_path);
     }
     stbi_image_free(data);
 }

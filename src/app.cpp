@@ -29,8 +29,8 @@ int App::run()
     init_input();
     init_cube_positions();
 
-    LOG_H("Initialization Complete");
-    LOG("OpenGL version " << _window->opengl_version());
+    EO_LOG_HEADING("Initialization Complete");
+    EO_LOG_INFO("OpenGL version " << _window->opengl_version());
 
     loop();
     return 0;
@@ -45,7 +45,7 @@ bool App::init_window()
     }
     catch (const WindowException& e)
     {
-        LOG_ERR(e.what());
+        EO_LOG_ERROR(e.what());
         return false;
     }
 
@@ -72,9 +72,9 @@ void App::init_rendering()
 
     _light = std::make_unique<Light>(*_shader,
                                      glm::vec3(10.0f, 50.0f, -10.0f),
-                                     glm::vec3(NCOLV(233), NCOLV(238), NCOLV(250)),
+                                     glm::vec3(EO_NCOLV(233), EO_NCOLV(238), EO_NCOLV(250)),
                                      glm::vec3(1.0f, 1.0f, 1.0f),
-                                     glm::vec3(NCOLV(255), NCOLV(204), NCOLV(107)));
+                                     glm::vec3(EO_NCOLV(255), EO_NCOLV(204), EO_NCOLV(107)));
 
     _mat_green_clay = std::make_unique<Material>(*_shader,
                                                  glm::vec3(0.2f),
