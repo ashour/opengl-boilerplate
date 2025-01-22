@@ -146,12 +146,24 @@ void App::render_scene()
     plane_transform.scale(glm::vec3(200.0f, 1.0f, 200.0f));
     _shader->set_uniform_mat4(u_model, plane_transform.matrix());
     _shader->set_uniform_1f(u_texture_scale, 0.02f);
+    auto u_ambient = _shader->uniform_location_for("u_material.ambient_color");
+    auto u_diffuse = _shader->uniform_location_for("u_material.diffuse_color");
+    auto u_specular = _shader->uniform_location_for("u_material.specular_color");
+    auto u_shininess = _shader->uniform_location_for("u_material.shininess");
+    _shader->set_uniform_vec3(u_ambient, glm::vec3(0.0f));
+    _shader->set_uniform_vec3(u_diffuse, glm::vec3(0.1f, 0.35f, 0.1f));
+    _shader->set_uniform_vec3(u_specular, glm::vec3(0.45f, 0.55f, 0.45f));
+    _shader->set_uniform_1f(u_shininess, 25.0f);
     _dirt_texture->bind(TextureUnit::TEXUNIT0);
     _plane->draw();
 
     Transform cube_transform{};
     cube_transform.rotation(Time::current_time() * glm::radians(50.0f), {0.5f, 1.0f, 0.0f});
     _shader->set_uniform_1f(u_texture_scale, 1.0f);
+    _shader->set_uniform_vec3(u_ambient, glm::vec3(0.24725f, 0.1995f, 0.0745f));
+    _shader->set_uniform_vec3(u_diffuse, glm::vec3(0.75164f, 0.60648f, 0.22648f));
+    _shader->set_uniform_vec3(u_specular, glm::vec3(0.628281f, 0.555802f, 0.366065f));
+    _shader->set_uniform_1f(u_shininess, 500.0f);
     _wall_texture->bind(TextureUnit::TEXUNIT0);
 
     for (glm::vec3 position : _cube_positions)

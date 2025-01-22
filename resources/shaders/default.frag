@@ -8,7 +8,7 @@ in vec3 v_color;
 in vec2 v_texture_coordinate;
 
 uniform vec3 u_light_color = vec3(1.0);
-uniform vec3 u_directional_light_position = vec3(-100.0, 100.0, 0.0);
+uniform vec3 u_directional_light_position = vec3(-25.0, 100.0, 25.0);
 uniform vec3 u_view_position;
 
 struct Material
