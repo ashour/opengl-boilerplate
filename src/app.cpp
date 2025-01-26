@@ -72,18 +72,14 @@ void App::init_rendering()
 
     _light = std::make_unique<Light>(*_shader,
                                      glm::vec3(10.0f, 50.0f, -10.0f),
-                                     glm::vec3(EO_NCOLV(233), EO_NCOLV(238), EO_NCOLV(250)),
-                                     glm::vec3(1.0f, 1.0f, 1.0f),
+                                     glm::vec3(0.4f),
+                                     glm::vec3(0.8f),
                                      glm::vec3(EO_NCOLV(255), EO_NCOLV(204), EO_NCOLV(107)));
 
-    _mat_green_clay = std::make_unique<Material>(*_shader,
-                                                 glm::vec3(0.2f),
-                                                 glm::vec3(0.1f, 0.35f, 0.1f),
-                                                 glm::vec3(0.45f, 0.55f, 0.45f),
-                                                 25.0f);
+    _mat_green_clay = std::make_unique<Material>(
+        *_shader, glm::vec3(0.1f, 0.35f, 0.1f), glm::vec3(0.45f, 0.55f, 0.45f), 25.0f);
 
     _mat_gold = std::make_unique<Material>(*_shader,
-                                           glm::vec3(0.24725f, 0.1995f, 0.0745f),
                                            glm::vec3(0.75164f, 0.60648f, 0.22648f),
                                            glm::vec3(0.628281f, 0.555802f, 0.366065f),
                                            25.0f);
