@@ -19,13 +19,12 @@ uniform vec3 u_view_position;
 
 struct Material
 {
-    vec3 ambient_color;
-    vec3 diffuse_color;
+    sampler2D diffuse;
     vec3 specular_color;
     float shininess;
 };
 
-uniform Material u_material = Material(vec3(0.2), vec3(0.8), vec3(1.0), 32);
+uniform Material u_material;
 
 const float MIN_TEXTURE_SCALE = 0.0001;
 uniform sampler2D u_texture;
@@ -38,12 +37,14 @@ void main()
     float inverted_texture_scale = 1.0 / max(u_texture_scale, MIN_TEXTURE_SCALE);
     vec4 texture_color = texture(u_texture, v_texture_coordinate * inverted_texture_scale);
 
-    vec3 ambient_light_color = u_light.ambient_color * u_material.ambient_color;
+    vec3 ambient_light_color = u_light.ambient_color * texture_color;
 
     vec3 light_direction = normalize(u_light.position - v_frag_position);
 
     vec3 diffuse_light_color =
-        u_light.diffuse_color * max(dot(v_normal, light_direction), 0.0) * u_material.diffuse_color;
+        u_light.diffuse_color *
+        max(dot(v_normal, light_direction), 0.0) *
+        texture_color;
 
     vec3 view_direction = normalize(u_view_position - v_frag_position);
     vec3 reflection_direction = reflect(-light_direction, v_normal);

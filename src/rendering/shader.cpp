@@ -49,6 +49,11 @@ unsigned int Shader::uniform_location_for(const std::string& variable) const
     return name;
 }
 
+void Shader::set_uniform_1i(const unsigned int location, const int value) const
+{
+    gldc(glUniform1i(location, value));
+}
+
 void Shader::set_uniform_1f(const unsigned int location, const float value) const
 {
     gldc(glUniform1f(location, value));

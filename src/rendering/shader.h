@@ -18,6 +18,7 @@ class Shader
 
     unsigned int uniform_location_for(const std::string& variable) const;
 
+    void set_uniform_1i(const unsigned int location, const int value) const;
     void set_uniform_1f(const unsigned int location, const float value) const;
     void set_uniform_vec3(const unsigned int location, const glm::vec3& value) const;
     void set_uniform_mat4(const unsigned int location, const glm::mat4& value) const;

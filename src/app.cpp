@@ -87,9 +87,13 @@ void App::init_rendering()
                                            glm::vec3(0.75164f, 0.60648f, 0.22648f),
                                            glm::vec3(0.628281f, 0.555802f, 0.366065f),
                                            25.0f);
+
+    auto u_material_diffuse = _shader->uniform_location_for("u_material.diffuse");
+    _shader->set_uniform_1i(u_material_diffuse, 0);
+
     Shader::unuse_all();
 
-    _wall_texture = std::make_unique<Texture>(TEXTURE_DIR + "wall.jpg", Format::RGB);
+    _container_texture = std::make_unique<Texture>(TEXTURE_DIR + "container2.png", Format::RGBA);
     _dirt_texture = std::make_unique<Texture>(TEXTURE_DIR + "dirt.png", Format::RGBA);
 
     _plane = std::make_unique<Mesh>(Primitive::plane());
@@ -181,7 +185,7 @@ void App::render_scene()
     cube_transform.rotation(Time::current_time() * glm::radians(50.0f), {0.5f, 1.0f, 0.0f});
     _shader->set_uniform_1f(u_texture_scale, 1.0f);
     _mat_gold->use();
-    _wall_texture->bind(TextureUnit::TEXUNIT0);
+    _container_texture->bind(TextureUnit::TEXUNIT0);
 
     for (glm::vec3 position : _cube_positions)
     {
