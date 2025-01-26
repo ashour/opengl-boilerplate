@@ -57,7 +57,7 @@ void App::init_rendering()
     _window->set_clear_color(SCENE_CLEAR_COLOR);
 
     _shader =
-        std::make_unique<Shader>(DEFAULT_VERTEX_SHADER_FILEPATH, DEFAULT_FRAGMENT_SHADER_FILEPATH);
+        std::make_shared<Shader>(DEFAULT_VERTEX_SHADER_FILEPATH, DEFAULT_FRAGMENT_SHADER_FILEPATH);
     _shader->build();
 
     _shader->use();
