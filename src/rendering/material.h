@@ -13,18 +13,15 @@ class Material
     Material(const Shader& shader,
              const std::string& diffuse_texture_file_path,
              const Format& diffuse_texture_format,
-             const std::string& specular_texture_file_path,
-             const Format& specular_texture_format,
-             const float shininess);
-
-    Material(const Shader& shader,
-             const std::string& diffuse_texture_file_path,
-             const Format& diffuse_texture_format,
-             const float shininess);
+             const float shininess,
+             const std::string& specular_texture_file_path = "",
+             const Format& specular_texture_format = Format::RGBA);
 
     void use() const;
 
   private:
+    void init_uniforms();
+
     static Texture& black_pixel();
 
     const Shader& _shader;

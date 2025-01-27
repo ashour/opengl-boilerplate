@@ -81,9 +81,9 @@ void App::init_rendering()
     _mat_box = std::make_unique<Material>(*_shader,
                                           TEXTURE_DIR + "container2_diffuse.png",
                                           Format::RGBA,
+                                          400.0f,
                                           TEXTURE_DIR + "container2_specular.png",
-                                          Format::RGBA,
-                                          400.0f);
+                                          Format::RGBA);
     Shader::unuse_all();
 
     _plane = std::make_unique<Mesh>(Primitive::plane());
