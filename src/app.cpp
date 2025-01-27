@@ -76,26 +76,16 @@ void App::init_rendering()
                                      glm::vec3(0.8f),
                                      glm::vec3(EO_NCOLV(255), EO_NCOLV(204), EO_NCOLV(107)));
 
-    _mat_green_clay = std::make_unique<Material>(
-        *_shader, glm::vec3(0.1f, 0.35f, 0.1f), glm::vec3(0.45f, 0.55f, 0.45f), 25.0f);
-
-    _mat_gold = std::make_unique<Material>(*_shader,
-                                           glm::vec3(0.75164f, 0.60648f, 0.22648f),
-                                           glm::vec3(0.628281f, 0.555802f, 0.366065f),
-                                           400.0f);
-
-    auto u_material_diffuse = _shader->uniform_location_for("u_material.diffuse");
-    _shader->set_uniform_1i(u_material_diffuse, 0);
-    auto u_material_specular = _shader->uniform_location_for("u_material.specular");
-    _shader->set_uniform_1i(u_material_specular, 1);
-
-    Shader::unuse_all();
+    _tex_dirt_diffuse = std::make_unique<Texture>(TEXTURE_DIR + "dirt.png", Format::RGBA);
+    _mat_green_clay =
+        std::make_unique<Material>(*_shader, *_tex_dirt_diffuse, *_tex_dirt_diffuse, 25.0f);
 
     _tex_box_diffuse =
         std::make_unique<Texture>(TEXTURE_DIR + "container2_diffuse.png", Format::RGBA);
     _tex_box_specular =
         std::make_unique<Texture>(TEXTURE_DIR + "container2_specular.png", Format::RGBA);
-    _tex_dirt_diffuse = std::make_unique<Texture>(TEXTURE_DIR + "dirt.png", Format::RGBA);
+    _mat_gold = std::make_unique<Material>(*_shader, *_tex_box_diffuse, *_tex_box_specular, 400.0f);
+    Shader::unuse_all();
 
     _plane = std::make_unique<Mesh>(Primitive::plane());
     _cube = std::make_unique<Mesh>(Primitive::cube());
@@ -179,16 +169,12 @@ void App::render_scene()
     _shader->set_uniform_mat4(u_model, plane_transform.matrix());
     _shader->set_uniform_1f(u_texture_scale, 0.02f);
     _mat_green_clay->use();
-    _tex_dirt_diffuse->bind(TextureUnit::TEXUNIT0);
-    _tex_dirt_diffuse->bind(TextureUnit::TEXUNIT1);
     _plane->draw();
 
     Transform cube_transform{};
     cube_transform.rotation(Time::current_time() * glm::radians(50.0f), {0.5f, 1.0f, 0.0f});
     _shader->set_uniform_1f(u_texture_scale, 1.0f);
     _mat_gold->use();
-    _tex_box_diffuse->bind(TextureUnit::TEXUNIT0);
-    _tex_box_specular->bind(TextureUnit::TEXUNIT1);
 
     for (glm::vec3 position : _cube_positions)
     {
