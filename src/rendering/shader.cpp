@@ -43,7 +43,7 @@ void Shader::use() const { gldc(glUseProgram(_shader_program)); }
 
 void Shader::unuse_all() { gldc(glUseProgram(0)); }
 
-unsigned int Shader::uniform_location_for(const std::string& variable) const
+int Shader::uniform_location_for(const std::string& variable) const
 {
     gldc(unsigned int name = glGetUniformLocation(_shader_program, variable.c_str()));
     return name;

@@ -33,8 +33,8 @@ class App
     std::unique_ptr<Material> _mat_dirt;
     std::unique_ptr<Material> _mat_box;
 
-    unsigned int _u_view_matrix;
-    unsigned int _u_view_position;
+    int _u_view_matrix;
+    int _u_view_position;
 
     std::unique_ptr<Mesh> _cube;
     std::unique_ptr<Mesh> _plane;

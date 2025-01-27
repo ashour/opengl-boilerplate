@@ -162,8 +162,8 @@ void App::render_scene()
                                     light_orbit_radius * glm::sin(light_angle),
                                     0.0f));
 
-    unsigned int u_model = _shader->uniform_location_for("u_model");
-    unsigned int u_texture_scale = _shader->uniform_location_for("u_texture_scale");
+    int u_model = _shader->uniform_location_for("u_model");
+    int u_texture_scale = _shader->uniform_location_for("u_texture_scale");
 
     Transform plane_transform{};
     plane_transform.scale(glm::vec3(200.0f, 1.0f, 200.0f));

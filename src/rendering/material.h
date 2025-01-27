@@ -29,9 +29,9 @@ class Material
     const std::unique_ptr<Texture> _tex_specular;
     const float _shininess{};
 
-    unsigned int _u_diffuse;
-    unsigned int _u_specular;
-    unsigned int _u_shininess;
+    int _u_diffuse;
+    int _u_specular;
+    int _u_shininess;
 
     static Texture& _s_tex_black_pixel;
 };

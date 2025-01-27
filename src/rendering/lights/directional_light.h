@@ -20,6 +20,6 @@ class DirectionalLight : public Light
     void set_direction(const glm::vec3& new_direction);
 
   private:
-    unsigned int _u_direction{};
+    int _u_direction{};
 };
 } // namespace eo
