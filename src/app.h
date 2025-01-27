@@ -3,7 +3,6 @@
 #include "rendering/material.h"
 #include "rendering/mesh.h"
 #include "rendering/shader.h"
-#include "rendering/texture.h"
 #include "system/window.h"
 #include <array>
 #include <memory>
@@ -31,12 +30,8 @@ class App
     std::shared_ptr<Shader> _shader;
     std::shared_ptr<Light> _light;
 
-    std::unique_ptr<Texture> _tex_box_diffuse;
-    std::unique_ptr<Texture> _tex_box_specular;
-    std::unique_ptr<Texture> _tex_dirt_diffuse;
-
-    std::unique_ptr<Material> _mat_green_clay;
-    std::unique_ptr<Material> _mat_gold;
+    std::unique_ptr<Material> _mat_dirt;
+    std::unique_ptr<Material> _mat_box;
 
     unsigned int _u_view_matrix;
     unsigned int _u_view_position;
