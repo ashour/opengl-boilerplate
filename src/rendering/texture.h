@@ -30,6 +30,8 @@ class Texture
     void bind(TextureUnit unit) const;
 
   private:
+    void create_bind_init();
+
     unsigned int _id{0};
 };
 } // namespace eo

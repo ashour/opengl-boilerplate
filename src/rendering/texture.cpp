@@ -10,13 +10,7 @@ namespace eo
 
 Texture::Texture(const std::string& file_path, const Format& format)
 {
-    gldc(glGenTextures(1, &_id));
-    gldc(glBindTexture(GL_TEXTURE_2D, _id));
-
-    gldc(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT));
-    gldc(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT));
-    gldc(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR));
-    gldc(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR));
+    create_bind_init();
 
     stbi_set_flip_vertically_on_load(true);
 
@@ -49,13 +43,7 @@ Texture::Texture(const unsigned char* color_data,
                  const int height,
                  const Format& format)
 {
-    gldc(glGenTextures(1, &_id));
-    gldc(glBindTexture(GL_TEXTURE_2D, _id));
-
-    gldc(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT));
-    gldc(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT));
-    gldc(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR));
-    gldc(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR));
+    create_bind_init();
 
     gldc(glTexImage2D(GL_TEXTURE_2D,
                       0,
@@ -75,5 +63,16 @@ void Texture::bind(TextureUnit unit) const
 {
     gldc(glActiveTexture(static_cast<GLenum>(unit)));
     gldc(glBindTexture(GL_TEXTURE_2D, _id));
+}
+
+void Texture::create_bind_init()
+{
+    gldc(glGenTextures(1, &_id));
+    gldc(glBindTexture(GL_TEXTURE_2D, _id));
+
+    gldc(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT));
+    gldc(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT));
+    gldc(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR));
+    gldc(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR));
 }
 } // namespace eo
