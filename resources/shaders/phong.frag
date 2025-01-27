@@ -9,7 +9,7 @@ in vec2 v_texture_coordinate;
 
 struct Light
 {
-    vec3 position;
+    vec3 direction;
     vec3 ambient_color;
     vec3 diffuse_color;
     vec3 specular_color;
@@ -40,7 +40,7 @@ void main()
 
     vec3 ambient_frag_color = u_light.ambient_color * diffuse_texture_color.rgb;
 
-    vec3 light_direction = normalize(u_light.position - v_frag_position);
+    vec3 light_direction = normalize(-u_light.direction);
 
     vec3 diffuse_frag_color = u_light.diffuse_color * max(dot(v_normal, light_direction), 0.0) *
                               diffuse_texture_color.rgb;

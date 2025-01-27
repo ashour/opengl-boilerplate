@@ -71,7 +71,7 @@ void App::init_rendering()
     _shader->set_uniform_mat4(u_projection, _camera->projection());
 
     _light = std::make_unique<Light>(*_shader,
-                                     glm::vec3(10.0f, 50.0f, -10.0f),
+                                     glm::vec3(-2.0f, -0.1f, -0.3f),
                                      glm::vec3(0.4f),
                                      glm::vec3(0.8f),
                                      glm::vec3(EO_NCOLV(255), EO_NCOLV(204), EO_NCOLV(107)));
@@ -156,9 +156,9 @@ void App::render_scene()
 
     constexpr float light_orbit_radius = 50.0f;
     float light_angle = std::fmod(glm::radians(Time::current_time() * 20.0f), glm::two_pi<float>());
-    _light->set_position(glm::vec3(light_orbit_radius * glm::cos(light_angle),
-                                   light_orbit_radius * glm::sin(light_angle),
-                                   0.0f));
+    _light->set_direction(glm::vec3(light_orbit_radius * glm::cos(light_angle),
+                                    light_orbit_radius * glm::sin(light_angle),
+                                    0.0f));
 
     unsigned int u_model = _shader->uniform_location_for("u_model");
     unsigned int u_texture_scale = _shader->uniform_location_for("u_texture_scale");
