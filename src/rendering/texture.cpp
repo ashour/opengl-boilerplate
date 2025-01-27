@@ -44,6 +44,31 @@ Texture::Texture(const std::string& file_path, const Format& format)
     stbi_image_free(data);
 }
 
+Texture::Texture(const unsigned char* color_data,
+                 const int width,
+                 const int height,
+                 const Format& format)
+{
+    gldc(glGenTextures(1, &_id));
+    gldc(glBindTexture(GL_TEXTURE_2D, _id));
+
+    gldc(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT));
+    gldc(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT));
+    gldc(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR));
+    gldc(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR));
+
+    gldc(glTexImage2D(GL_TEXTURE_2D,
+                      0,
+                      GL_RGB,
+                      width,
+                      height,
+                      0,
+                      static_cast<GLenum>(format),
+                      GL_UNSIGNED_BYTE,
+                      color_data));
+    gldc(glGenerateMipmap(GL_TEXTURE_2D));
+}
+
 Texture::~Texture() { gldc(glDeleteTextures(1, &_id)); }
 
 void Texture::bind(TextureUnit unit) const

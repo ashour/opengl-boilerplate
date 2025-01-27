@@ -76,12 +76,7 @@ void App::init_rendering()
                                      glm::vec3(0.8f),
                                      glm::vec3(EO_NCOLV(255), EO_NCOLV(204), EO_NCOLV(107)));
 
-    _mat_dirt = std::make_unique<Material>(*_shader,
-                                           TEXTURE_DIR + "dirt.png",
-                                           Format::RGBA,
-                                           TEXTURE_DIR + "dirt.png",
-                                           Format::RGBA,
-                                           25.0f);
+    _mat_dirt = std::make_unique<Material>(*_shader, TEXTURE_DIR + "dirt.png", Format::RGBA, 25.0f);
 
     _mat_box = std::make_unique<Material>(*_shader,
                                           TEXTURE_DIR + "container2_diffuse.png",

@@ -21,6 +21,10 @@ class Texture
 {
   public:
     Texture(const std::string& file_path, const Format& format);
+    Texture(const unsigned char* color_data,
+            const int width,
+            const int height,
+            const Format& format);
     ~Texture();
 
     void bind(TextureUnit unit) const;
