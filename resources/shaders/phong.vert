@@ -7,7 +7,7 @@ layout(location = 3) in vec2 a_texture_coordinate;
 
 out vec3 v_normal;
 out vec3 v_color;
-out vec2 v_texture_coordinate;
+out vec2 v_uv;
 
 out vec3 v_frag_position;
 
@@ -21,5 +21,5 @@ void main()
     v_frag_position = vec3(u_model * vec4(a_position, 1.0));
     v_normal = mat3(transpose(inverse(u_model))) * a_normal;
     v_color = a_color;
-    v_texture_coordinate = a_texture_coordinate;
+    v_uv = a_texture_coordinate;
 }

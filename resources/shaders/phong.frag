@@ -5,7 +5,7 @@ out vec4 o_color;
 in vec3 v_frag_position;
 in vec3 v_normal;
 in vec3 v_color;
-in vec2 v_texture_coordinate;
+in vec2 v_uv;
 
 struct Light
 {
@@ -40,8 +40,7 @@ void main()
     // stretch the uvs: as the uvs expand, the texture effectively
     // shrinks, and vice versa.
     float inverted_texture_scale = 1.0 / max(u_texture_scale, MIN_TEXTURE_SCALE);
-    vec4 diffuse_texture_color =
-        texture(u_material.diffuse, v_texture_coordinate * inverted_texture_scale);
+    vec4 diffuse_texture_color = texture(u_material.diffuse, v_uv * inverted_texture_scale);
 
     vec3 ambient_frag_color = u_directional_light.base.ambient_color * diffuse_texture_color.rgb;
 
@@ -53,8 +52,8 @@ void main()
     vec3 view_direction = normalize(u_view_position - v_frag_position);
     vec3 reflection_direction = reflect(-light_direction, v_normal);
     float shine = pow(max(dot(view_direction, reflection_direction), 0.0), u_material.shininess);
-    vec3 specular_frag_color = vec3(texture(u_material.specular, v_texture_coordinate)) * shine *
-                               u_directional_light.base.specular_color;
+    vec3 specular_frag_color =
+        vec3(texture(u_material.specular, v_uv)) * shine * u_directional_light.base.specular_color;
 
     o_color = vec4(ambient_frag_color + diffuse_frag_color + specular_frag_color, 1.0);
 }
