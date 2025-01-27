@@ -31,8 +31,8 @@ class App
     std::shared_ptr<Shader> _shader;
     std::shared_ptr<Light> _light;
 
-    std::unique_ptr<Texture> _container_texture;
-    std::unique_ptr<Texture> _dirt_texture;
+    std::unique_ptr<Texture> _tex_box_diffuse;
+    std::unique_ptr<Texture> _tex_dirt;
 
     std::unique_ptr<Material> _mat_green_clay;
     std::unique_ptr<Material> _mat_gold;

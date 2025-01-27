@@ -89,8 +89,9 @@ void App::init_rendering()
 
     Shader::unuse_all();
 
-    _container_texture = std::make_unique<Texture>(TEXTURE_DIR + "container2.png", Format::RGBA);
-    _dirt_texture = std::make_unique<Texture>(TEXTURE_DIR + "dirt.png", Format::RGBA);
+    _tex_box_diffuse =
+        std::make_unique<Texture>(TEXTURE_DIR + "container2_diffuse.png", Format::RGBA);
+    _tex_dirt = std::make_unique<Texture>(TEXTURE_DIR + "dirt.png", Format::RGBA);
 
     _plane = std::make_unique<Mesh>(Primitive::plane());
     _cube = std::make_unique<Mesh>(Primitive::cube());
@@ -174,14 +175,14 @@ void App::render_scene()
     _shader->set_uniform_mat4(u_model, plane_transform.matrix());
     _shader->set_uniform_1f(u_texture_scale, 0.02f);
     _mat_green_clay->use();
-    _dirt_texture->bind(TextureUnit::TEXUNIT0);
+    _tex_dirt->bind(TextureUnit::TEXUNIT0);
     _plane->draw();
 
     Transform cube_transform{};
     cube_transform.rotation(Time::current_time() * glm::radians(50.0f), {0.5f, 1.0f, 0.0f});
     _shader->set_uniform_1f(u_texture_scale, 1.0f);
     _mat_gold->use();
-    _container_texture->bind(TextureUnit::TEXUNIT0);
+    _tex_box_diffuse->bind(TextureUnit::TEXUNIT0);
 
     for (glm::vec3 position : _cube_positions)
     {
