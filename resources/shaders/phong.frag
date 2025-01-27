@@ -17,17 +17,17 @@ struct Light
 uniform Light u_light;
 uniform vec3 u_view_position;
 
+uniform sampler2D u_diffuse_texture;
+uniform sampler2D u_specular_texture;
 struct Material
 {
     sampler2D diffuse;
-    vec3 specular_color;
+    sampler2D specular;
     float shininess;
 };
-
 uniform Material u_material;
 
 const float MIN_TEXTURE_SCALE = 0.0001;
-uniform sampler2D u_texture;
 uniform float u_texture_scale = 1.0;
 
 void main()
@@ -35,19 +35,21 @@ void main()
     // stretch the uvs: as the uvs expand, the texture effectively
     // shrinks, and vice versa.
     float inverted_texture_scale = 1.0 / max(u_texture_scale, MIN_TEXTURE_SCALE);
-    vec4 texture_color = texture(u_texture, v_texture_coordinate * inverted_texture_scale);
+    vec4 diffuse_texture_color =
+        texture(u_material.diffuse, v_texture_coordinate * inverted_texture_scale);
 
-    vec3 ambient_light_color = u_light.ambient_color * texture_color.rgb;
+    vec3 ambient_frag_color = u_light.ambient_color * diffuse_texture_color.rgb;
 
     vec3 light_direction = normalize(u_light.position - v_frag_position);
 
-    vec3 diffuse_light_color =
-        u_light.diffuse_color * max(dot(v_normal, light_direction), 0.0) * texture_color.rgb;
+    vec3 diffuse_frag_color = u_light.diffuse_color * max(dot(v_normal, light_direction), 0.0) *
+                              diffuse_texture_color.rgb;
 
     vec3 view_direction = normalize(u_view_position - v_frag_position);
     vec3 reflection_direction = reflect(-light_direction, v_normal);
     float shine = pow(max(dot(view_direction, reflection_direction), 0.0), u_material.shininess);
-    vec3 specular_light_color = u_material.specular_color * shine * u_light.specular_color;
+    vec3 specular_frag_color =
+        vec3(texture(u_material.specular, v_texture_coordinate)) * shine * u_light.specular_color;
 
-    o_color = vec4(ambient_light_color + diffuse_light_color + specular_light_color, 1.0);
+    o_color = vec4(ambient_frag_color + diffuse_frag_color + specular_frag_color, 1.0);
 }

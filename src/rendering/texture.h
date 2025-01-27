@@ -7,7 +7,8 @@ namespace eo
 {
 enum class TextureUnit
 {
-    TEXUNIT0 = GL_TEXTURE0
+    TEXUNIT0 = GL_TEXTURE0,
+    TEXUNIT1 = GL_TEXTURE1
 };
 
 enum class Format
@@ -19,7 +20,7 @@ enum class Format
 class Texture
 {
   public:
-    explicit Texture(const std::string& file_path, const Format& format);
+    Texture(const std::string& file_path, const Format& format);
     ~Texture();
 
     void bind(TextureUnit unit) const;
