@@ -70,11 +70,13 @@ void App::init_rendering()
     auto u_projection = _shader->uniform_location_for("u_projection");
     _shader->set_uniform_mat4(u_projection, _camera->projection());
 
-    _light = std::make_unique<Light>(*_shader,
-                                     glm::vec3(-2.0f, -0.1f, -0.3f),
-                                     glm::vec3(0.4f),
-                                     glm::vec3(0.8f),
-                                     glm::vec3(EO_NCOLV(255), EO_NCOLV(204), EO_NCOLV(107)));
+    _light =
+        std::make_unique<DirectionalLight>(*_shader,
+                                           "u_directional_light",
+                                           glm::vec3(-2.0f, -0.1f, -0.3f),
+                                           glm::vec3(0.4f),
+                                           glm::vec3(0.6f),
+                                           glm::vec3(EO_NCOLV(255), EO_NCOLV(204), EO_NCOLV(107)));
 
     _mat_dirt = std::make_unique<Material>(*_shader, TEXTURE_DIR + "dirt.png", Format::RGBA, 25.0f);
 

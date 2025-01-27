@@ -9,12 +9,17 @@ in vec2 v_texture_coordinate;
 
 struct Light
 {
-    vec3 direction;
     vec3 ambient_color;
     vec3 diffuse_color;
     vec3 specular_color;
 };
-uniform Light u_light;
+struct DirectionalLight
+{
+    Light base;
+    vec3 direction;
+};
+uniform DirectionalLight u_directional_light;
+
 uniform vec3 u_view_position;
 
 uniform sampler2D u_diffuse_texture;
@@ -38,18 +43,18 @@ void main()
     vec4 diffuse_texture_color =
         texture(u_material.diffuse, v_texture_coordinate * inverted_texture_scale);
 
-    vec3 ambient_frag_color = u_light.ambient_color * diffuse_texture_color.rgb;
+    vec3 ambient_frag_color = u_directional_light.base.ambient_color * diffuse_texture_color.rgb;
 
-    vec3 light_direction = normalize(-u_light.direction);
+    vec3 light_direction = normalize(-u_directional_light.direction);
 
-    vec3 diffuse_frag_color = u_light.diffuse_color * max(dot(v_normal, light_direction), 0.0) *
-                              diffuse_texture_color.rgb;
+    vec3 diffuse_frag_color = u_directional_light.base.diffuse_color *
+                              max(dot(v_normal, light_direction), 0.0) * diffuse_texture_color.rgb;
 
     vec3 view_direction = normalize(u_view_position - v_frag_position);
     vec3 reflection_direction = reflect(-light_direction, v_normal);
     float shine = pow(max(dot(view_direction, reflection_direction), 0.0), u_material.shininess);
-    vec3 specular_frag_color =
-        vec3(texture(u_material.specular, v_texture_coordinate)) * shine * u_light.specular_color;
+    vec3 specular_frag_color = vec3(texture(u_material.specular, v_texture_coordinate)) * shine *
+                               u_directional_light.base.specular_color;
 
     o_color = vec4(ambient_frag_color + diffuse_frag_color + specular_frag_color, 1.0);
 }
