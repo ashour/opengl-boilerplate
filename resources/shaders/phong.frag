@@ -79,6 +79,13 @@ vec3 phong_shading(Light light,
     return ambient + diffuse + specular;
 }
 
+float attentuation(
+    vec3 light_position, vec3 frag_position, float constant, float linear, float quadratic)
+{
+    float distance = length(light_position - frag_position);
+    return 1.0 / (constant + linear * distance + quadratic * distance * distance);
+}
+
 vec3 directional_light_component(DirectionalLight light,
                                  vec3 normal,
                                  vec3 view_direction,
@@ -103,14 +110,13 @@ vec3 point_light_component(PointLight light,
                            vec3 specular_sample,
                            float shininess)
 {
-    vec3 light_direction = normalize(light.position - frag_position);
+    vec3 light_to_frag_direction = normalize(light.position - frag_position);
 
-    float distance = length(light.position - v_frag_position);
-    float attentuation =
-        1.0 / (light.constant + light.linear * distance + light.quadratic * distance * distance);
+    float attentuation = attentuation(
+        light.position, v_frag_position, light.constant, light.linear, light.quadratic);
 
     return attentuation * phong_shading(light.base,
-                                        light_direction,
+                                        light_to_frag_direction,
                                         normal,
                                         view_direction,
                                         diffuse_sample,
@@ -131,9 +137,8 @@ vec3 spot_light_component(SpotLight light,
     float epsilon = light.inner_cutoff - light.outer_cutoff;
     float intensity = clamp((theta - light.outer_cutoff) / epsilon, 0.0, 1.0);
 
-    float distance = length(light.position - v_frag_position);
-    float attentuation =
-        1.0 / (light.constant + light.linear * distance + light.quadratic * distance * distance);
+    float attentuation = attentuation(
+        light.position, v_frag_position, light.constant, light.linear, light.quadratic);
 
     return attentuation * phong_shading(light.base,
                                         light_to_frag_direction,
