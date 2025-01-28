@@ -14,7 +14,6 @@
 #include "system/input.h"
 #include "system/time.h"
 #include "system/window.h"
-#include <cmath>
 #include <glm/ext.hpp>
 #include <glm/glm.hpp>
 #include <memory>
@@ -71,19 +70,18 @@ void App::init_rendering()
 
     _shader->set_uniform("u_projection", _camera->projection());
 
-    _directional_light =
-        std::make_unique<DirectionalLight>(*_shader,
-                                           "u_directional_light",
-                                           glm::vec3(0.0f),
-                                           glm::vec3(0.5f),
-                                           glm::vec3(0.4f),
-                                           glm::vec3(EO_NCOLV(255), EO_NCOLV(204), EO_NCOLV(107)));
+    _directional_light = std::make_unique<DirectionalLight>(*_shader,
+                                                            "u_directional_light",
+                                                            glm::vec3(-5.0f, -1.0f, -10.0f),
+                                                            EO_COLOR3_HEX(0x011C33),
+                                                            EO_COLOR3_HEX(0x97E8EC),
+                                                            EO_COLOR3_HEX(0xE5FAFF));
 
     PointLight{*_shader,
                "u_point_light",
-               glm::vec3(0.0f, 0.0f, 1.0f),
-               glm::vec3(0.0f, 0.0f, 1.0f),
-               glm::vec3(0.0f, 0.0f, 1.0f),
+               EO_COLOR3_HEX(0x8ECAE6),
+               EO_COLOR3_HEX(0x8ECAE6),
+               EO_COLOR3_HEX(0xE5FAFF),
                glm::vec3(0.0f, 4.0f, 0.0f),
                1.0f,
                0.045f,
@@ -91,9 +89,9 @@ void App::init_rendering()
 
     _flash_light = std::make_unique<SpotLight>(*_shader,
                                                "u_spot_light",
-                                               glm::vec3(0.0f, 0.0f, 0.0f),
-                                               glm::vec3(EO_NCOLV(251.0f), EO_NCOLV(133.0f), 0.0f),
-                                               glm::vec3(EO_NCOLV(251.0f), EO_NCOLV(133.0f), 0.0f),
+                                               glm::vec3(0.0f),
+                                               EO_COLOR3_HEX(0xFFB703),
+                                               EO_COLOR3_HEX(0xFEEEC2),
                                                _camera->position(),
                                                1.0f,
                                                0.007f,
