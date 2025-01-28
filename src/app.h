@@ -28,7 +28,7 @@ class App
     std::unique_ptr<Window> _window;
     std::unique_ptr<Camera> _camera;
     std::shared_ptr<Shader> _shader;
-    std::shared_ptr<DirectionalLight> _light;
+    std::shared_ptr<DirectionalLight> _directional_light;
 
     std::unique_ptr<Material> _mat_dirt;
     std::unique_ptr<Material> _mat_box;

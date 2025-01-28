@@ -5,6 +5,7 @@
 #include "lib/random.h"
 #include "objects/primitive.h"
 #include "rendering/camera.h"
+#include "rendering/lights/point_light.h"
 #include "rendering/material.h"
 #include "rendering/mesh.h"
 #include "rendering/shader.h"
@@ -69,13 +70,23 @@ void App::init_rendering()
 
     _shader->set_uniform("u_projection", _camera->projection());
 
-    _light =
+    _directional_light =
         std::make_unique<DirectionalLight>(*_shader,
                                            "u_directional_light",
                                            glm::vec3(0.0f),
-                                           glm::vec3(0.35f),
+                                           glm::vec3(0.5f),
                                            glm::vec3(0.4f),
                                            glm::vec3(EO_NCOLV(255), EO_NCOLV(204), EO_NCOLV(107)));
+
+    PointLight{*_shader,
+               "u_point_light",
+               glm::vec3(0.0f, 0.0f, 1.0f),
+               glm::vec3(0.0f, 0.0f, 1.0f),
+               glm::vec3(0.0f, 0.0f, 1.0f),
+               glm::vec3(0.0f, 4.0f, 0.0f),
+               1.0f,
+               0.045f,
+               0.0075f};
 
     _mat_dirt = std::make_unique<Material>(*_shader, TEXTURE_DIR + "dirt.png", Format::RGBA, 25.0f);
 
@@ -158,9 +169,9 @@ void App::render_scene()
     constexpr float light_orbit_radius = 50.0f;
     float light_y_tilt = glm::tan(glm::radians(-30.0f));
     float light_angle = std::fmod(glm::radians(Time::current_time() * 20.0f), glm::two_pi<float>());
-    _light->set_direction(glm::vec3(light_orbit_radius * glm::cos(light_angle),
-                                    light_orbit_radius * light_y_tilt,
-                                    light_orbit_radius * glm::sin(light_angle)));
+    _directional_light->set_direction(glm::vec3(light_orbit_radius * glm::cos(light_angle),
+                                                light_orbit_radius * light_y_tilt,
+                                                light_orbit_radius * glm::sin(light_angle)));
 
     Transform plane_transform{};
     plane_transform.scale(glm::vec3(200.0f, 1.0f, 200.0f));

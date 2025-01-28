@@ -1,6 +1,6 @@
 #pragma once
 
-#include "rendering/lights/light.h"
+#include "light.h"
 #include <glm/glm.hpp>
 #include <string>
 
