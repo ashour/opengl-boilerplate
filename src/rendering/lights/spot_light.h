@@ -13,6 +13,9 @@ class SpotLight : public Light
               const glm::vec3& diffuse_color,
               const glm::vec3& specular_color,
               const glm::vec3& position,
+              const float constant,
+              const float linear,
+              const float quadratic,
               const glm::vec3& direction,
               const float inner_cutoff);
 

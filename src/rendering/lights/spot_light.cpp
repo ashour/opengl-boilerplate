@@ -10,6 +10,9 @@ SpotLight::SpotLight(Shader& shader,
                      const glm::vec3& diffuse_color,
                      const glm::vec3& specular_color,
                      const glm::vec3& position,
+                     const float constant,
+                     const float linear,
+                     const float quadratic,
                      const glm::vec3& direction,
                      const float inner_cutoff)
     : Light{shader, name, ambient_color, diffuse_color, specular_color}
@@ -20,6 +23,9 @@ SpotLight::SpotLight(Shader& shader,
     shader.set_uniform(_u_position, position);
     shader.set_uniform(_u_direction, direction);
 
+    shader.set_uniform(std::format("{}.constant", name), constant);
+    shader.set_uniform(std::format("{}.linear", name), linear);
+    shader.set_uniform(std::format("{}.quadratic", name), quadratic);
     shader.set_uniform(std::format("{}.inner_cutoff", name), inner_cutoff);
 }
 

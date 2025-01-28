@@ -95,6 +95,9 @@ void App::init_rendering()
                                                glm::vec3(0.0f, 1.0f, 1.0f),
                                                glm::vec3(0.0f, 1.0f, 1.0f),
                                                _camera->position(),
+                                               1.0f,
+                                               0.045f,
+                                               0.0075f,
                                                _camera->front(),
                                                glm::cos(glm::radians(12.5f)));
 
