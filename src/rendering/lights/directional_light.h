@@ -10,7 +10,7 @@ namespace eo
 class DirectionalLight : public Light
 {
   public:
-    DirectionalLight(const Shader& shader,
+    DirectionalLight(Shader& shader,
                      const std::string& name,
                      const glm::vec3& direction,
                      const glm::vec3& ambient_color,

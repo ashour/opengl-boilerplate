@@ -3,6 +3,7 @@
 #include <glad/glad.h>
 #include <glm/glm.hpp>
 #include <string>
+#include <unordered_map>
 
 namespace eo
 {
@@ -16,7 +17,7 @@ class Shader
     void use() const;
     static void unuse_all();
 
-    int uniform_location_for(const std::string& variable) const;
+    int uniform_location_for(const std::string& variable);
 
     void set_uniform_1i(const unsigned int location, const int value) const;
     void set_uniform_1f(const unsigned int location, const float value) const;
@@ -39,5 +40,7 @@ class Shader
                                 const unsigned int fragment_shader,
                                 char* log_buffer,
                                 const size_t log_buffer_size) const;
+
+    std::unordered_map<std::string, int> _uniform_locations;
 };
 } // namespace eo

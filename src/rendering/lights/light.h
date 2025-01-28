@@ -9,12 +9,12 @@ namespace eo
 class Light
 {
   protected:
-    Light(const Shader& shader,
+    Light(Shader& shader,
           const std::string& name,
           const glm::vec3& ambient_color,
           const glm::vec3& diffuse_color,
           const glm::vec3& specular_color);
 
-    const Shader& _shader;
+    Shader& _shader;
 };
 } // namespace eo

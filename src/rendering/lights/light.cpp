@@ -5,7 +5,7 @@
 
 namespace eo
 {
-Light::Light(const Shader& shader,
+Light::Light(Shader& shader,
              const std::string& name,
              const glm::vec3& ambient_color,
              const glm::vec3& diffuse_color,

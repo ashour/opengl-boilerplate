@@ -10,7 +10,7 @@ namespace eo
 class Material
 {
   public:
-    Material(const Shader& shader,
+    Material(Shader& shader,
              const std::string& diffuse_texture_file_path,
              const Format& diffuse_texture_format,
              const float shininess,
@@ -24,7 +24,7 @@ class Material
 
     static Texture& black_pixel();
 
-    const Shader& _shader;
+    Shader& _shader;
     const std::unique_ptr<Texture> _tex_diffuse;
     const std::unique_ptr<Texture> _tex_specular;
     const float _shininess{};

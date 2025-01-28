@@ -6,13 +6,16 @@
 #include <glm/ext.hpp>
 #include <glm/glm.hpp>
 #include <string>
+#include <unordered_map>
 
 namespace eo
 {
 Shader::Shader(const std::string& vertex_shader_filepath,
                const std::string& fragment_shader_filepath)
     : _vertex_shader_filepath{vertex_shader_filepath},
-      _fragment_shader_filepath{fragment_shader_filepath}
+      _fragment_shader_filepath{fragment_shader_filepath},
+      _shader_program{0},
+      _uniform_locations{}
 {
 }
 
@@ -43,11 +46,17 @@ void Shader::use() const { gldc(glUseProgram(_shader_program)); }
 
 void Shader::unuse_all() { gldc(glUseProgram(0)); }
 
-int Shader::uniform_location_for(const std::string& variable) const
+int Shader::uniform_location_for(const std::string& variable)
 {
-    gldc(int name = glGetUniformLocation(_shader_program, variable.c_str()));
-    EO_ASSERT(name > -1);
-    return name;
+    auto it = _uniform_locations.find(variable);
+    if (it == _uniform_locations.end())
+    {
+        gldc(int location = glGetUniformLocation(_shader_program, variable.c_str()));
+        EO_ASSERT(location > -1);
+        _uniform_locations[variable] = location;
+        return location;
+    }
+    return it->second;
 }
 
 void Shader::set_uniform_1i(const unsigned int location, const int value) const

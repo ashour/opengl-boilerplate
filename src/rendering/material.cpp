@@ -5,7 +5,7 @@
 
 namespace eo
 {
-Material::Material(const Shader& shader,
+Material::Material(Shader& shader,
                    const std::string& diffuse_texture_file_path,
                    const Format& diffuse_texture_format,
                    const float shininess,
