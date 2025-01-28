@@ -20,18 +20,12 @@ class Material
     void use() const;
 
   private:
-    void init_uniforms();
-
     static Texture& black_pixel();
 
     Shader& _shader;
     const std::unique_ptr<Texture> _tex_diffuse;
     const std::unique_ptr<Texture> _tex_specular;
     const float _shininess{};
-
-    int _u_diffuse;
-    int _u_specular;
-    int _u_shininess;
 
     static Texture& _s_tex_black_pixel;
 };

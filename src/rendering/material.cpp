@@ -19,7 +19,8 @@ Material::Material(Shader& shader,
               ? std::make_unique<Texture>(black_pixel())
               : std::make_unique<Texture>(specular_texture_file_path, specular_texture_format)}
 {
-    init_uniforms();
+    _shader.set_uniform_1i("u_material.diffuse", 0);
+    _shader.set_uniform_1i("u_material.specular", 1);
 }
 
 void Material::use() const
@@ -27,17 +28,7 @@ void Material::use() const
     _tex_diffuse->bind(TextureUnit::TEXUNIT0);
     _tex_specular->bind(TextureUnit::TEXUNIT1);
 
-    _shader.set_uniform_1f(_u_shininess, _shininess);
-}
-
-void Material::init_uniforms()
-{
-    _u_diffuse = _shader.uniform_location_for("u_material.diffuse");
-    _u_specular = _shader.uniform_location_for("u_material.specular");
-    _u_shininess = _shader.uniform_location_for("u_material.shininess");
-
-    _shader.set_uniform_1i(_u_diffuse, 0);
-    _shader.set_uniform_1i(_u_specular, 1);
+    _shader.set_uniform_1f("u_material.shininess", _shininess);
 }
 
 Texture& Material::black_pixel()

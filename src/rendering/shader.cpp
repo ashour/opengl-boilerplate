@@ -64,9 +64,19 @@ void Shader::set_uniform_1i(const unsigned int location, const int value) const
     gldc(glUniform1i(location, value));
 }
 
+void Shader::set_uniform_1i(const std::string& name, const int value)
+{
+    set_uniform_1i(uniform_location_for(name), value);
+}
+
 void Shader::set_uniform_1f(const unsigned int location, const float value) const
 {
     gldc(glUniform1f(location, value));
+}
+
+void Shader::set_uniform_1f(const std::string& name, const float value)
+{
+    set_uniform_1f(uniform_location_for(name), value);
 }
 
 void Shader::set_uniform_vec3(const unsigned int location, const glm::vec3& value) const
@@ -74,9 +84,19 @@ void Shader::set_uniform_vec3(const unsigned int location, const glm::vec3& valu
     gldc(glUniform3f(location, value.x, value.y, value.z));
 }
 
+void Shader::set_uniform_vec3(const std::string& name, const glm::vec3& value)
+{
+    set_uniform_vec3(uniform_location_for(name), value);
+}
+
 void Shader::set_uniform_mat4(const unsigned int location, const glm::mat4& value) const
 {
     gldc(glUniformMatrix4fv(location, 1, GL_FALSE, glm::value_ptr(value)));
+}
+
+void Shader::set_uniform_mat4(const std::string& name, const glm::mat4& value)
+{
+    set_uniform_mat4(uniform_location_for(name), value);
 }
 
 unsigned int Shader::create_shader(const GLenum type,
