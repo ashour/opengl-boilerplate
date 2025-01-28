@@ -13,11 +13,11 @@ DirectionalLight::DirectionalLight(Shader& shader,
     : Light(shader, name, ambient_color, diffuse_color, specular_color)
 {
     _u_direction = shader.uniform_location_for(std::format("{}.direction", name));
-    shader.set_uniform_vec3(_u_direction, direction);
+    shader.set_uniform(_u_direction, direction);
 }
 
 void DirectionalLight::set_direction(const glm::vec3& new_direction)
 {
-    _shader.set_uniform_vec3(_u_direction, new_direction);
+    _shader.set_uniform(_u_direction, new_direction);
 }
 } // namespace eo

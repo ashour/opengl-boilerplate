@@ -67,7 +67,7 @@ void App::init_rendering()
     _camera = std::make_unique<Camera>(
         static_cast<float>(_window->buffer_width() / static_cast<float>(_window->buffer_height())));
 
-    _shader->set_uniform_mat4("u_projection", _camera->projection());
+    _shader->set_uniform("u_projection", _camera->projection());
 
     _light =
         std::make_unique<DirectionalLight>(*_shader,
@@ -152,8 +152,8 @@ void App::handle_input()
 void App::render_scene()
 {
     _shader->use();
-    _shader->set_uniform_mat4(_u_view_matrix, _camera->view());
-    _shader->set_uniform_vec3(_u_view_position, _camera->position());
+    _shader->set_uniform(_u_view_matrix, _camera->view());
+    _shader->set_uniform(_u_view_position, _camera->position());
 
     constexpr float light_orbit_radius = 50.0f;
     float light_y_tilt = glm::tan(glm::radians(-30.0f));
@@ -164,20 +164,20 @@ void App::render_scene()
 
     Transform plane_transform{};
     plane_transform.scale(glm::vec3(200.0f, 1.0f, 200.0f));
-    _shader->set_uniform_mat4("u_model", plane_transform.matrix());
-    _shader->set_uniform_1f("u_texture_scale", 0.02f);
+    _shader->set_uniform("u_model", plane_transform.matrix());
+    _shader->set_uniform("u_texture_scale", 0.02f);
     _mat_dirt->use();
     _plane->draw();
 
     Transform cube_transform{};
     cube_transform.rotation(Time::current_time() * glm::radians(50.0f), {0.5f, 1.0f, 0.0f});
-    _shader->set_uniform_1f("u_texture_scale", 1.0f);
+    _shader->set_uniform("u_texture_scale", 1.0f);
     _mat_box->use();
 
     for (glm::vec3 position : _cube_positions)
     {
         cube_transform.position(position);
-        _shader->set_uniform_mat4("u_model", cube_transform.matrix());
+        _shader->set_uniform("u_model", cube_transform.matrix());
         _cube->draw();
     }
 }

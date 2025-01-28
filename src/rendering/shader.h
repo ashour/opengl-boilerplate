@@ -1,6 +1,8 @@
 #pragma once
 
+#include "lib/opengl_debug.h"
 #include <glad/glad.h>
+#include <glm/ext.hpp>
 #include <glm/glm.hpp>
 #include <string>
 #include <unordered_map>
@@ -19,17 +21,36 @@ class Shader
 
     int uniform_location_for(const std::string& variable);
 
-    void set_uniform_1i(const unsigned int location, const int value) const;
-    void set_uniform_1i(const std::string& name, const int value);
+    template <typename T>
+    void set_uniform(const unsigned int location, const T& value) const
+    {
+        if constexpr (std::is_same_v<T, int>)
+        {
+            gldc(glUniform1i(location, value));
+        }
+        else if constexpr (std::is_same_v<T, float>)
+        {
+            gldc(glUniform1f(location, value));
+        }
+        else if constexpr (std::is_same_v<T, glm::vec3>)
+        {
+            gldc(glUniform3f(location, value.x, value.y, value.z));
+        }
+        else if constexpr (std::is_same_v<T, glm::mat4>)
+        {
+            gldc(glUniformMatrix4fv(location, 1, GL_FALSE, glm::value_ptr(value)));
+        }
+        else
+        {
+            static_assert(always_false<T>, "Unsupported uniform type");
+        }
+    }
 
-    void set_uniform_1f(const unsigned int location, const float value) const;
-    void set_uniform_1f(const std::string& name, const float value);
-
-    void set_uniform_vec3(const unsigned int location, const glm::vec3& value) const;
-    void set_uniform_vec3(const std::string& name, const glm::vec3& value);
-
-    void set_uniform_mat4(const unsigned int location, const glm::mat4& value) const;
-    void set_uniform_mat4(const std::string& name, const glm::mat4& value);
+    template <typename T>
+    void set_uniform(const std::string& name, const T& value)
+    {
+        set_uniform(uniform_location_for(name), value);
+    }
 
   private:
     const std::string _vertex_shader_filepath;
@@ -49,5 +70,8 @@ class Shader
                                 const size_t log_buffer_size) const;
 
     std::unordered_map<std::string, int> _uniform_locations;
+
+    template <typename T>
+    static constexpr bool always_false = false;
 };
 } // namespace eo
