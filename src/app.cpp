@@ -92,14 +92,15 @@ void App::init_rendering()
     _flash_light = std::make_unique<SpotLight>(*_shader,
                                                "u_spot_light",
                                                glm::vec3(0.0f, 0.0f, 0.0f),
-                                               glm::vec3(0.0f, 1.0f, 1.0f),
-                                               glm::vec3(0.0f, 1.0f, 1.0f),
+                                               glm::vec3(EO_NCOLV(251.0f), EO_NCOLV(133.0f), 0.0f),
+                                               glm::vec3(EO_NCOLV(251.0f), EO_NCOLV(133.0f), 0.0f),
                                                _camera->position(),
                                                1.0f,
-                                               0.045f,
-                                               0.0075f,
+                                               0.007f,
+                                               0.0002f,
                                                _camera->front(),
-                                               glm::cos(glm::radians(12.5f)));
+                                               glm::cos(glm::radians(12.5f)),
+                                               glm::cos(glm::radians(17.5f)));
 
     _mat_dirt = std::make_unique<Material>(*_shader, TEXTURE_DIR + "dirt.png", Format::RGBA, 25.0f);
 

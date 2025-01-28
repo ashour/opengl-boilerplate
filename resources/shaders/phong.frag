@@ -40,6 +40,7 @@ struct SpotLight
     float quadratic;
     vec3 direction;
     float inner_cutoff;
+    float outer_cutoff;
 };
 uniform SpotLight u_spot_light;
 
@@ -127,25 +128,20 @@ vec3 spot_light_component(SpotLight light,
 {
     vec3 light_to_frag_direction = normalize(light.position - frag_position);
     float theta = dot(light_to_frag_direction, normalize(-light.direction));
+    float epsilon = light.inner_cutoff - light.outer_cutoff;
+    float intensity = clamp((theta - light.outer_cutoff) / epsilon, 0.0, 1.0);
 
-    if (theta > light.inner_cutoff)
-    {
-        float distance = length(light.position - v_frag_position);
-        float attentuation = 1.0 / (light.constant + light.linear * distance +
-                                    light.quadratic * distance * distance);
+    float distance = length(light.position - v_frag_position);
+    float attentuation =
+        1.0 / (light.constant + light.linear * distance + light.quadratic * distance * distance);
 
-        return attentuation * phong_shading(light.base,
-                                            light_to_frag_direction,
-                                            normal,
-                                            view_direction,
-                                            diffuse_sample,
-                                            specular_sample,
-                                            shininess);
-    }
-    else
-    {
-        return light.base.ambient_color * diffuse_sample;
-    }
+    return attentuation * phong_shading(light.base,
+                                        light_to_frag_direction,
+                                        normal,
+                                        view_direction,
+                                        diffuse_sample * intensity,
+                                        specular_sample * intensity,
+                                        shininess);
 }
 
 void main()

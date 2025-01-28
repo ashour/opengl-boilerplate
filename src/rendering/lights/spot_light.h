@@ -17,7 +17,8 @@ class SpotLight : public Light
               const float linear,
               const float quadratic,
               const glm::vec3& direction,
-              const float inner_cutoff);
+              const float inner_cutoff,
+              const float outer_cutoff);
 
     void set_position(const glm::vec3& new_position) const;
     void set_direction(const glm::vec3& new_direction) const;
