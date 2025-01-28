@@ -1,5 +1,6 @@
 #include "rendering/camera.h"
 #include "rendering/lights/directional_light.h"
+#include "rendering/lights/spot_light.h"
 #include "rendering/material.h"
 #include "rendering/mesh.h"
 #include "rendering/shader.h"
@@ -28,7 +29,8 @@ class App
     std::unique_ptr<Window> _window;
     std::unique_ptr<Camera> _camera;
     std::shared_ptr<Shader> _shader;
-    std::shared_ptr<DirectionalLight> _directional_light;
+    std::unique_ptr<DirectionalLight> _directional_light;
+    std::unique_ptr<SpotLight> _flash_light;
 
     std::unique_ptr<Material> _mat_dirt;
     std::unique_ptr<Material> _mat_box;

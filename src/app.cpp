@@ -6,6 +6,7 @@
 #include "objects/primitive.h"
 #include "rendering/camera.h"
 #include "rendering/lights/point_light.h"
+#include "rendering/lights/spot_light.h"
 #include "rendering/material.h"
 #include "rendering/mesh.h"
 #include "rendering/shader.h"
@@ -87,6 +88,15 @@ void App::init_rendering()
                1.0f,
                0.045f,
                0.0075f};
+
+    _flash_light = std::make_unique<SpotLight>(*_shader,
+                                               "u_spot_light",
+                                               glm::vec3(0.0f, 0.0f, 0.0f),
+                                               glm::vec3(0.0f, 1.0f, 1.0f),
+                                               glm::vec3(0.0f, 1.0f, 1.0f),
+                                               _camera->position(),
+                                               _camera->front(),
+                                               glm::cos(glm::radians(12.5f)));
 
     _mat_dirt = std::make_unique<Material>(*_shader, TEXTURE_DIR + "dirt.png", Format::RGBA, 25.0f);
 
@@ -172,6 +182,9 @@ void App::render_scene()
     _directional_light->set_direction(glm::vec3(light_orbit_radius * glm::cos(light_angle),
                                                 light_orbit_radius * light_y_tilt,
                                                 light_orbit_radius * glm::sin(light_angle)));
+
+    _flash_light->set_position(_camera->position());
+    _flash_light->set_direction(_camera->front());
 
     Transform plane_transform{};
     plane_transform.scale(glm::vec3(200.0f, 1.0f, 200.0f));

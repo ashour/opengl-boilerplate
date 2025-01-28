@@ -31,6 +31,15 @@ struct PointLight
 };
 uniform PointLight u_point_light;
 
+struct SpotLight
+{
+    Light base;
+    vec3 position;
+    vec3 direction;
+    float inner_cutoff;
+};
+uniform SpotLight u_spot_light;
+
 uniform vec3 u_view_position;
 
 uniform sampler2D u_diffuse_texture;
@@ -96,14 +105,40 @@ vec3 point_light_component(PointLight light,
     float attentuation =
         1.0 / (light.constant + light.linear * distance + light.quadratic * distance * distance);
 
-    return phong_shading(light.base,
-                         light_direction,
-                         normal,
-                         view_direction,
-                         diffuse_sample,
-                         specular_sample,
-                         shininess) *
-           attentuation;
+    return attentuation * phong_shading(light.base,
+                                        light_direction,
+                                        normal,
+                                        view_direction,
+                                        diffuse_sample,
+                                        specular_sample,
+                                        shininess);
+}
+
+vec3 spot_light_component(SpotLight light,
+                          vec3 frag_position,
+                          vec3 normal,
+                          vec3 view_direction,
+                          vec3 diffuse_sample,
+                          vec3 specular_sample,
+                          float shininess)
+{
+    vec3 light_to_frag_direction = normalize(light.position - frag_position);
+    float theta = dot(light_to_frag_direction, normalize(-light.direction));
+
+    if (theta > light.inner_cutoff)
+    {
+        return phong_shading(light.base,
+                             normalize(-light.direction),
+                             normal,
+                             view_direction,
+                             diffuse_sample,
+                             specular_sample,
+                             shininess);
+    }
+    else
+    {
+        return light.base.ambient_color * diffuse_sample;
+    }
 }
 
 void main()
@@ -132,5 +167,13 @@ void main()
                                              specular_sample,
                                              u_material.shininess);
 
-    o_color = vec4(directional_light + point_light, 1.0);
+    vec3 spot_light = spot_light_component(u_spot_light,
+                                           v_frag_position,
+                                           v_normal,
+                                           view_direction,
+                                           diffuse_sample,
+                                           specular_sample,
+                                           u_material.shininess);
+
+    o_color = vec4(directional_light + point_light + spot_light, 1.0);
 }
