@@ -1,5 +1,7 @@
 #version 410 core
 
+#define MAX_POINT_LIGHT_COUNT 16
+
 out vec4 o_color;
 
 in vec3 v_frag_position;
@@ -29,7 +31,8 @@ struct PointLight
     float linear;
     float quadratic;
 };
-uniform PointLight u_point_light;
+uniform PointLight u_point_lights[MAX_POINT_LIGHT_COUNT];
+uniform int u_point_light_count;
 
 struct SpotLight
 {
@@ -167,13 +170,17 @@ void main()
                                                          specular_sample,
                                                          u_material.shininess);
 
-    vec3 point_light = point_light_component(u_point_light,
-                                             v_frag_position,
-                                             v_normal,
-                                             view_direction,
-                                             diffuse_sample,
-                                             specular_sample,
-                                             u_material.shininess);
+    vec3 point_lights = vec3(0);
+    for (int i = 0; i < u_point_light_count; i += 1)
+    {
+        point_lights += point_light_component(u_point_lights[i],
+                                              v_frag_position,
+                                              v_normal,
+                                              view_direction,
+                                              diffuse_sample,
+                                              specular_sample,
+                                              u_material.shininess);
+    }
 
     vec3 spot_light = spot_light_component(u_spot_light,
                                            v_frag_position,
@@ -183,5 +190,5 @@ void main()
                                            specular_sample,
                                            u_material.shininess);
 
-    o_color = vec4(directional_light + point_light + spot_light, 1.0);
+    o_color = vec4(directional_light + point_lights + spot_light, 1.0);
 }

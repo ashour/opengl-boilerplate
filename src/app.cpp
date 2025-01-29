@@ -77,15 +77,35 @@ void App::init_rendering()
                                                             EO_COLOR3_HEX(0x97E8EC),
                                                             EO_COLOR3_HEX(0xE5FAFF));
 
-    PointLight{*_shader,
-               "u_point_light",
-               EO_COLOR3_HEX(0x8ECAE6),
-               EO_COLOR3_HEX(0x8ECAE6),
-               EO_COLOR3_HEX(0xE5FAFF),
-               glm::vec3(0.0f, 4.0f, 0.0f),
-               1.0f,
-               0.045f,
-               0.0075f};
+    std::vector<glm::vec3> point_light_data = {
+        glm::vec3(12.0f, 0.2f, 4.0f),
+        EO_COLOR3_HEX(0x8ECAE6),
+        EO_COLOR3_HEX(0x8ECAE6),
+        EO_COLOR3_HEX(0xE5FAFF),
+        glm::vec3(-12.0, 1.0f, 4.0f),
+        EO_COLOR3_HEX(0xFB8500),
+        EO_COLOR3_HEX(0xFB8500),
+        EO_COLOR3_HEX(0xFFF0D6),
+        glm::vec3(0.0f, 4.0f, -20.0f),
+        EO_COLOR3_HEX(0xDDE392),
+        EO_COLOR3_HEX(0xDDE392),
+        EO_COLOR3_HEX(0xF0F2CE),
+    };
+    constexpr int point_light_stride = 4;
+    int point_light_count = static_cast<int>(point_light_data.size() / point_light_stride);
+    _shader->set_uniform("u_point_light_count", point_light_count);
+    for (int i = 0; i < point_light_count; i += 1)
+    {
+        PointLight{*_shader,
+                   std::format("u_point_lights[{}]", i),
+                   point_light_data[i * point_light_stride + 1],
+                   point_light_data[i * point_light_stride + 2],
+                   point_light_data[i * point_light_stride + 3],
+                   point_light_data[i * point_light_stride],
+                   1.0f,
+                   0.045f,
+                   0.0075f};
+    }
 
     _flash_light = std::make_unique<SpotLight>(*_shader,
                                                "u_spot_light",
