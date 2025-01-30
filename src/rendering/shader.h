@@ -28,6 +28,10 @@ class Shader
         {
             gldc(glUniform1i(location, value));
         }
+        else if constexpr (std::is_same_v<T, unsigned int>)
+        {
+            gldc(glUniform1ui(location, value));
+        }
         else if constexpr (std::is_same_v<T, float>)
         {
             gldc(glUniform1f(location, value));

@@ -4,6 +4,7 @@ project(opengl_boilerplate VERSION 1.0.0 LANGUAGES CXX)
 set(CMAKE_CXX_STANDARD 23)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
+set(THIRD_PARTY_DIR third_party)
 
 # ----------------------------------------
 # GLFW
@@ -12,13 +13,13 @@ option(GLFW_BUILD_EXAMPLES OFF)
 option(GLFW_BUILD_TESTS OFF)
 option(GLFW_BUILD_DOCS OFF)
 option(GLFW_INSTALL OFF)
-add_subdirectory(third_party/glfw)
+add_subdirectory(${THIRD_PARTY_DIR}/glfw)
 
 
 # ----------------------------------------
 # GLAD
 # ----------------------------------------
-add_subdirectory(third_party/glad)
+add_subdirectory(${THIRD_PARTY_DIR}/glad)
 
 
 # ----------------------------------------
@@ -26,14 +27,22 @@ add_subdirectory(third_party/glad)
 # ----------------------------------------
 option(GLM_BUILD_TEST OFF)
 option(BUILD_SHARED_LIBS OFF)
-add_subdirectory(third_party/glm)
+add_subdirectory(${THIRD_PARTY_DIR}/glm)
 
 
 # ----------------------------------------
 # stb_image
 # ----------------------------------------
-include_directories(third_party/stb)
+include_directories(${THIRD_PARTY_DIR}/stb)
 
+
+# ----------------------------------------
+# Assimp
+# ----------------------------------------
+option(BUILD_SHARED_LIBS OFF)
+option(ASSIMP_INSTALL OFF)
+option(ASSIMP_BUILD_TESTS OFF)
+add_subdirectory(${THIRD_PARTY_DIR}/assimp)
 
 # ----------------------------------------
 # Executables
@@ -50,6 +59,7 @@ target_link_libraries(${PROJECT_NAME} PRIVATE
   glfw
   glad
   glm
+  assimp
 )
 
 if (APPLE)
