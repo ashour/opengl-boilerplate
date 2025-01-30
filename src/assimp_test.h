@@ -56,12 +56,15 @@ class AssimpModel
     std::string _directory;
 
     void load_model(std::string file_path);
+
     void process_node(aiNode* node, const aiScene* scene);
     AssimpMesh process_mesh(aiMesh* mesh, const aiScene* scene);
+
     std::vector<AssimpTexture>
     load_textures_for(aiMaterial* material, aiTextureType type, std::string type_name);
-
     static unsigned int tex_from_file(const char* path, const std::string& directory);
+
+    std::vector<AssimpTexture> _loaded_texture_cache;
 };
 
 class AssimpTest

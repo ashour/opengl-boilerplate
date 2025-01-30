@@ -293,11 +293,27 @@ AssimpModel::load_textures_for(aiMaterial* material, aiTextureType type, std::st
     {
         aiString str;
         material->GetTexture(type, i, &str);
-        AssimpTexture texture;
-        texture.id = tex_from_file(str.C_Str(), _directory);
-        texture.type = type_name;
-        texture.path = std::string(str.C_Str());
-        textures.push_back(texture);
+
+        bool was_loaded_from_cache = false;
+        for (size_t j = 0; j < _loaded_texture_cache.size(); j += 1)
+        {
+            if (std::strcmp(_loaded_texture_cache[j].path.data(), str.C_Str()) == 0)
+            {
+                textures.push_back(_loaded_texture_cache[j]);
+                was_loaded_from_cache = true;
+                break;
+            }
+        }
+
+        if (!was_loaded_from_cache)
+        {
+            AssimpTexture texture;
+            texture.id = tex_from_file(str.C_Str(), _directory);
+            texture.type = type_name;
+            texture.path = std::string(str.C_Str());
+            textures.push_back(texture);
+            _loaded_texture_cache.push_back(texture);
+        }
     }
 
     return textures;
