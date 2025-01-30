@@ -1,7 +1,7 @@
 // clang-format off
 #include "rendering/camera.h"
+#include "rendering/lights/directional_light.h"
 #include "rendering/transform.h"
-#include <filesystem>
 #define STB_IMAGE_IMPLEMENTATION
 #include <stb_image.h>
 // clang-format on
@@ -50,7 +50,7 @@ int AssimpTest::run()
     }
     window->set_clear_color(SCENE_CLEAR_COLOR);
 
-    Shader shader{SHADER_DIR + "assimp_test.vert", SHADER_DIR + "assimp_test.frag"};
+    Shader shader{"resources/shaders/assimp_test.vert", "resources/shaders/assimp_test.frag"};
     shader.build();
     shader.use();
 
@@ -69,6 +69,14 @@ int AssimpTest::run()
     Transform transform;
     transform.position(glm::vec3(-140.0f, -10.0f, 100.0f));
     transform.scale(glm::vec3(0.1f));
+
+    DirectionalLight light(shader,
+                           "u_directional_light",
+                           glm::vec3(10.0f, -1.0f, 10.0f),
+                           glm::vec3(0.4f),
+                           glm::vec3(0.2f),
+                           glm::vec3(0.0f));
+
     bool is_running = true;
     while (is_running)
     {
