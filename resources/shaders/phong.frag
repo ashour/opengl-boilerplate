@@ -49,12 +49,12 @@ uniform SpotLight u_spot_light;
 
 uniform vec3 u_view_position;
 
-uniform sampler2D u_diffuse_texture;
-uniform sampler2D u_specular_texture;
+uniform sampler2D u_tex_diffuse_1;
+uniform sampler2D u_tex_specular_1;
 struct Material
 {
-    sampler2D diffuse;
-    sampler2D specular;
+    sampler2D diffuse_1;
+    sampler2D specular_1;
     float shininess;
 };
 uniform Material u_material;
@@ -160,15 +160,11 @@ void main()
     // shrinks, and vice versa.
     float inverted_texture_scale = 1.0 / max(u_texture_scale, MIN_TEXTURE_SCALE);
     vec2 scaled_uv = v_uv * inverted_texture_scale;
-    vec3 diffuse_sample = texture(u_material.diffuse, scaled_uv).rgb;
-    vec3 specular_sample = texture(u_material.specular, scaled_uv).rgb;
+    vec3 diffuse_sample = texture(u_material.diffuse_1, scaled_uv).rgb;
+    vec3 specular_sample = texture(u_material.specular_1, scaled_uv).rgb;
 
-    vec3 directional_light = directional_light_component(u_directional_light,
-                                                         v_normal,
-                                                         view_direction,
-                                                         diffuse_sample,
-                                                         specular_sample,
-                                                         u_material.shininess);
+    vec3 directional_light = directional_light_component(
+        u_directional_light, v_normal, view_direction, diffuse_sample, specular_sample, 32);
 
     vec3 point_lights = vec3(0);
     for (int i = 0; i < u_point_light_count; i += 1)
@@ -179,7 +175,7 @@ void main()
                                               view_direction,
                                               diffuse_sample,
                                               specular_sample,
-                                              u_material.shininess);
+                                              32);
     }
 
     vec3 spot_light = spot_light_component(u_spot_light,
@@ -188,7 +184,7 @@ void main()
                                            view_direction,
                                            diffuse_sample,
                                            specular_sample,
-                                           u_material.shininess);
+                                           32);
 
     o_color = vec4(directional_light + point_lights + spot_light, 1.0);
 }

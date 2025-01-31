@@ -1,10 +1,10 @@
-#include "assimp_test.h"
+#include "app.h"
 #include "lib/log.h"
 
 int main()
 {
     EO_LOG_HEADING("Main Start");
 
-    eo::AssimpTest app;
+    eo::App app;
     return app.run();
 }

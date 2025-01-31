@@ -9,6 +9,7 @@
 #include "rendering/lights/spot_light.h"
 #include "rendering/material.h"
 #include "rendering/mesh.h"
+#include "rendering/model.h"
 #include "rendering/shader.h"
 #include "rendering/transform.h"
 #include "system/input.h"
@@ -130,6 +131,8 @@ void App::init_rendering()
                                           Format::RGBA);
     Shader::unuse_all();
 
+    _x_wing = std::make_unique<Model>("resources/models/x-wing.obj");
+
     _plane = std::make_unique<Mesh>(Primitive::plane());
     _cube = std::make_unique<Mesh>(Primitive::cube());
 }
@@ -226,5 +229,11 @@ void App::render_scene()
         _shader->set_uniform("u_model", cube_transform.matrix());
         _cube->draw();
     }
+
+    Transform x_wing_transform{};
+    x_wing_transform.position(glm::vec3(-70.0f, 2.0f, 70.0f));
+    x_wing_transform.scale(glm::vec3(0.05f));
+    _shader->set_uniform("u_model", x_wing_transform.matrix());
+    _x_wing->draw(*_shader);
 }
 } // namespace eo

@@ -19,8 +19,8 @@ Material::Material(Shader& shader,
               ? std::make_unique<Texture>(black_pixel())
               : std::make_unique<Texture>(specular_texture_file_path, specular_texture_format)}
 {
-    _shader.set_uniform("u_material.diffuse", 0);
-    _shader.set_uniform("u_material.specular", 1);
+    _shader.set_uniform("u_material.diffuse_1", 0);
+    _shader.set_uniform("u_material.specular_1", 1);
 }
 
 void Material::use() const

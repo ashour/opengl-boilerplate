@@ -3,6 +3,7 @@
 #include "rendering/lights/spot_light.h"
 #include "rendering/material.h"
 #include "rendering/mesh.h"
+#include "rendering/model.h"
 #include "rendering/shader.h"
 #include "system/window.h"
 #include <array>
@@ -40,6 +41,7 @@ class App
 
     std::unique_ptr<Mesh> _cube;
     std::unique_ptr<Mesh> _plane;
+    std::unique_ptr<Model> _x_wing;
     std::array<glm::vec3, 180> _cube_positions{};
 };
 } // namespace eo
