@@ -33,8 +33,8 @@ class Mesh
     std::vector<unsigned int> _indices;
     std::vector<NewTexture> _textures;
 
-    size_t _index_count{};
-
-    void init();
+    void init_vertex_array();
+    void init_buffers();
+    void init_vertex_attribs() const;
 };
 } // namespace eo
