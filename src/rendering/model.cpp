@@ -111,13 +111,15 @@ Model::load_textures_for(aiMaterial* material, aiTextureType type, std::string t
 
     for (size_t i = 0; i < material->GetTextureCount(type); i += 1)
     {
-        aiString str;
-        material->GetTexture(type, i, &str);
+        aiString model_file_path;
+        material->GetTexture(type, i, &model_file_path);
+        std::string actual_filepath = actual_file_path_for(model_file_path.C_Str());
 
         bool was_loaded_from_cache = false;
         for (size_t j = 0; j < _loaded_texture_cache.size(); j += 1)
         {
-            if (std::strcmp(_loaded_texture_cache[j].path.data(), str.C_Str()) == 0)
+
+            if (_loaded_texture_cache[j].path == actual_filepath)
             {
                 textures.push_back(_loaded_texture_cache[j]);
                 was_loaded_from_cache = true;
@@ -128,9 +130,9 @@ Model::load_textures_for(aiMaterial* material, aiTextureType type, std::string t
         if (!was_loaded_from_cache)
         {
             NewTexture texture;
-            texture.id = tex_from_file(str.C_Str(), _directory);
+            texture.id = tex_from_file(actual_filepath.c_str());
             texture.type = type_name;
-            texture.path = std::string(str.C_Str());
+            texture.path = actual_filepath;
             textures.push_back(texture);
             _loaded_texture_cache.push_back(texture);
         }
@@ -139,17 +141,14 @@ Model::load_textures_for(aiMaterial* material, aiTextureType type, std::string t
     return textures;
 }
 
-unsigned int Model::tex_from_file(const char* path, const std::string& directory)
+unsigned int Model::tex_from_file(const char* file_path)
 {
-    std::string model_file_path = std::string(path);
-    std::string filename = model_file_path.substr(model_file_path.find_last_of("/\\") + 1);
-    std::string actual_filepath = directory + '/' + filename;
-
+    // TODO should really be the Texture object's responsbility
     unsigned int texture_id;
     gldc(glGenTextures(1, &texture_id));
 
     int width, height, component_count;
-    unsigned char* data = stbi_load(actual_filepath.c_str(), &width, &height, &component_count, 0);
+    unsigned char* data = stbi_load(file_path, &width, &height, &component_count, 0);
     if (data)
     {
         GLenum format;
@@ -180,11 +179,18 @@ unsigned int Model::tex_from_file(const char* path, const std::string& directory
     }
     else
     {
-        std::cout << "Texture failed to load at path: " << filename << std::endl;
+        std::cout << "Texture failed to load at path: " << file_path << std::endl;
         stbi_image_free(data);
     }
 
     return texture_id;
+}
+
+std::string Model::actual_file_path_for(const char* model_texture_file_path)
+{
+    std::string model_file_path = std::string(model_texture_file_path);
+    std::string filename = model_file_path.substr(model_file_path.find_last_of("/\\") + 1);
+    return _directory + '/' + filename;
 }
 
 } // namespace eo

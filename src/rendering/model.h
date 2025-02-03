@@ -27,7 +27,9 @@ class Model
 
     std::vector<NewTexture>
     load_textures_for(aiMaterial* material, aiTextureType type, std::string type_name);
-    static unsigned int tex_from_file(const char* path, const std::string& directory);
+    static unsigned int tex_from_file(const char* file_path);
+
+    std::string actual_file_path_for(const char* model_texture_file_path);
 
     std::vector<NewTexture> _loaded_texture_cache;
 };
