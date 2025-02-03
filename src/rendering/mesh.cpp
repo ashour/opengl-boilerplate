@@ -62,6 +62,8 @@ void Mesh::draw(Shader& shader)
     }
     gldc(glActiveTexture(GL_TEXTURE0));
 
+    shader.set_uniform(std::format("u_material.shininess"), 32.0f);
+
     gldc(glBindVertexArray(_vao));
     gldc(glDrawElements(GL_TRIANGLES, _indices.size(), GL_UNSIGNED_INT, 0));
 }
