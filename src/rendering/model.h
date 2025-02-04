@@ -25,12 +25,11 @@ class Model
     void process_node(aiNode* node, const aiScene* scene);
     std::unique_ptr<Mesh> process_mesh(aiMesh* mesh, const aiScene* scene);
 
-    std::vector<NewTexture>
+    std::vector<std::shared_ptr<Texture>>
     load_textures_for(aiMaterial* material, aiTextureType type, std::string type_name);
-    static unsigned int tex_from_file(const char* file_path);
 
     std::string actual_file_path_for(const char* model_texture_file_path);
 
-    std::vector<NewTexture> _loaded_texture_cache;
+    std::vector<std::shared_ptr<Texture>> _loaded_texture_cache;
 };
 } // namespace eo

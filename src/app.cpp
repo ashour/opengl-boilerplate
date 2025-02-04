@@ -11,6 +11,7 @@
 #include "rendering/mesh.h"
 #include "rendering/model.h"
 #include "rendering/shader.h"
+#include "rendering/texture.h"
 #include "rendering/transform.h"
 #include "system/input.h"
 #include "system/time.h"
@@ -121,20 +122,21 @@ void App::init_rendering()
                                                glm::cos(glm::radians(12.5f)),
                                                glm::cos(glm::radians(17.5f)));
 
-    _mat_dirt = std::make_unique<Material>(*_shader, TEXTURE_DIR + "dirt.png", Format::RGBA, 25.0f);
-
-    _mat_box = std::make_unique<Material>(*_shader,
-                                          TEXTURE_DIR + "container2_diffuse.png",
-                                          Format::RGBA,
-                                          400.0f,
-                                          TEXTURE_DIR + "container2_specular.png",
-                                          Format::RGBA);
     Shader::unuse_all();
 
     _x_wing = std::make_unique<Model>("resources/models/x-wing.obj");
 
-    _plane = std::make_unique<Mesh>(Primitive::plane());
-    _cube = std::make_unique<Mesh>(Primitive::cube());
+    std::vector<std::shared_ptr<Texture>> mat_dirt_textures{
+        std::make_shared<Texture>("diffuse", "resources/textures/dirt.png")};
+    _mat_dirt = std::make_shared<Material>(mat_dirt_textures, 25.0f);
+    _plane = std::make_unique<Mesh>(Primitive::plane(), _mat_dirt);
+
+    std::vector<std::shared_ptr<Texture>> mat_box_textures{
+        std::make_shared<Texture>("diffuse", "resources/textures/container2_diffuse.png"),
+        std::make_shared<Texture>("specular", "resources/textures/container2_specular.png"),
+    };
+    _mat_box = std::make_shared<Material>(mat_box_textures, 400.0f);
+    _cube = std::make_unique<Mesh>(Primitive::cube(), _mat_box);
 }
 
 void App::init_input()
@@ -215,13 +217,13 @@ void App::render_scene()
     plane_transform.scale(glm::vec3(200.0f, 1.0f, 200.0f));
     _shader->set_uniform("u_model", plane_transform.matrix());
     _shader->set_uniform("u_texture_scale", 0.02f);
-    _mat_dirt->use();
+    _mat_dirt->bind(*_shader);
     _plane->draw();
 
     Transform cube_transform{};
     cube_transform.rotation(Time::current_time() * glm::radians(50.0f), {0.5f, 1.0f, 0.0f});
     _shader->set_uniform("u_texture_scale", 1.0f);
-    _mat_box->use();
+    _mat_box->bind(*_shader);
 
     for (glm::vec3 position : _cube_positions)
     {
@@ -234,6 +236,7 @@ void App::render_scene()
     x_wing_transform.position(glm::vec3(-70.0f, 2.0f, 70.0f));
     x_wing_transform.scale(glm::vec3(0.05f));
     _shader->set_uniform("u_model", x_wing_transform.matrix());
+    _shader->set_uniform("u_texture_scale", 1.0f);
     _x_wing->draw(*_shader);
 }
 } // namespace eo

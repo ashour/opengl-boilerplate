@@ -10,23 +10,15 @@ namespace eo
 class Material
 {
   public:
-    Material(Shader& shader,
-             const std::string& diffuse_texture_file_path,
-             const Format& diffuse_texture_format,
-             const float shininess,
-             const std::string& specular_texture_file_path = "",
-             const Format& specular_texture_format = Format::RGBA);
+    Material(const std::vector<std::shared_ptr<Texture>>& textures, const float shininess);
 
-    void use() const;
+    const std::vector<std::shared_ptr<Texture>>& textures() const { return _textures; }
+    constexpr float shininess() const { return _shininess; }
+
+    void bind(Shader& shader);
 
   private:
-    static Texture& black_pixel();
-
-    Shader& _shader;
-    const std::unique_ptr<Texture> _tex_diffuse;
-    const std::unique_ptr<Texture> _tex_specular;
+    std::vector<std::shared_ptr<Texture>> _textures;
     const float _shininess{};
-
-    static Texture& _s_tex_black_pixel;
 };
 } // namespace eo

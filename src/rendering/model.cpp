@@ -24,7 +24,8 @@ void Model::draw(Shader& shader)
 void Model::load_model(std::string file_path)
 {
     Assimp::Importer importer;
-    const aiScene* scene = importer.ReadFile(file_path, aiProcess_Triangulate | aiProcess_FlipUVs);
+    const aiScene* scene = importer.ReadFile(
+        file_path, aiProcess_Triangulate | aiProcess_FlipUVs | aiProcess_JoinIdenticalVertices);
     if (!scene || scene->mFlags & AI_SCENE_FLAGS_INCOMPLETE || !scene->mRootNode)
     {
         EO_LOG_ERROR("[Assimp] " << importer.GetErrorString());
@@ -56,7 +57,7 @@ std::unique_ptr<Mesh> Model::process_mesh(aiMesh* mesh, const aiScene* scene)
 {
     std::vector<Vertex> vertices;
     std::vector<unsigned int> indices;
-    std::vector<NewTexture> textures;
+    std::vector<std::shared_ptr<Texture>> textures;
 
     vertices.reserve(mesh->mNumVertices);
 
@@ -94,12 +95,10 @@ std::unique_ptr<Mesh> Model::process_mesh(aiMesh* mesh, const aiScene* scene)
     {
         aiMaterial* material = scene->mMaterials[mesh->mMaterialIndex];
 
-        std::vector<NewTexture> diffuse_maps =
-            load_textures_for(material, aiTextureType_DIFFUSE, "diffuse");
+        auto diffuse_maps = load_textures_for(material, aiTextureType_DIFFUSE, "diffuse");
         textures.insert(textures.end(), diffuse_maps.begin(), diffuse_maps.end());
 
-        std::vector<NewTexture> specular_maps =
-            load_textures_for(material, aiTextureType_SPECULAR, "specular");
+        auto specular_maps = load_textures_for(material, aiTextureType_SPECULAR, "specular");
         textures.insert(textures.end(), specular_maps.begin(), specular_maps.end());
 
         if (material->Get(AI_MATKEY_SHININESS, shininess) != AI_SUCCESS)
@@ -108,16 +107,25 @@ std::unique_ptr<Mesh> Model::process_mesh(aiMesh* mesh, const aiScene* scene)
         }
     }
 
-    return std::make_unique<Mesh>(
-        std::move(vertices), std::move(indices), std::move(textures), shininess);
+    auto material = std::make_shared<Material>(textures, shininess);
+    return std::make_unique<Mesh>(std::move(vertices), std::move(indices), material);
 }
 
-std::vector<NewTexture>
+std::vector<std::shared_ptr<Texture>>
 Model::load_textures_for(aiMaterial* material, aiTextureType type, std::string type_name)
 {
-    std::vector<NewTexture> textures;
+    std::vector<std::shared_ptr<Texture>> textures;
 
-    for (size_t i = 0; i < material->GetTextureCount(type); i += 1)
+    auto texture_count = material->GetTextureCount(type);
+    if (texture_count == 0 && type_name == "specular")
+    {
+        constexpr unsigned char black[] = {0, 0, 0, 255};
+        textures.push_back(std::make_shared<Texture>(black, 1, 1, "specular"));
+
+        return textures;
+    }
+
+    for (size_t i = 0; i < texture_count; i += 1)
     {
         aiString model_file_path;
         material->GetTexture(type, i, &model_file_path);
@@ -126,8 +134,7 @@ Model::load_textures_for(aiMaterial* material, aiTextureType type, std::string t
         bool was_loaded_from_cache = false;
         for (size_t j = 0; j < _loaded_texture_cache.size(); j += 1)
         {
-
-            if (_loaded_texture_cache[j].path == actual_filepath)
+            if (_loaded_texture_cache[j]->path == actual_filepath)
             {
                 textures.push_back(_loaded_texture_cache[j]);
                 was_loaded_from_cache = true;
@@ -137,61 +144,13 @@ Model::load_textures_for(aiMaterial* material, aiTextureType type, std::string t
 
         if (!was_loaded_from_cache)
         {
-            NewTexture texture;
-            texture.id = tex_from_file(actual_filepath.c_str());
-            texture.type = type_name;
-            texture.path = actual_filepath;
+            auto texture = std::make_shared<Texture>(type_name, actual_filepath);
             textures.push_back(texture);
             _loaded_texture_cache.push_back(texture);
         }
     }
 
     return textures;
-}
-
-unsigned int Model::tex_from_file(const char* file_path)
-{
-    // TODO should really be the Texture object's responsbility
-    unsigned int texture_id;
-    gldc(glGenTextures(1, &texture_id));
-
-    int width, height, component_count;
-    unsigned char* data = stbi_load(file_path, &width, &height, &component_count, 0);
-    if (data)
-    {
-        GLenum format;
-        if (component_count == 1)
-        {
-            format = GL_RED;
-        }
-        else if (component_count == 3)
-        {
-            format = GL_RGB;
-        }
-        else if (component_count == 4)
-        {
-            format = GL_RGBA;
-        }
-
-        gldc(glBindTexture(GL_TEXTURE_2D, texture_id));
-        gldc(glTexImage2D(
-            GL_TEXTURE_2D, 0, format, width, height, 0, format, GL_UNSIGNED_BYTE, data));
-        gldc(glGenerateMipmap(GL_TEXTURE_2D));
-
-        gldc(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT));
-        gldc(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT));
-        gldc(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR));
-        gldc(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR));
-
-        stbi_image_free(data);
-    }
-    else
-    {
-        std::cout << "Texture failed to load at path: " << file_path << std::endl;
-        stbi_image_free(data);
-    }
-
-    return texture_id;
 }
 
 std::string Model::actual_file_path_for(const char* model_texture_file_path)

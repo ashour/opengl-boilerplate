@@ -5,16 +5,15 @@
 
 namespace eo
 {
-Mesh::Mesh(const Object& object)
-    : Mesh(object.vertices, object.indices, std::vector<NewTexture>{}, 0.0f)
+Mesh::Mesh(const Object& object, std::shared_ptr<Material> material)
+    : Mesh(object.vertices, object.indices, material)
 {
 }
 
 Mesh::Mesh(std::vector<Vertex> vertices,
            std::vector<unsigned int> indices,
-           std::vector<NewTexture> textures,
-           float shininess)
-    : _vertices{vertices}, _indices{indices}, _textures{textures}, _shininess{shininess}
+           std::shared_ptr<Material> material)
+    : _vertices{vertices}, _indices{indices}, _material(material)
 {
     init_vertex_array();
     init_buffers();
@@ -36,35 +35,7 @@ void Mesh::draw()
 
 void Mesh::draw(Shader& shader)
 {
-    unsigned int diffuse_counter = 1;
-    unsigned int specular_counter = 1;
-
-    for (int i = 0; i < _textures.size(); i += 1)
-    {
-        gldc(glActiveTexture(GL_TEXTURE0 + i));
-
-        std::string number;
-        std::string name = _textures[i].type;
-
-        // TODO enum instead of magic values here
-        if (name == "diffuse")
-        {
-            number = std::to_string(diffuse_counter);
-            diffuse_counter += 1;
-        }
-        else if (name == "specular")
-        {
-            number = std::to_string(specular_counter);
-            specular_counter += 1;
-        }
-
-        // TODO constant template instead of magic value here
-        shader.set_uniform(std::format("u_material.{}_{}", name, number), i);
-        gldc(glBindTexture(GL_TEXTURE_2D, _textures[i].id));
-    }
-    gldc(glActiveTexture(GL_TEXTURE0));
-
-    shader.set_uniform(std::format("u_material.shininess"), _shininess);
+    _material->bind(shader);
 
     gldc(glBindVertexArray(_vao));
     gldc(glDrawElements(GL_TRIANGLES, _indices.size(), GL_UNSIGNED_INT, 0));

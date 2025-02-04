@@ -1,9 +1,10 @@
 #pragma once
 
 #include "objects/object.h"
-#include "rendering/new_texture.h"
+#include "rendering/material.h"
 #include "rendering/shader.h"
 #include "rendering/vertex.h"
+#include <memory>
 
 namespace eo
 {
@@ -11,11 +12,10 @@ namespace eo
 class Mesh
 {
   public:
-    explicit Mesh(const Object& object);
+    explicit Mesh(const Object& object, std::shared_ptr<Material> material);
     Mesh(std::vector<Vertex> vertices,
          std::vector<unsigned int> indices,
-         std::vector<NewTexture> textures,
-         float shininess);
+         std::shared_ptr<Material> material);
     ~Mesh();
 
     void draw();
@@ -23,7 +23,7 @@ class Mesh
 
     const std::vector<Vertex>& vertices() const { return _vertices; }
     const std::vector<unsigned int>& indices() const { return _indices; }
-    const std::vector<NewTexture>& textures() const { return _textures; }
+    const std::shared_ptr<Material> material() const { return _material; }
 
   private:
     unsigned int _vao{};
@@ -32,9 +32,7 @@ class Mesh
 
     std::vector<Vertex> _vertices;
     std::vector<unsigned int> _indices;
-    std::vector<NewTexture> _textures;
-
-    float _shininess{};
+    std::shared_ptr<Material> _material;
 
     void init_vertex_array();
     void init_buffers();

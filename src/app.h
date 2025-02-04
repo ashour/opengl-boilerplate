@@ -33,8 +33,8 @@ class App
     std::unique_ptr<DirectionalLight> _directional_light;
     std::unique_ptr<SpotLight> _flash_light;
 
-    std::unique_ptr<Material> _mat_dirt;
-    std::unique_ptr<Material> _mat_box;
+    std::shared_ptr<Material> _mat_dirt;
+    std::shared_ptr<Material> _mat_box;
 
     int _u_view_matrix;
     int _u_view_position;

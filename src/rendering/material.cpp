@@ -1,44 +1,34 @@
 #include "material.h"
+#include "rendering/shader.h"
 #include "rendering/texture.h"
 #include <glm/glm.hpp>
 #include <memory>
 
 namespace eo
 {
-Material::Material(Shader& shader,
-                   const std::string& diffuse_texture_file_path,
-                   const Format& diffuse_texture_format,
-                   const float shininess,
-                   const std::string& specular_texture_file_path,
-                   const Format& specular_texture_format)
-    : _shader(shader),
-      _shininess{shininess},
-      _tex_diffuse{std::make_unique<Texture>(diffuse_texture_file_path, diffuse_texture_format)},
-      _tex_specular{
-          specular_texture_file_path.empty()
-              ? std::make_unique<Texture>(black_pixel())
-              : std::make_unique<Texture>(specular_texture_file_path, specular_texture_format)}
+Material::Material(const std::vector<std::shared_ptr<Texture>>& textures, const float shininess)
+    : _textures(textures), _shininess{shininess}
 {
-    _shader.set_uniform("u_material.diffuse_1", 0);
-    _shader.set_uniform("u_material.specular_1", 1);
 }
 
-void Material::use() const
+void Material::bind(Shader& shader)
 {
-    _tex_diffuse->bind(TextureUnit::TEXUNIT0);
-    _tex_specular->bind(TextureUnit::TEXUNIT1);
+    shader.set_uniform("u_material.diffuse_1", 0);
+    shader.set_uniform("u_material.specular_1", 1);
 
-    _shader.set_uniform("u_material.shininess", _shininess);
-}
-
-Texture& Material::black_pixel()
-{
-    static std::unique_ptr<Texture> black_pixel = []()
+    for (auto texture : _textures)
     {
-        unsigned char black[] = {0, 0, 0, 255};
-        return std::make_unique<Texture>(black, 1, 1, Format::RGBA);
-    }();
+        if (texture->type == "diffuse")
+        {
+            gldc(glActiveTexture(GL_TEXTURE0));
+        }
+        else if (texture->type == "specular")
+        {
+            gldc(glActiveTexture(GL_TEXTURE1));
+        }
+        gldc(glBindTexture(GL_TEXTURE_2D, texture->id));
+    }
 
-    return *black_pixel;
+    shader.set_uniform("u_material.shininess", _shininess);
 }
 } // namespace eo
