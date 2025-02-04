@@ -31,4 +31,25 @@ void Material::bind(Shader& shader)
 
     shader.set_uniform("u_material.shininess", _shininess);
 }
+
+void Material::unbind(Shader& shader)
+{
+    for (auto texture : _textures)
+    {
+        if (texture->type == "diffuse")
+        {
+            gldc(glActiveTexture(GL_TEXTURE0));
+        }
+        else if (texture->type == "specular")
+        {
+            gldc(glActiveTexture(GL_TEXTURE1));
+        }
+        gldc(glBindTexture(GL_TEXTURE_2D, 0));
+    }
+
+    shader.set_uniform("u_material.diffuse_1", 0);
+    shader.set_uniform("u_material.specular_1", 0);
+
+    shader.set_uniform("u_material.shininess", 0.0f);
+}
 } // namespace eo

@@ -220,18 +220,19 @@ void App::render_scene()
     _shader->set_uniform("u_texture_scale", 0.02f);
     _mat_dirt->bind(*_shader);
     _plane->draw();
+    _mat_dirt->unbind(*_shader);
 
     Transform cube_transform{};
     cube_transform.rotation(Time::current_time() * glm::radians(50.0f), {0.5f, 1.0f, 0.0f});
     _shader->set_uniform("u_texture_scale", 1.0f);
     _mat_box->bind(*_shader);
-
     for (glm::vec3 position : _cube_positions)
     {
         cube_transform.position(position);
         _shader->set_uniform("u_model", cube_transform.matrix());
         _cube->draw();
     }
+    _mat_box->unbind(*_shader);
 
     Transform x_wing_transform{};
     x_wing_transform.position(glm::vec3(-70.0f, 2.0f, 70.0f));
@@ -239,11 +240,13 @@ void App::render_scene()
     _shader->set_uniform("u_model", x_wing_transform.matrix());
     _shader->set_uniform("u_texture_scale", 1.0f);
     _x_wing->draw(*_shader);
+    _x_wing->unbind_materials(*_shader);
 
     Transform backpack_transform{};
     backpack_transform.position({12.0f, 2.0f, 4.0f});
     _shader->set_uniform("u_model", backpack_transform.matrix());
     _shader->set_uniform("u_texture_scale", 1.0f);
     _backpack->draw(*_shader);
+    _backpack->unbind_materials(*_shader);
 }
 } // namespace eo

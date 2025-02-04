@@ -16,6 +16,7 @@ class Material
     constexpr float shininess() const { return _shininess; }
 
     void bind(Shader& shader);
+    void unbind(Shader& shader);
 
   private:
     std::vector<std::shared_ptr<Texture>> _textures;

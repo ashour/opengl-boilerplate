@@ -21,6 +21,15 @@ void Model::draw(Shader& shader)
     }
 }
 
+void Model::unbind_materials(Shader& shader)
+{
+
+    for (const auto& mesh : _meshes)
+    {
+        mesh->material()->unbind(shader);
+    }
+}
+
 void Model::load_model(std::string file_path)
 {
     Assimp::Importer importer;

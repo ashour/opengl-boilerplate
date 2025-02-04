@@ -15,6 +15,7 @@ class Model
     Model(const std::string& file_path);
 
     void draw(Shader& shader);
+    void unbind_materials(Shader& shader);
 
   private:
     std::vector<std::unique_ptr<Mesh>> _meshes;
