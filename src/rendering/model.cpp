@@ -128,9 +128,7 @@ Model::load_textures_for(aiMaterial* material, aiTextureType type, std::string t
     auto texture_count = material->GetTextureCount(type);
     if (texture_count == 0 && type_name == "specular")
     {
-        constexpr unsigned char black[] = {0, 0, 0, 255};
-        textures.push_back(std::make_shared<Texture>(black, 1, 1, "specular"));
-
+        textures.push_back(Texture::no_specular());
         return textures;
     }
 
@@ -143,7 +141,7 @@ Model::load_textures_for(aiMaterial* material, aiTextureType type, std::string t
         bool was_loaded_from_cache = false;
         for (size_t j = 0; j < _loaded_texture_cache.size(); j += 1)
         {
-            if (_loaded_texture_cache[j]->path == actual_filepath)
+            if (_loaded_texture_cache[j]->path() == actual_filepath)
             {
                 textures.push_back(_loaded_texture_cache[j]);
                 was_loaded_from_cache = true;

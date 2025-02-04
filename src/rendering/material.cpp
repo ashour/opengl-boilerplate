@@ -6,27 +6,40 @@
 
 namespace eo
 {
+std::unique_ptr<Texture> Material::_black_pixel = nullptr;
+
 Material::Material(const std::vector<std::shared_ptr<Texture>>& textures, const float shininess)
     : _textures(textures), _shininess{shininess}
 {
+    if (!_black_pixel)
+    {
+        const unsigned char black[] = {0, 0, 0, 255};
+        _black_pixel = std::make_unique<Texture>(black, 1, 1, "::black_pixel::");
+    }
 }
 
 void Material::bind(Shader& shader)
 {
-    shader.set_uniform("u_material.diffuse_1", 0);
-    shader.set_uniform("u_material.specular_1", 1);
-
     for (auto texture : _textures)
     {
-        if (texture->type == "diffuse")
+        if (texture->type() == "diffuse")
         {
-            gldc(glActiveTexture(GL_TEXTURE0));
+            shader.set_uniform("u_material.diffuse_1", 2);
+            gldc(glActiveTexture(GL_TEXTURE2));
+            gldc(glBindTexture(GL_TEXTURE_2D, texture->id()));
         }
-        else if (texture->type == "specular")
+        else if (texture->type() == "specular")
         {
-            gldc(glActiveTexture(GL_TEXTURE1));
+            shader.set_uniform("u_material.specular_1", 3);
+            gldc(glActiveTexture(GL_TEXTURE3));
+            gldc(glBindTexture(GL_TEXTURE_2D, texture->id()));
         }
-        gldc(glBindTexture(GL_TEXTURE_2D, texture->id));
+        else if (texture->type() == "::no_specular::")
+        {
+            shader.set_uniform("u_material.specular_1", 3);
+            gldc(glActiveTexture(GL_TEXTURE3));
+            gldc(glBindTexture(GL_TEXTURE_2D, _black_pixel->id()));
+        }
     }
 
     shader.set_uniform("u_material.shininess", _shininess);
@@ -36,15 +49,21 @@ void Material::unbind(Shader& shader)
 {
     for (auto texture : _textures)
     {
-        if (texture->type == "diffuse")
+        if (texture->type() == "diffuse")
         {
-            gldc(glActiveTexture(GL_TEXTURE0));
+            gldc(glActiveTexture(GL_TEXTURE2));
+            gldc(glBindTexture(GL_TEXTURE_2D, 0));
         }
-        else if (texture->type == "specular")
+        else if (texture->type() == "specular")
         {
-            gldc(glActiveTexture(GL_TEXTURE1));
+            gldc(glActiveTexture(GL_TEXTURE3));
+            gldc(glBindTexture(GL_TEXTURE_2D, 0));
         }
-        gldc(glBindTexture(GL_TEXTURE_2D, 0));
+        else if (texture->type() == "::no_specular::")
+        {
+            gldc(glActiveTexture(GL_TEXTURE3));
+            gldc(glBindTexture(GL_TEXTURE_2D, 0));
+        }
     }
 
     shader.set_uniform("u_material.diffuse_1", 0);

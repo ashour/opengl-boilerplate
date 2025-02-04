@@ -128,7 +128,9 @@ void App::init_rendering()
     _backpack = std::make_unique<Model>("resources/models/backpack/backpack.obj");
 
     std::vector<std::shared_ptr<Texture>> mat_dirt_textures{
-        std::make_shared<Texture>("diffuse", "resources/textures/dirt.png")};
+        std::make_shared<Texture>("diffuse", "resources/textures/dirt.png"),
+        Texture::no_specular(),
+    };
     _mat_dirt = std::make_shared<Material>(mat_dirt_textures, 25.0f);
     _plane = std::make_unique<Mesh>(Primitive::plane(), _mat_dirt);
 

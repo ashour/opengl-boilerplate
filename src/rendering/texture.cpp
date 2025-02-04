@@ -6,10 +6,10 @@
 namespace eo
 {
 Texture::Texture(const std::string& type, const std::string& file_path)
-    : type{type}, path{file_path}
+    : _type{type}, _path{file_path}
 {
-    gldc(glGenTextures(1, &id));
-    gldc(glBindTexture(GL_TEXTURE_2D, id));
+    gldc(glGenTextures(1, &_id));
+    gldc(glBindTexture(GL_TEXTURE_2D, _id));
 
     gldc(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT));
     gldc(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT));
@@ -51,11 +51,15 @@ Texture::Texture(const std::string& type, const std::string& file_path)
     stbi_image_free(data);
 }
 
-Texture::Texture(const void* color_data, const int width, const int height, const std::string& type)
-    : type{type}
+Texture::Texture(const void* color_data,
+                 const int width,
+                 const int height,
+                 const std::string& type,
+                 const std::string& path)
+    : _type{type}, _path{path}
 {
-    gldc(glGenTextures(1, &id));
-    gldc(glBindTexture(GL_TEXTURE_2D, id));
+    gldc(glGenTextures(1, &_id));
+    gldc(glBindTexture(GL_TEXTURE_2D, _id));
 
     gldc(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT));
     gldc(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT));
@@ -67,5 +71,13 @@ Texture::Texture(const void* color_data, const int width, const int height, cons
     gldc(glGenerateMipmap(GL_TEXTURE_2D));
 }
 
-Texture::~Texture() { gldc(glDeleteTextures(1, &id)); }
+Texture::~Texture() { gldc(glDeleteTextures(1, &_id)); }
+
+std::shared_ptr<Texture> Texture::no_specular()
+{
+    static std::shared_ptr<Texture> texture = std::make_shared<Texture>(Texture{"::no_specular::"});
+    return texture;
+}
+
+Texture::Texture(std::string type) : _id{}, _type{type}, _path{} {}
 } // namespace eo

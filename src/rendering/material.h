@@ -19,6 +19,8 @@ class Material
     void unbind(Shader& shader);
 
   private:
+    static std::unique_ptr<Texture> _black_pixel;
+
     std::vector<std::shared_ptr<Texture>> _textures;
     const float _shininess{};
 };
