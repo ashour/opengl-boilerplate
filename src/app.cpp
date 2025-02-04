@@ -124,7 +124,8 @@ void App::init_rendering()
 
     Shader::unuse_all();
 
-    _x_wing = std::make_unique<Model>("resources/models/x-wing.obj");
+    _x_wing = std::make_unique<Model>("resources/models/x-wing/x-wing.obj");
+    _backpack = std::make_unique<Model>("resources/models/backpack/backpack.obj");
 
     std::vector<std::shared_ptr<Texture>> mat_dirt_textures{
         std::make_shared<Texture>("diffuse", "resources/textures/dirt.png")};
@@ -238,5 +239,11 @@ void App::render_scene()
     _shader->set_uniform("u_model", x_wing_transform.matrix());
     _shader->set_uniform("u_texture_scale", 1.0f);
     _x_wing->draw(*_shader);
+
+    Transform backpack_transform{};
+    backpack_transform.position({12.0f, 2.0f, 4.0f});
+    _shader->set_uniform("u_model", backpack_transform.matrix());
+    _shader->set_uniform("u_texture_scale", 1.0f);
+    _backpack->draw(*_shader);
 }
 } // namespace eo

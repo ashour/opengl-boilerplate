@@ -40,8 +40,10 @@ class App
     int _u_view_position;
 
     std::unique_ptr<Mesh> _cube;
+    std::array<glm::vec3, 180> _cube_positions{};
+
     std::unique_ptr<Mesh> _plane;
     std::unique_ptr<Model> _x_wing;
-    std::array<glm::vec3, 180> _cube_positions{};
+    std::unique_ptr<Model> _backpack;
 };
 } // namespace eo
