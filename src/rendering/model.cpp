@@ -104,10 +104,12 @@ std::unique_ptr<Mesh> Model::process_mesh(aiMesh* mesh, const aiScene* scene)
     {
         aiMaterial* material = scene->mMaterials[mesh->mMaterialIndex];
 
-        auto diffuse_maps = load_textures_for(material, aiTextureType_DIFFUSE, "diffuse");
+        auto diffuse_maps =
+            load_textures_for(material, aiTextureType_DIFFUSE, Texture::Type::diffuse);
         textures.insert(textures.end(), diffuse_maps.begin(), diffuse_maps.end());
 
-        auto specular_maps = load_textures_for(material, aiTextureType_SPECULAR, "specular");
+        auto specular_maps =
+            load_textures_for(material, aiTextureType_SPECULAR, Texture::Type::specular);
         textures.insert(textures.end(), specular_maps.begin(), specular_maps.end());
 
         if (material->Get(AI_MATKEY_SHININESS, shininess) != AI_SUCCESS)
@@ -121,12 +123,12 @@ std::unique_ptr<Mesh> Model::process_mesh(aiMesh* mesh, const aiScene* scene)
 }
 
 std::vector<std::shared_ptr<Texture>>
-Model::load_textures_for(aiMaterial* material, aiTextureType type, std::string type_name)
+Model::load_textures_for(aiMaterial* material, aiTextureType ai_type, Texture::Type internal_type)
 {
     std::vector<std::shared_ptr<Texture>> textures;
 
-    auto texture_count = material->GetTextureCount(type);
-    if (texture_count == 0 && type_name == "specular")
+    auto texture_count = material->GetTextureCount(ai_type);
+    if (texture_count == 0 && internal_type == Texture::Type::specular)
     {
         textures.push_back(Texture::no_specular());
         return textures;
@@ -135,7 +137,7 @@ Model::load_textures_for(aiMaterial* material, aiTextureType type, std::string t
     for (size_t i = 0; i < texture_count; i += 1)
     {
         aiString model_file_path;
-        material->GetTexture(type, i, &model_file_path);
+        material->GetTexture(ai_type, i, &model_file_path);
         std::string actual_filepath = actual_file_path_for(model_file_path.C_Str());
 
         bool was_loaded_from_cache = false;
@@ -151,7 +153,7 @@ Model::load_textures_for(aiMaterial* material, aiTextureType type, std::string t
 
         if (!was_loaded_from_cache)
         {
-            auto texture = std::make_shared<Texture>(type_name, actual_filepath);
+            auto texture = std::make_shared<Texture>(internal_type, actual_filepath);
             textures.push_back(texture);
             _loaded_texture_cache.push_back(texture);
         }

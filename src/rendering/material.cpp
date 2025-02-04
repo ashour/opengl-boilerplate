@@ -14,7 +14,7 @@ Material::Material(const std::vector<std::shared_ptr<Texture>>& textures, const 
     if (!_black_pixel)
     {
         const unsigned char black[] = {0, 0, 0, 255};
-        _black_pixel = std::make_unique<Texture>(black, 1, 1, "::black_pixel::");
+        _black_pixel = std::make_unique<Texture>(black, 1, 1);
     }
 }
 
@@ -22,23 +22,25 @@ void Material::bind(Shader& shader)
 {
     for (auto texture : _textures)
     {
-        if (texture->type() == "diffuse")
+        switch (texture->type())
         {
+        case Texture::Type::diffuse:
             shader.set_uniform("u_material.diffuse_1", 2);
             gldc(glActiveTexture(GL_TEXTURE2));
             gldc(glBindTexture(GL_TEXTURE_2D, texture->id()));
-        }
-        else if (texture->type() == "specular")
-        {
+            break;
+        case Texture::Type::specular:
             shader.set_uniform("u_material.specular_1", 3);
             gldc(glActiveTexture(GL_TEXTURE3));
             gldc(glBindTexture(GL_TEXTURE_2D, texture->id()));
-        }
-        else if (texture->type() == "::no_specular::")
-        {
+            break;
+        case Texture::Type::no_specular:
             shader.set_uniform("u_material.specular_1", 3);
             gldc(glActiveTexture(GL_TEXTURE3));
             gldc(glBindTexture(GL_TEXTURE_2D, _black_pixel->id()));
+            break;
+        default:
+            EO_LOG_ERROR("Unsupported texture type!");
         }
     }
 
@@ -49,20 +51,22 @@ void Material::unbind(Shader& shader)
 {
     for (auto texture : _textures)
     {
-        if (texture->type() == "diffuse")
+        switch (texture->type())
         {
+        case Texture::Type::diffuse:
             gldc(glActiveTexture(GL_TEXTURE2));
             gldc(glBindTexture(GL_TEXTURE_2D, 0));
-        }
-        else if (texture->type() == "specular")
-        {
+            break;
+        case Texture::Type::specular:
             gldc(glActiveTexture(GL_TEXTURE3));
             gldc(glBindTexture(GL_TEXTURE_2D, 0));
-        }
-        else if (texture->type() == "::no_specular::")
-        {
+            break;
+        case Texture::Type::no_specular:
             gldc(glActiveTexture(GL_TEXTURE3));
             gldc(glBindTexture(GL_TEXTURE_2D, 0));
+            break;
+        default:
+            EO_LOG_ERROR("Unsupported texture type!");
         }
     }
 

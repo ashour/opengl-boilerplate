@@ -27,7 +27,7 @@ class Model
     std::unique_ptr<Mesh> process_mesh(aiMesh* mesh, const aiScene* scene);
 
     std::vector<std::shared_ptr<Texture>>
-    load_textures_for(aiMaterial* material, aiTextureType type, std::string type_name);
+    load_textures_for(aiMaterial* material, aiTextureType ai_type, Texture::Type internal_type);
 
     std::string actual_file_path_for(const char* model_texture_file_path);
 

@@ -5,8 +5,7 @@
 
 namespace eo
 {
-Texture::Texture(const std::string& type, const std::string& file_path)
-    : _type{type}, _path{file_path}
+Texture::Texture(Type type, const std::string& file_path) : _type{type}, _path{file_path}
 {
     gldc(glGenTextures(1, &_id));
     gldc(glBindTexture(GL_TEXTURE_2D, _id));
@@ -51,12 +50,8 @@ Texture::Texture(const std::string& type, const std::string& file_path)
     stbi_image_free(data);
 }
 
-Texture::Texture(const void* color_data,
-                 const int width,
-                 const int height,
-                 const std::string& type,
-                 const std::string& path)
-    : _type{type}, _path{path}
+Texture::Texture(const void* color_data, const int width, const int height, const std::string& path)
+    : _type(Type::solid_color), _path{path}
 {
     gldc(glGenTextures(1, &_id));
     gldc(glBindTexture(GL_TEXTURE_2D, _id));
@@ -75,9 +70,9 @@ Texture::~Texture() { gldc(glDeleteTextures(1, &_id)); }
 
 std::shared_ptr<Texture> Texture::no_specular()
 {
-    static std::shared_ptr<Texture> texture = std::make_shared<Texture>(Texture{"::no_specular::"});
+    static std::shared_ptr<Texture> texture = std::make_shared<Texture>(Texture::Type::no_specular);
     return texture;
 }
 
-Texture::Texture(std::string type) : _id{}, _type{type}, _path{} {}
+Texture::Texture(Type type) : _id{}, _type{type}, _path{} {}
 } // namespace eo
