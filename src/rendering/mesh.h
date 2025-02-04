@@ -14,7 +14,8 @@ class Mesh
     explicit Mesh(const Object& object);
     Mesh(std::vector<Vertex> vertices,
          std::vector<unsigned int> indices,
-         std::vector<NewTexture> textures);
+         std::vector<NewTexture> textures,
+         float shininess);
     ~Mesh();
 
     void draw();
@@ -32,6 +33,8 @@ class Mesh
     std::vector<Vertex> _vertices;
     std::vector<unsigned int> _indices;
     std::vector<NewTexture> _textures;
+
+    float _shininess{};
 
     void init_vertex_array();
     void init_buffers();

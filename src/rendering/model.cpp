@@ -88,6 +88,8 @@ std::unique_ptr<Mesh> Model::process_mesh(aiMesh* mesh, const aiScene* scene)
         }
     }
 
+    float shininess;
+
     if (mesh->mMaterialIndex >= 0)
     {
         aiMaterial* material = scene->mMaterials[mesh->mMaterialIndex];
@@ -99,9 +101,15 @@ std::unique_ptr<Mesh> Model::process_mesh(aiMesh* mesh, const aiScene* scene)
         std::vector<NewTexture> specular_maps =
             load_textures_for(material, aiTextureType_SPECULAR, "specular");
         textures.insert(textures.end(), specular_maps.begin(), specular_maps.end());
+
+        if (material->Get(AI_MATKEY_SHININESS, shininess) != AI_SUCCESS)
+        {
+            shininess = 0;
+        }
     }
 
-    return std::make_unique<Mesh>(std::move(vertices), std::move(indices), std::move(textures));
+    return std::make_unique<Mesh>(
+        std::move(vertices), std::move(indices), std::move(textures), shininess);
 }
 
 std::vector<NewTexture>

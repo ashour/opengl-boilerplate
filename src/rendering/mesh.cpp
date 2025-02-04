@@ -5,14 +5,16 @@
 
 namespace eo
 {
-Mesh::Mesh(const Object& object) : Mesh(object.vertices, object.indices, std::vector<NewTexture>{})
+Mesh::Mesh(const Object& object)
+    : Mesh(object.vertices, object.indices, std::vector<NewTexture>{}, 0.0f)
 {
 }
 
 Mesh::Mesh(std::vector<Vertex> vertices,
            std::vector<unsigned int> indices,
-           std::vector<NewTexture> textures)
-    : _vertices{vertices}, _indices{indices}, _textures{textures}
+           std::vector<NewTexture> textures,
+           float shininess)
+    : _vertices{vertices}, _indices{indices}, _textures{textures}, _shininess{shininess}
 {
     init_vertex_array();
     init_buffers();
@@ -62,7 +64,7 @@ void Mesh::draw(Shader& shader)
     }
     gldc(glActiveTexture(GL_TEXTURE0));
 
-    shader.set_uniform(std::format("u_material.shininess"), 32.0f);
+    shader.set_uniform(std::format("u_material.shininess"), _shininess);
 
     gldc(glBindVertexArray(_vao));
     gldc(glDrawElements(GL_TRIANGLES, _indices.size(), GL_UNSIGNED_INT, 0));
