@@ -2,17 +2,27 @@
 
 out vec4 o_color;
 
-float near = 0.1;
-float far = 100.0;
+in vec2 v_uv;
 
-float linearize_depth(float non_linear_depth)
+uniform sampler2D u_tex_diffuse_1;
+uniform sampler2D u_tex_specular_1;
+struct Material
 {
-    float normalized_device_coordinate_z = non_linear_depth * 2.0 - 1.0;
-    return (2.0 * near * far) / (far + near - normalized_device_coordinate_z * (far - near));
-}
+    sampler2D diffuse_1;
+    sampler2D specular_1;
+    float shininess;
+};
+uniform Material u_material;
+
+const float MIN_TEXTURE_SCALE = 0.0001;
+uniform float u_texture_scale = 1.0;
 
 void main()
 {
-    float depth = linearize_depth(gl_FragCoord.z) / far;
-    o_color = vec4(vec3(depth), 1.0);
+    float inverted_texture_scale = 1.0 / max(u_texture_scale, MIN_TEXTURE_SCALE);
+    vec2 scaled_uv = v_uv * inverted_texture_scale;
+    vec3 diffuse_sample = texture(u_material.diffuse_1, scaled_uv).rgb;
+    vec3 specular_sample = texture(u_material.specular_1, scaled_uv).rgb;
+
+    o_color = vec4(vec3(diffuse_sample + specular_sample), 1.0);
 }

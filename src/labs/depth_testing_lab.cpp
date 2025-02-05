@@ -14,8 +14,8 @@ DepthTestingLab::DepthTestingLab(const Window& window) : Lab(window)
     gldc(glDepthFunc(GL_LESS));
     _window.set_clear_color(SCENE_CLEAR_COLOR);
 
-    _shader = std::make_shared<Shader>("resources/shaders/unlit_texture.vert",
-                                       "resources/shaders/unlit_texture.frag");
+    _shader = std::make_shared<Shader>("resources/shaders/depth_test.vert",
+                                       "resources/shaders/depth_test.frag");
     _shader->build();
 
     _shader->use();
