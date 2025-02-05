@@ -46,7 +46,7 @@ DepthTestingLab::DepthTestingLab(const Window& window) : Lab(window)
         { _camera->look(current_mouse_position, last_mouse_position); });
 }
 
-void DepthTestingLab::OnUpdate()
+void DepthTestingLab::on_update()
 {
     if (Input::action_pressed(Action::move_forward))
     {
@@ -66,7 +66,7 @@ void DepthTestingLab::OnUpdate()
     }
 }
 
-void DepthTestingLab::OnRender()
+void DepthTestingLab::on_render()
 {
     _shader->use();
     _shader->set_uniform(_u_view_matrix, _camera->view());

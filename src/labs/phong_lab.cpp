@@ -111,7 +111,7 @@ PhongLab::PhongLab(const Window& window) : Lab(window)
 
 PhongLab::~PhongLab() {}
 
-void PhongLab::OnUpdate()
+void PhongLab::on_update()
 {
     if (Input::action_pressed(Action::move_forward))
     {
@@ -131,7 +131,7 @@ void PhongLab::OnUpdate()
     }
 }
 
-void PhongLab::OnRender()
+void PhongLab::on_render()
 {
     _shader->use();
     _shader->set_uniform(_u_view_matrix, _camera->view());

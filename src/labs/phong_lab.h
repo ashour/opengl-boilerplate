@@ -18,8 +18,8 @@ class PhongLab : public Lab
     PhongLab(const Window& window);
     ~PhongLab();
 
-    void OnUpdate() override;
-    void OnRender() override;
+    void on_update() override;
+    void on_render() override;
 
   private:
     std::unique_ptr<Camera> _camera;

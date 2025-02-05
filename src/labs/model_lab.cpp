@@ -100,7 +100,7 @@ ModelLab::ModelLab(const Window& window) : Lab(window)
         { _camera->look(current_mouse_position, last_mouse_position); });
 }
 
-void ModelLab::OnUpdate()
+void ModelLab::on_update()
 {
     if (Input::action_pressed(Action::move_forward))
     {
@@ -120,7 +120,7 @@ void ModelLab::OnUpdate()
     }
 }
 
-void ModelLab::OnRender()
+void ModelLab::on_render()
 {
     _shader->use();
     _shader->set_uniform(_u_view_matrix, _camera->view());

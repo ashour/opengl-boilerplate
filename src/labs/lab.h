@@ -10,8 +10,8 @@ class Lab
     Lab(const Window& window) : _window{window} {}
     virtual ~Lab() {}
 
-    virtual void OnUpdate() {}
-    virtual void OnRender() {}
+    virtual void on_update() {}
+    virtual void on_render() {}
 
   protected:
     const Window& _window;

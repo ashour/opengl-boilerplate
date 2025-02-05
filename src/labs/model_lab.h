@@ -18,8 +18,8 @@ class ModelLab : public Lab
   public:
     ModelLab(const Window& window);
 
-    void OnUpdate() override;
-    void OnRender() override;
+    void on_update() override;
+    void on_render() override;
 
   private:
     std::unique_ptr<Camera> _camera;

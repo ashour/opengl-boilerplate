@@ -30,8 +30,8 @@ void App::loop()
         _window->poll_events();
         _window->clear();
 
-        _lab->OnUpdate();
-        _lab->OnRender();
+        _lab->on_update();
+        _lab->on_render();
 
         _window->swap_buffers();
         is_running = !(_window->should_close() || Input::action_pressed(Action::quit_app));
