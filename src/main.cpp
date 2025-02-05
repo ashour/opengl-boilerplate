@@ -6,5 +6,7 @@ int main()
     EO_LOG_HEADING("Main Start");
 
     eo::App app;
-    return app.run();
+    app.run();
+
+    return 0;
 }
