@@ -1,6 +1,6 @@
 #include "app.h"
 #include "config.h"
-#include "labs/phong_lab.h"
+#include "labs/model_lab.h"
 #include "system/input.h"
 #include "system/time.h"
 #include "system/window.h"
@@ -12,7 +12,7 @@ void App::run()
 {
     _window = std::make_unique<Window>(
         WINDOW_WIDTH, WINDOW_HEIGHT, WINDOW_TITLE, OPENGL_MAJOR_VERSION, OPENGL_MINOR_VERSION);
-    _lab = std::make_unique<PhongLab>(*_window);
+    _lab = std::make_unique<ModelLab>(*_window);
 
     EO_LOG_HEADING("Initialization Complete");
     EO_LOG_INFO("OpenGL version " << _window->opengl_version());

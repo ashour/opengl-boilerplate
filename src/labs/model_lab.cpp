@@ -1,7 +1,6 @@
 #include "config.h"
-#include "lib/random.h"
+#include "model_lab.h"
 #include "objects/primitive.h"
-#include "phong_lab.h"
 #include "rendering/lights/point_light.h"
 #include "rendering/transform.h"
 #include "system/input.h"
@@ -10,7 +9,7 @@
 namespace eo
 {
 
-PhongLab::PhongLab(const Window& window) : Lab(window)
+ModelLab::ModelLab(const Window& window) : Lab(window)
 {
     _window.set_clear_color(SCENE_CLEAR_COLOR);
 
@@ -79,6 +78,9 @@ PhongLab::PhongLab(const Window& window) : Lab(window)
 
     Shader::unuse_all();
 
+    _x_wing = std::make_unique<Model>("resources/models/x-wing/x-wing.obj");
+    _backpack = std::make_unique<Model>("resources/models/backpack/backpack.obj");
+
     std::vector<std::shared_ptr<Texture>> mat_dirt_textures{
         std::make_shared<Texture>(Texture::Type::diffuse, "resources/textures/dirt.png"),
         Texture::no_specular(),
@@ -92,26 +94,13 @@ PhongLab::PhongLab(const Window& window) : Lab(window)
         std::make_shared<Texture>(Texture::Type::specular,
                                   "resources/textures/container2_specular.png"),
     };
-    _mat_box = std::make_shared<Material>(mat_box_textures, 400.0f);
-    _cube = std::make_unique<Mesh>(Primitive::cube(), _mat_box);
-
-    for (size_t i = 0; i < _cube_positions.size(); i += 1)
-    {
-        _cube_positions[i] = {
-            random_float(-90.0f, 90.0f),
-            random_float(2.0f, 20.0f),
-            random_float(-90.0f, 90.0f),
-        };
-    }
 
     Input::register_mouse_move_handler(
         [this](auto current_mouse_position, auto last_mouse_position)
         { _camera->look(current_mouse_position, last_mouse_position); });
 }
 
-PhongLab::~PhongLab() {}
-
-void PhongLab::OnUpdate()
+void ModelLab::OnUpdate()
 {
     if (Input::action_pressed(Action::move_forward))
     {
@@ -131,7 +120,7 @@ void PhongLab::OnUpdate()
     }
 }
 
-void PhongLab::OnRender()
+void ModelLab::OnRender()
 {
     _shader->use();
     _shader->set_uniform(_u_view_matrix, _camera->view());
@@ -155,17 +144,20 @@ void PhongLab::OnRender()
     _plane->draw();
     _mat_dirt->unbind(*_shader);
 
-    Transform cube_transform{};
-    cube_transform.rotation(Time::current_time() * glm::radians(50.0f), {0.5f, 1.0f, 0.0f});
+    Transform x_wing_transform{};
+    x_wing_transform.position(glm::vec3(-70.0f, 2.0f, 70.0f));
+    x_wing_transform.scale(glm::vec3(0.05f));
+    _shader->set_uniform("u_model", x_wing_transform.matrix());
     _shader->set_uniform("u_texture_scale", 1.0f);
-    _mat_box->bind(*_shader);
-    for (glm::vec3 position : _cube_positions)
-    {
-        cube_transform.position(position);
-        _shader->set_uniform("u_model", cube_transform.matrix());
-        _cube->draw();
-    }
-    _mat_box->unbind(*_shader);
+    _x_wing->draw(*_shader);
+    _x_wing->unbind_materials(*_shader);
+
+    Transform backpack_transform{};
+    backpack_transform.position({12.0f, 2.0f, 4.0f});
+    _shader->set_uniform("u_model", backpack_transform.matrix());
+    _shader->set_uniform("u_texture_scale", 1.0f);
+    _backpack->draw(*_shader);
+    _backpack->unbind_materials(*_shader);
 }
 
 } // namespace eo
