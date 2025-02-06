@@ -1,10 +1,7 @@
 #include "lib/file_to_string.h"
 #include "lib/log.h"
-#include "lib/opengl_debug.h"
+#include "rendering/rendering.h"
 #include "shader.h"
-#include <glad/glad.h>
-#include <glm/ext.hpp>
-#include <glm/glm.hpp>
 #include <string>
 #include <unordered_map>
 

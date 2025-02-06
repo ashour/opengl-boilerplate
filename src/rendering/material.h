@@ -2,7 +2,6 @@
 
 #include "rendering/shader.h"
 #include "rendering/texture.h"
-#include <glm/glm.hpp>
 #include <memory>
 
 namespace eo

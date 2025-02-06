@@ -1,9 +1,6 @@
 #pragma once
 
-#include "lib/opengl_debug.h"
-#include <glad/glad.h>
-#include <glm/ext.hpp>
-#include <glm/glm.hpp>
+#include "rendering/rendering.h"
 #include <string>
 #include <unordered_map>
 

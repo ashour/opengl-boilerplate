@@ -1,6 +1,5 @@
-#include "lib/opengl_debug.h"
+#include "rendering/rendering.h"
 #include "texture.h"
-#include <glad/glad.h>
 #include <stb_image.h>
 
 namespace eo

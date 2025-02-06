@@ -1,6 +1,5 @@
-#include "lib/opengl_debug.h"
 #include "mesh.h"
-#include <glad/glad.h>
+#include "rendering/rendering.h"
 #include <vector>
 
 namespace eo

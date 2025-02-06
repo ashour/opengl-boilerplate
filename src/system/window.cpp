@@ -1,12 +1,7 @@
-// clang-format off
-#include <glad/glad.h>
-// clang-format on
 #include "input.h"
 #include "lib/log.h"
-#include "lib/opengl_debug.h"
+#include "rendering/rendering.h"
 #include "window.h"
-#include <GLFW/glfw3.h>
-#include <glm/glm.hpp>
 
 namespace eo
 {

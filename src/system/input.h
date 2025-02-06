@@ -1,9 +1,7 @@
 #pragma once
-
-#include <GLFW/glfw3.h>
+#include "rendering/rendering.h"
 #include <array>
 #include <functional>
-#include <glm/glm.hpp>
 
 namespace eo
 {
