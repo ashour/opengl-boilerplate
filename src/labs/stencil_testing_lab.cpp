@@ -37,7 +37,7 @@ StencilTestingLab::StencilTestingLab(const Window& window) : Lab(window)
         Texture::no_specular(),
     };
     _mat_dirt = std::make_shared<Material>(mat_dirt_textures, 0.0f);
-    _plane = std::make_unique<Mesh>(Primitive::plane(), _mat_dirt);
+    _plane = std::make_unique<Mesh>(Primitive::quad(), _mat_dirt);
 
     std::vector<std::shared_ptr<Texture>> mat_box_textures{
         std::make_shared<Texture>(Texture::Type::diffuse,

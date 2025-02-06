@@ -1,10 +1,10 @@
 #include "cube.h"
 #include "object.h"
-#include "plane.h"
 #include "primitive.h"
+#include "quad.h"
 
 namespace eo
 {
 Object Primitive::cube() { return eo::cube; }
-Object Primitive::plane() { return eo::plane; }
+Object Primitive::quad() { return eo::quad; }
 } // namespace eo

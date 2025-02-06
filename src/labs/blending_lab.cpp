@@ -1,5 +1,5 @@
+#include "blending_lab.h"
 #include "config.h"
-#include "depth_testing_lab.h"
 #include "lib/random.h"
 #include "objects/primitive.h"
 #include "rendering/transform.h"
@@ -9,13 +9,12 @@
 namespace eo
 {
 
-DepthTestingLab::DepthTestingLab(const Window& window) : Lab(window)
+BlendingLab::BlendingLab(const Window& window) : Lab(window)
 {
-    gldc(glDepthFunc(GL_LESS));
     _window.set_clear_color(SCENE_CLEAR_COLOR);
 
-    _shader = std::make_shared<Shader>("resources/shaders/depth_test.vert",
-                                       "resources/shaders/depth_test.frag");
+    _shader = std::make_shared<Shader>("resources/shaders/unlit_texture.vert",
+                                       "resources/shaders/unlit_texture.frag");
     _shader->build();
 
     _shader->use();
@@ -28,9 +27,19 @@ DepthTestingLab::DepthTestingLab(const Window& window) : Lab(window)
 
     Shader::unuse_all();
 
-    _plane = std::make_unique<Mesh>(Primitive::quad(), nullptr);
+    std::vector<std::shared_ptr<Texture>> mat_dirt_textures{
+        std::make_shared<Texture>(Texture::Type::diffuse, "resources/textures/dirt.png"),
+        Texture::no_specular(),
+    };
+    _mat_dirt = std::make_shared<Material>(mat_dirt_textures, 25.0f);
+    _plane = std::make_unique<Mesh>(Primitive::quad(), _mat_dirt);
 
-    _cube = std::make_unique<Mesh>(Primitive::cube(), nullptr);
+    std::vector<std::shared_ptr<Texture>> mat_box_textures{
+        std::make_shared<Texture>(Texture::Type::diffuse,
+                                  "resources/textures/container2_diffuse.png"),
+        Texture::no_specular()};
+    _mat_box = std::make_shared<Material>(mat_box_textures, 400.0f);
+    _cube = std::make_unique<Mesh>(Primitive::cube(), _mat_box);
 
     for (size_t i = 0; i < _cube_positions.size(); i += 1)
     {
@@ -46,7 +55,9 @@ DepthTestingLab::DepthTestingLab(const Window& window) : Lab(window)
         { _camera->look(current_mouse_position, last_mouse_position); });
 }
 
-void DepthTestingLab::on_update()
+BlendingLab::~BlendingLab() {}
+
+void BlendingLab::on_update()
 {
     if (Input::action_pressed(Action::move_forward))
     {
@@ -66,24 +77,30 @@ void DepthTestingLab::on_update()
     }
 }
 
-void DepthTestingLab::on_render()
+void BlendingLab::on_render()
 {
     _shader->use();
     _shader->set_uniform(_u_view_matrix, _camera->view());
 
+    Transform plane_transform{};
+    plane_transform.scale(glm::vec3(200.0f, 1.0f, 200.0f));
+    _shader->set_uniform("u_model", plane_transform.matrix());
+    _shader->set_uniform("u_texture_scale", 0.02f);
+    _mat_dirt->bind(*_shader);
+    _plane->draw();
+    _mat_dirt->unbind(*_shader);
+
     Transform cube_transform{};
     cube_transform.rotation(Time::current_time() * glm::radians(50.0f), {0.5f, 1.0f, 0.0f});
+    _shader->set_uniform("u_texture_scale", 1.0f);
+    _mat_box->bind(*_shader);
     for (glm::vec3 position : _cube_positions)
     {
         cube_transform.position(position);
         _shader->set_uniform("u_model", cube_transform.matrix());
         _cube->draw();
     }
-
-    Transform plane_transform{};
-    plane_transform.scale(glm::vec3(200.0f, 1.0f, 200.0f));
-    _shader->set_uniform("u_model", plane_transform.matrix());
-    _plane->draw();
+    _mat_box->unbind(*_shader);
 }
 
 } // namespace eo

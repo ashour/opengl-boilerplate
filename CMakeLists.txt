@@ -47,7 +47,7 @@ add_subdirectory(${THIRD_PARTY_DIR}/assimp)
 # ----------------------------------------
 # Executables
 # ----------------------------------------
-file (GLOB_RECURSE SOURCES
+file (GLOB_RECURSE SOURCES CONFIGURE_DEPENDS
   src/*.h
   src/*.cpp
 )

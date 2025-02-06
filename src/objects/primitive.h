@@ -8,6 +8,6 @@ class Primitive
 {
   public:
     static Object cube();
-    static Object plane();
+    static Object quad();
 };
 } // namespace eo
