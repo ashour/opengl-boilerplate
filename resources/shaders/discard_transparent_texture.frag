@@ -21,7 +21,12 @@ void main()
 {
     float inverted_texture_scale = 1.0 / max(u_texture_scale, MIN_TEXTURE_SCALE);
     vec2 scaled_uv = v_uv * inverted_texture_scale;
-    vec3 diffuse_sample = texture(u_material.diffuse_1, scaled_uv).rgb;
 
-    o_color = vec4(vec3(diffuse_sample), 1.0);
+    vec4 diffuse_sample = texture(u_material.diffuse_1, scaled_uv);
+    if (diffuse_sample.a < 0.1)
+    {
+        discard;
+    }
+
+    o_color = diffuse_sample;
 }

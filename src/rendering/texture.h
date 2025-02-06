@@ -1,5 +1,6 @@
 #pragma once
 
+#include "rendering/rendering.h"
 #include <memory>
 #include <string>
 
@@ -16,7 +17,13 @@ class Texture
         no_specular,
     };
 
-    Texture(const Type type, const std::string& file_path);
+    enum class Wrap
+    {
+        repeat = GL_REPEAT,
+        clamp_to_edge = GL_CLAMP_TO_EDGE,
+    };
+
+    Texture(const Type type, const std::string& file_path, const Wrap wrap = Wrap::repeat);
     Texture(const void* color_data,
             const int width,
             const int height,

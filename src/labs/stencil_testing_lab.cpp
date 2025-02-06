@@ -93,9 +93,9 @@ void StencilTestingLab::on_render()
     _render_shader->use();
     _render_shader->set_uniform("u_texture_scale", 0.05f);
     _mat_dirt->bind(*_render_shader);
-    Transform plane_transform{};
-    plane_transform.scale(glm::vec3(200.0f, 1.0f, 200.0f));
-    _render_shader->set_uniform("u_model", plane_transform.matrix());
+    Transform ground_transform{};
+    ground_transform.scale(glm::vec3(200.0f, 1.0f, 200.0f));
+    _render_shader->set_uniform("u_model", ground_transform.matrix());
     _ground->draw();
     _mat_dirt->unbind(*_render_shader);
 

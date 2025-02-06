@@ -9,7 +9,7 @@ namespace eo
 class Material
 {
   public:
-    Material(const std::vector<std::shared_ptr<Texture>>& textures, const float shininess);
+    Material(const std::vector<std::shared_ptr<Texture>>& textures, const float shininess = 0.0f);
 
     const std::vector<std::shared_ptr<Texture>>& textures() const { return _textures; }
     constexpr float shininess() const { return _shininess; }

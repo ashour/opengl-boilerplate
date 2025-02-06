@@ -13,17 +13,25 @@ BlendingLab::BlendingLab(const Window& window) : Lab(window)
 {
     _window.set_clear_color(SCENE_CLEAR_COLOR);
 
-    _shader = std::make_shared<Shader>("resources/shaders/unlit_texture.vert",
-                                       "resources/shaders/unlit_texture.frag");
-    _shader->build();
+    _unlit_tex_shader = std::make_shared<Shader>("resources/shaders/unlit_texture.vert",
+                                                 "resources/shaders/unlit_texture.frag");
+    _unlit_tex_shader->build();
 
-    _shader->use();
-    _u_view_matrix = _shader->uniform_location_for("u_view");
+    _discard_transparent_tex_shader =
+        std::make_shared<Shader>("resources/shaders/unlit_texture.vert",
+                                 "resources/shaders/discard_transparent_texture.frag");
+    _discard_transparent_tex_shader->build();
 
     _camera = std::make_unique<Camera>(
         static_cast<float>(_window.buffer_width() / static_cast<float>(_window.buffer_height())));
 
-    _shader->set_uniform("u_projection", _camera->projection());
+    _unlit_tex_shader->use();
+    _u_view_matrix = _unlit_tex_shader->uniform_location_for("u_view");
+    _unlit_tex_shader->set_uniform("u_projection", _camera->projection());
+
+    _discard_transparent_tex_shader->use();
+    _u_view_matrix = _discard_transparent_tex_shader->uniform_location_for("u_view");
+    _discard_transparent_tex_shader->set_uniform("u_projection", _camera->projection());
 
     Shader::unuse_all();
 
@@ -49,6 +57,14 @@ BlendingLab::BlendingLab(const Window& window) : Lab(window)
             random_float(-90.0f, 90.0f),
         };
     }
+
+    std::vector<std::shared_ptr<Texture>> mat_grass_textures{
+        std::make_shared<Texture>(
+            Texture::Type::diffuse, "resources/textures/grass.png", Texture::Wrap::clamp_to_edge),
+        Texture::no_specular(),
+    };
+    _mat_grass = std::make_shared<Material>(mat_grass_textures);
+    _quad = std::make_unique<Mesh>(Primitive::quad(), _mat_grass);
 
     Input::register_mouse_move_handler(
         [this](auto current_mouse_position, auto last_mouse_position)
@@ -79,28 +95,40 @@ void BlendingLab::on_update()
 
 void BlendingLab::on_render()
 {
-    _shader->use();
-    _shader->set_uniform(_u_view_matrix, _camera->view());
+    _unlit_tex_shader->use();
+    _unlit_tex_shader->set_uniform(_u_view_matrix, _camera->view());
 
-    Transform plane_transform{};
-    plane_transform.scale(glm::vec3(200.0f, 1.0f, 200.0f));
-    _shader->set_uniform("u_model", plane_transform.matrix());
-    _shader->set_uniform("u_texture_scale", 0.02f);
-    _mat_dirt->bind(*_shader);
+    Transform ground_transform{};
+    ground_transform.scale(glm::vec3(200.0f, 1.0f, 200.0f));
+    _unlit_tex_shader->set_uniform("u_model", ground_transform.matrix());
+    _unlit_tex_shader->set_uniform("u_texture_scale", 0.02f);
+    _mat_dirt->bind(*_unlit_tex_shader);
     _ground->draw();
-    _mat_dirt->unbind(*_shader);
+    _mat_dirt->unbind(*_unlit_tex_shader);
 
     Transform cube_transform{};
     cube_transform.rotation(Time::current_time() * glm::radians(50.0f), {0.5f, 1.0f, 0.0f});
-    _shader->set_uniform("u_texture_scale", 1.0f);
-    _mat_box->bind(*_shader);
+    _unlit_tex_shader->set_uniform("u_texture_scale", 1.0f);
+    _mat_box->bind(*_unlit_tex_shader);
     for (glm::vec3 position : _cube_positions)
     {
         cube_transform.position(position);
-        _shader->set_uniform("u_model", cube_transform.matrix());
+        _unlit_tex_shader->set_uniform("u_model", cube_transform.matrix());
         _cube->draw();
     }
-    _mat_box->unbind(*_shader);
+    _mat_box->unbind(*_unlit_tex_shader);
+
+    _discard_transparent_tex_shader->use();
+    _discard_transparent_tex_shader->set_uniform(_u_view_matrix, _camera->view());
+
+    Transform quad_transform{};
+    quad_transform.rotation(glm::radians(90.0f), {1, 0, 0});
+    quad_transform.position({0, 6.0f, 0});
+    _discard_transparent_tex_shader->set_uniform("u_model", quad_transform.matrix());
+    _discard_transparent_tex_shader->set_uniform("u_texture_scale", 1.0f);
+    _mat_grass->bind(*_discard_transparent_tex_shader);
+    _quad->draw();
+    _mat_grass->unbind(*_discard_transparent_tex_shader);
 }
 
 } // namespace eo

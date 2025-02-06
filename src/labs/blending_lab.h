@@ -21,10 +21,12 @@ class BlendingLab : public Lab
 
   private:
     std::unique_ptr<Camera> _camera;
-    std::shared_ptr<Shader> _shader;
+    std::shared_ptr<Shader> _unlit_tex_shader;
+    std::shared_ptr<Shader> _discard_transparent_tex_shader;
 
     std::shared_ptr<Material> _mat_dirt;
     std::shared_ptr<Material> _mat_box;
+    std::shared_ptr<Material> _mat_grass;
 
     int _u_view_matrix;
 
@@ -32,5 +34,7 @@ class BlendingLab : public Lab
     std::array<glm::vec3, 180> _cube_positions{};
 
     std::unique_ptr<Mesh> _ground;
+
+    std::unique_ptr<Mesh> _quad;
 };
 } // namespace eo

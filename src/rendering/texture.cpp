@@ -4,13 +4,14 @@
 
 namespace eo
 {
-Texture::Texture(Type type, const std::string& file_path) : _type{type}, _path{file_path}
+Texture::Texture(const Type type, const std::string& file_path, const Wrap wrap)
+    : _type{type}, _path{file_path}
 {
     gldc(glGenTextures(1, &_id));
     gldc(glBindTexture(GL_TEXTURE_2D, _id));
 
-    gldc(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT));
-    gldc(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT));
+    gldc(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, static_cast<GLint>(wrap)));
+    gldc(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, static_cast<GLint>(wrap)));
     gldc(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR));
     gldc(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR));
 

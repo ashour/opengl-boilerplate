@@ -147,9 +147,9 @@ void PhongLab::on_render()
     _flash_light->set_position(_camera->position());
     _flash_light->set_direction(_camera->front());
 
-    Transform plane_transform{};
-    plane_transform.scale(glm::vec3(200.0f, 1.0f, 200.0f));
-    _shader->set_uniform("u_model", plane_transform.matrix());
+    Transform ground_transform{};
+    ground_transform.scale(glm::vec3(200.0f, 1.0f, 200.0f));
+    _shader->set_uniform("u_model", ground_transform.matrix());
     _shader->set_uniform("u_texture_scale", 0.02f);
     _mat_dirt->bind(*_shader);
     _ground->draw();
