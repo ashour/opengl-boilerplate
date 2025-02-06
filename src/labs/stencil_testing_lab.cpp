@@ -37,7 +37,7 @@ StencilTestingLab::StencilTestingLab(const Window& window) : Lab(window)
         Texture::no_specular(),
     };
     _mat_dirt = std::make_shared<Material>(mat_dirt_textures, 0.0f);
-    _plane = std::make_unique<Mesh>(Primitive::quad(), _mat_dirt);
+    _ground = std::make_unique<Mesh>(Primitive::quad(), _mat_dirt);
 
     std::vector<std::shared_ptr<Texture>> mat_box_textures{
         std::make_shared<Texture>(Texture::Type::diffuse,
@@ -96,7 +96,7 @@ void StencilTestingLab::on_render()
     Transform plane_transform{};
     plane_transform.scale(glm::vec3(200.0f, 1.0f, 200.0f));
     _render_shader->set_uniform("u_model", plane_transform.matrix());
-    _plane->draw();
+    _ground->draw();
     _mat_dirt->unbind(*_render_shader);
 
     gldc(glStencilFunc(GL_ALWAYS, 1, 0xFF));

@@ -28,7 +28,7 @@ DepthTestingLab::DepthTestingLab(const Window& window) : Lab(window)
 
     Shader::unuse_all();
 
-    _plane = std::make_unique<Mesh>(Primitive::quad(), nullptr);
+    _ground = std::make_unique<Mesh>(Primitive::quad(), nullptr);
 
     _cube = std::make_unique<Mesh>(Primitive::cube(), nullptr);
 
@@ -83,7 +83,7 @@ void DepthTestingLab::on_render()
     Transform plane_transform{};
     plane_transform.scale(glm::vec3(200.0f, 1.0f, 200.0f));
     _shader->set_uniform("u_model", plane_transform.matrix());
-    _plane->draw();
+    _ground->draw();
 }
 
 } // namespace eo

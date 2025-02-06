@@ -86,7 +86,7 @@ ModelLab::ModelLab(const Window& window) : Lab(window)
         Texture::no_specular(),
     };
     _mat_dirt = std::make_shared<Material>(mat_dirt_textures, 25.0f);
-    _plane = std::make_unique<Mesh>(Primitive::quad(), _mat_dirt);
+    _ground = std::make_unique<Mesh>(Primitive::quad(), _mat_dirt);
 
     std::vector<std::shared_ptr<Texture>> mat_box_textures{
         std::make_shared<Texture>(Texture::Type::diffuse,
@@ -141,7 +141,7 @@ void ModelLab::on_render()
     _shader->set_uniform("u_model", plane_transform.matrix());
     _shader->set_uniform("u_texture_scale", 0.02f);
     _mat_dirt->bind(*_shader);
-    _plane->draw();
+    _ground->draw();
     _mat_dirt->unbind(*_shader);
 
     Transform x_wing_transform{};

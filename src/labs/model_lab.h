@@ -32,7 +32,7 @@ class ModelLab : public Lab
     int _u_view_matrix;
     int _u_view_position;
 
-    std::unique_ptr<Mesh> _plane;
+    std::unique_ptr<Mesh> _ground;
     std::unique_ptr<Model> _x_wing;
     std::unique_ptr<Model> _backpack;
 };

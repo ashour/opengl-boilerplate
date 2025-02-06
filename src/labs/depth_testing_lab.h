@@ -26,6 +26,6 @@ class DepthTestingLab : public Lab
     std::unique_ptr<Mesh> _cube;
     std::array<glm::vec3, 180> _cube_positions{};
 
-    std::unique_ptr<Mesh> _plane;
+    std::unique_ptr<Mesh> _ground;
 };
 } // namespace eo
