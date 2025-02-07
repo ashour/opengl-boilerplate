@@ -34,6 +34,7 @@ Window::Window(const unsigned int width,
 
     glfwSetKeyCallback(_glfw_window, Input::key_callback);
     glfwSetCursorPosCallback(_glfw_window, Input::mouse_callback);
+    glfwSetMouseButtonCallback(_glfw_window, Input::mouse_button_callback);
 
     glfwMakeContextCurrent(_glfw_window);
 

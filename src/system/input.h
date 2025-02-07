@@ -5,16 +5,20 @@
 
 namespace eo
 {
-// clang-format off
-enum class Action
+enum class Key
 {
-        quit_app = GLFW_KEY_ESCAPE,
-    move_forward = GLFW_KEY_W,
-       move_left = GLFW_KEY_A,
-       move_back = GLFW_KEY_S,
-      move_right = GLFW_KEY_D
+    escape = GLFW_KEY_ESCAPE,
+    w = GLFW_KEY_W,
+    a = GLFW_KEY_A,
+    s = GLFW_KEY_S,
+    d = GLFW_KEY_D
 };
-// clang-format on
+
+enum class MouseButton
+{
+    left = GLFW_MOUSE_BUTTON_LEFT,
+    right = GLFW_MOUSE_BUTTON_RIGHT,
+};
 
 class Input
 {
@@ -22,7 +26,10 @@ class Input
     Input() = delete;
 
     static void key_callback(GLFWwindow* window, int key, int scancode, int action, int mods);
-    static bool action_pressed(Action action);
+    static bool key_pressed(Key action);
+
+    static void mouse_button_callback(GLFWwindow* window, int button, int action, int mods);
+    static bool mouse_button_pressed(MouseButton button);
 
     static void register_mouse_move_handler(std::function<void(glm::vec2, glm::vec2)>);
     static void mouse_callback(GLFWwindow* window, double x_position, double y_position);
@@ -31,6 +38,9 @@ class Input
   private:
     static constexpr size_t KEYS_SIZE = 1024;
     static std::array<bool, KEYS_SIZE> _keys;
+
+    static constexpr size_t MOUSE_BUTTONS_SIZE = 8;
+    static std::array<bool, MOUSE_BUTTONS_SIZE> _mouse_buttons;
 
     static std::function<void(glm::vec2, glm::vec2)> _on_mouse_moved;
     static bool _is_first_mouse_movement;

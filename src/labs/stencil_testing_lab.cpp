@@ -63,19 +63,19 @@ StencilTestingLab::StencilTestingLab(const Window& window) : Lab(window)
 
 void StencilTestingLab::on_update()
 {
-    if (Input::action_pressed(Action::move_forward))
+    if (Input::key_pressed(Key::w))
     {
         _camera->strafe(Strafe::forward, Time::delta_time());
     }
-    if (Input::action_pressed(Action::move_back))
+    if (Input::key_pressed(Key::s))
     {
         _camera->strafe(Strafe::back, Time::delta_time());
     }
-    if (Input::action_pressed(Action::move_left))
+    if (Input::key_pressed(Key::a))
     {
         _camera->strafe(Strafe::left, Time::delta_time());
     }
-    if (Input::action_pressed(Action::move_right))
+    if (Input::key_pressed(Key::d))
     {
         _camera->strafe(Strafe::right, Time::delta_time());
     }

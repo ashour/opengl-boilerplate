@@ -54,7 +54,7 @@ void App::loop()
 
         _ui->render();
         _window->swap_buffers();
-        is_running = !(_window->should_close() || Input::action_pressed(Action::quit_app));
+        is_running = !(_window->should_close() || Input::key_pressed(Key::escape));
     }
 }
 } // namespace eo

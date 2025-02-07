@@ -86,26 +86,36 @@ BlendingLab::BlendingLab(const Window& window) : Lab(window)
 
     Input::register_mouse_move_handler(
         [this](auto current_mouse_position, auto last_mouse_position)
-        { _camera->look(current_mouse_position, last_mouse_position); });
+        {
+            if (Input::mouse_button_pressed(MouseButton::right))
+            {
+                _camera->look(current_mouse_position, last_mouse_position);
+            }
+        });
 }
 
 BlendingLab::~BlendingLab() {}
 
 void BlendingLab::on_update()
 {
-    if (Input::action_pressed(Action::move_forward))
+    if (!Input::mouse_button_pressed(MouseButton::right))
+    {
+        return;
+    }
+
+    if (Input::key_pressed(Key::w))
     {
         _camera->strafe(Strafe::forward, Time::delta_time());
     }
-    if (Input::action_pressed(Action::move_back))
+    if (Input::key_pressed(Key::s))
     {
         _camera->strafe(Strafe::back, Time::delta_time());
     }
-    if (Input::action_pressed(Action::move_left))
+    if (Input::key_pressed(Key::a))
     {
         _camera->strafe(Strafe::left, Time::delta_time());
     }
-    if (Input::action_pressed(Action::move_right))
+    if (Input::key_pressed(Key::d))
     {
         _camera->strafe(Strafe::right, Time::delta_time());
     }
