@@ -39,7 +39,6 @@ set(IMGUI_SOURCES
   ${THIRD_PARTY_DIR}/imgui/imgui_draw.cpp
   ${THIRD_PARTY_DIR}/imgui/imgui_tables.cpp
   ${THIRD_PARTY_DIR}/imgui/imgui_widgets.cpp
-  ${THIRD_PARTY_DIR}/imgui/imgui_demo.cpp
 )
 set(IMGUI_BACKEND_SOURCES
   ${THIRD_PARTY_DIR}/imgui/backends/imgui_impl_glfw.cpp
