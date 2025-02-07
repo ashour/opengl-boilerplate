@@ -24,7 +24,6 @@ add_subdirectory(${THIRD_PARTY_DIR}/fmt)
 # ----------------------------------------
 add_subdirectory(${THIRD_PARTY_DIR}/glad)
 
-
 # ----------------------------------------
 # GLM
 # ----------------------------------------
@@ -32,6 +31,29 @@ option(GLM_BUILD_TEST OFF)
 option(BUILD_SHARED_LIBS OFF)
 add_subdirectory(${THIRD_PARTY_DIR}/glm)
 
+# ----------------------------------------
+# IMGUI
+# ----------------------------------------
+set(IMGUI_SOURCES
+  ${THIRD_PARTY_DIR}/imgui/imgui.cpp
+  ${THIRD_PARTY_DIR}/imgui/imgui_draw.cpp
+  ${THIRD_PARTY_DIR}/imgui/imgui_tables.cpp
+  ${THIRD_PARTY_DIR}/imgui/imgui_widgets.cpp
+  ${THIRD_PARTY_DIR}/imgui/imgui_demo.cpp
+)
+set(IMGUI_BACKEND_SOURCES
+  ${THIRD_PARTY_DIR}/imgui/backends/imgui_impl_glfw.cpp
+  ${THIRD_PARTY_DIR}/imgui/backends/imgui_impl_opengl3.cpp
+)
+add_library(imgui STATIC
+  ${IMGUI_SOURCES}
+  ${IMGUI_BACKEND_SOURCES}
+)
+target_include_directories(imgui PUBLIC
+  ${THIRD_PARTY_DIR}/imgui
+  ${THIRD_PARTY_DIR}/imgui/backends
+)
+target_link_libraries(imgui glfw)
 
 # ----------------------------------------
 # stb_image
@@ -56,14 +78,14 @@ file (GLOB_RECURSE SOURCES CONFIGURE_DEPENDS
 )
 add_executable(${PROJECT_NAME} ${SOURCES})
 
-target_include_directories(${PROJECT_NAME} PRIVATE src)
+target_include_directories(${PROJECT_NAME} PRIVATE src ${THIRD_PARTY_DIR}/imgui/backends)
 
 target_link_libraries(${PROJECT_NAME} PRIVATE
   assimp
   fmt
   glad
   glm
-  glfw
+  imgui
 )
 
 if (APPLE)

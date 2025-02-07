@@ -15,8 +15,10 @@ class Window
            const unsigned int opengl_minor_version);
     ~Window();
 
-    const int buffer_width() const { return _buffer_width; };
-    const int buffer_height() const { return _buffer_height; };
+    const int buffer_width() const { return _buffer_width; }
+    const int buffer_height() const { return _buffer_height; }
+
+    GLFWwindow* native_window() const { return _glfw_window; }
 
     bool should_close() const;
     void set_clear_color(const glm::vec4& color) const;
