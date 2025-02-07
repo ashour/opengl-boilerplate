@@ -15,7 +15,7 @@ void App::run()
     _lab = std::make_unique<BlendingLab>(*_window);
 
     EO_LOG_HEADING("Initialization Complete");
-    EO_LOG_INFO("OpenGL version " << _window->opengl_version());
+    EO_LOG_INFO("OpenGL version {}", (const char*)_window->opengl_version());
 
     loop();
 }

@@ -45,7 +45,7 @@ Texture::Texture(const Type type, const std::string& file_path, const Wrap wrap)
     }
     else
     {
-        EO_LOG_ERROR("Failed to load texture " << file_path);
+        EO_LOG_ERROR("Failed to load texture ({})", file_path);
     }
     stbi_image_free(data);
 }

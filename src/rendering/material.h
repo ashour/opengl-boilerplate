@@ -3,6 +3,7 @@
 #include "rendering/shader.h"
 #include "rendering/texture.h"
 #include <memory>
+#include <vector>
 
 namespace eo
 {

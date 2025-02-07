@@ -5,6 +5,7 @@
 #include "rendering/transform.h"
 #include "system/input.h"
 #include "system/time.h"
+#include <format>
 
 namespace eo
 {

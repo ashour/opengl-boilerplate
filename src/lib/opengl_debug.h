@@ -2,7 +2,6 @@
 
 #include "log.h"
 #include <glad/glad.h>
-#include <iostream>
 #include <string>
 
 #ifdef _MSC_VER
@@ -55,8 +54,11 @@ static bool _gl_log_call(const char* function, const char* file, int line)
 {
     while (GLenum errorCode = glGetError())
     {
-        EO_LOG_ERROR("[OpenGL Error] (" << _gl_error_code_to_string(errorCode) << ") " << function
-                                        << " " << file << ":" << line);
+        EO_LOG_ERROR("[OpenGL Error] ({}) {} {}:{}",
+                     _gl_error_code_to_string(errorCode),
+                     function,
+                     file,
+                     line);
         return false;
     }
     return true;

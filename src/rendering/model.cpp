@@ -37,7 +37,7 @@ void Model::load_model(std::string file_path)
         file_path, aiProcess_Triangulate | aiProcess_FlipUVs | aiProcess_JoinIdenticalVertices);
     if (!scene || scene->mFlags & AI_SCENE_FLAGS_INCOMPLETE || !scene->mRootNode)
     {
-        EO_LOG_ERROR("[Assimp] " << importer.GetErrorString());
+        EO_LOG_ERROR("[Assimp Error] {}", importer.GetErrorString());
         return;
     }
 

@@ -7,14 +7,17 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(THIRD_PARTY_DIR third_party)
 
 # ----------------------------------------
-# GLFW
+# Assimp
 # ----------------------------------------
-option(GLFW_BUILD_EXAMPLES OFF)
-option(GLFW_BUILD_TESTS OFF)
-option(GLFW_BUILD_DOCS OFF)
-option(GLFW_INSTALL OFF)
-add_subdirectory(${THIRD_PARTY_DIR}/glfw)
+option(BUILD_SHARED_LIBS OFF)
+option(ASSIMP_INSTALL OFF)
+option(ASSIMP_BUILD_TESTS OFF)
+add_subdirectory(${THIRD_PARTY_DIR}/assimp)
 
+# ----------------------------------------
+# fmt
+# ----------------------------------------
+add_subdirectory(${THIRD_PARTY_DIR}/fmt)
 
 # ----------------------------------------
 # GLAD
@@ -35,14 +38,14 @@ add_subdirectory(${THIRD_PARTY_DIR}/glm)
 # ----------------------------------------
 include_directories(${THIRD_PARTY_DIR}/stb)
 
-
 # ----------------------------------------
-# Assimp
+# GLFW
 # ----------------------------------------
-option(BUILD_SHARED_LIBS OFF)
-option(ASSIMP_INSTALL OFF)
-option(ASSIMP_BUILD_TESTS OFF)
-add_subdirectory(${THIRD_PARTY_DIR}/assimp)
+option(GLFW_BUILD_EXAMPLES OFF)
+option(GLFW_BUILD_TESTS OFF)
+option(GLFW_BUILD_DOCS OFF)
+option(GLFW_INSTALL OFF)
+add_subdirectory(${THIRD_PARTY_DIR}/glfw)
 
 # ----------------------------------------
 # Executables
@@ -56,10 +59,11 @@ add_executable(${PROJECT_NAME} ${SOURCES})
 target_include_directories(${PROJECT_NAME} PRIVATE src)
 
 target_link_libraries(${PROJECT_NAME} PRIVATE
-  glfw
+  assimp
+  fmt
   glad
   glm
-  assimp
+  glfw
 )
 
 if (APPLE)
