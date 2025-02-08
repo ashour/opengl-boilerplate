@@ -14,8 +14,11 @@ class App
   private:
     std::unique_ptr<Window> _window;
     std::unique_ptr<UI> _ui;
-    Lab* _lab;
 
     void loop();
+
+    Lab* _lab;
+    std::string _current_lab_name;
+    void lab_selector();
 };
 } // namespace eo

@@ -18,6 +18,7 @@ void App::run()
     EO_LOG_INFO("Initializing OpenGL");
     _window = std::make_unique<Window>(
         WINDOW_WIDTH, WINDOW_HEIGHT, WINDOW_TITLE, OPENGL_MAJOR_VERSION, OPENGL_MINOR_VERSION);
+    _current_lab_name = "Blending";
     _lab = new BlendingLab(*_window);
     EO_LOG_INFO("OpenGL version {}", (const char*)_window->opengl_version());
 
@@ -32,44 +33,40 @@ void App::run()
 void App::loop()
 {
     bool is_running = true;
-    static std::string current_lab = "Blending";
 
     while (is_running)
     {
         Time::update();
         _window->poll_events();
         _lab->on_update();
-
         _ui->new_frame();
-
-        {
-            _ui->begin_window(std::format("Labs [{}]", current_lab));
-            for (const auto& pair : LabRegistry::labs())
-            {
-                auto name = pair.first;
-                bool is_selected = (current_lab == name);
-                if (_ui->radio_button(name, is_selected))
-                {
-                    if (current_lab != name)
-                    {
-                        current_lab = name;
-                        delete _lab;
-                        _lab = LabRegistry::create(name, *_window);
-                    }
-                }
-            }
-            _ui->end_window();
-        }
-
         _window->clear();
-
         _lab->on_render();
-
+        lab_selector();
         // _lab->on_gui_render(_ui);
         _ui->render();
-
         _window->swap_buffers();
         is_running = !(_window->should_close() || Input::key_pressed(Key::escape));
     }
+}
+
+void App::lab_selector()
+{
+    _ui->begin_window(std::format("Labs [{}]", _current_lab_name));
+    for (const auto& pair : LabRegistry::labs())
+    {
+        auto name = pair.first;
+        bool is_selected = (_current_lab_name == name);
+        if (_ui->radio_button(name, is_selected))
+        {
+            if (_current_lab_name != name)
+            {
+                _current_lab_name = name;
+                delete _lab;
+                _lab = LabRegistry::create(name, *_window);
+            }
+        }
+    }
+    _ui->end_window();
 }
 } // namespace eo
