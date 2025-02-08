@@ -35,4 +35,13 @@ void UI::render()
     ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 }
 
+bool UI::begin_window(const std::string& name) { return ImGui::Begin(name.c_str()); }
+
+void UI::end_window() { ImGui::End(); }
+
+bool UI::radio_button(const std::string& label, bool is_selected)
+{
+    return ImGui::RadioButton(label.c_str(), is_selected);
+}
+
 } // namespace eo

@@ -43,12 +43,12 @@ void App::loop()
         _ui->new_frame();
 
         {
-            ImGui::Begin(std::format("Labs [{}]", current_lab).c_str());
+            _ui->begin_window(std::format("Labs [{}]", current_lab));
             for (const auto& pair : LabRegistry::labs())
             {
                 auto name = pair.first;
                 bool is_selected = (current_lab == name);
-                if (ImGui::RadioButton(name.c_str(), is_selected))
+                if (_ui->radio_button(name, is_selected))
                 {
                     if (current_lab != name)
                     {
@@ -58,14 +58,14 @@ void App::loop()
                     }
                 }
             }
-            ImGui::End();
+            _ui->end_window();
         }
 
         _window->clear();
 
         _lab->on_render();
 
-        // _lab->on_imgui_render();
+        // _lab->on_gui_render(_ui);
         _ui->render();
 
         _window->swap_buffers();
