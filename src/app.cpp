@@ -6,9 +6,6 @@
 #include "system/time.h"
 #include "system/window.h"
 #include <format>
-#include <imgui.h>
-#include <imgui_impl_glfw.h>
-#include <imgui_impl_opengl3.h>
 #include <memory>
 
 namespace eo
@@ -43,7 +40,15 @@ void App::loop()
         _window->clear();
         _lab->on_render();
         lab_selector();
-        // _lab->on_gui_render(_ui);
+        if (SHOW_UI_DEMO)
+        {
+            _ui->show_demo();
+        }
+        if (SHOW_UI_METRICS)
+        {
+            _ui->show_metrics();
+        }
+        _lab->on_ui_render(*_ui);
         _ui->render();
         _window->swap_buffers();
         is_running = !(_window->should_close() || Input::key_pressed(Key::escape));

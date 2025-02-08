@@ -1,6 +1,7 @@
 #pragma once
 
 #include "rendering/camera.h"
+#include "system/ui.h"
 #include "system/window.h"
 
 namespace eo
@@ -13,6 +14,7 @@ class Lab
 
     virtual void on_update() {}
     virtual void on_render() {}
+    virtual void on_ui_render(UI& ui) {}
 
   protected:
     const Window& _window;

@@ -1,6 +1,6 @@
 #pragma once
 
-#include <GLFW/glfw3.h>
+#include "rendering/rendering.h"
 #include <imgui.h>
 #include <imgui_impl_glfw.h>
 #include <imgui_impl_opengl3.h>
@@ -16,6 +16,9 @@ class UI
 
     void new_frame();
     void render();
+
+    void show_demo();
+    void show_metrics();
 
     bool begin_window(const std::string& name);
     void end_window();

@@ -164,5 +164,4 @@ void BlendingLab::on_render()
     gldc(glDisable(GL_BLEND));
     gldc(glEnable(GL_CULL_FACE));
 }
-
 } // namespace eo

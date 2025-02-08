@@ -1,3 +1,4 @@
+#include "system/time.h"
 #include "ui.h"
 
 namespace eo
@@ -33,6 +34,17 @@ void UI::render()
 {
     ImGui::Render();
     ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
+}
+
+void UI::show_demo() { ImGui::ShowDemoWindow(); }
+
+void UI::show_metrics()
+{
+    begin_window("Metrics");
+    auto delta_time = Time::delta_time();
+    float fps = (delta_time > 0.0f) ? (1.0f / delta_time) : 0.0f;
+    ImGui::Text("%.3f ms/frame (%.1f FPS)", delta_time * 1000, fps);
+    end_window();
 }
 
 bool UI::begin_window(const std::string& name) { return ImGui::Begin(name.c_str()); }
