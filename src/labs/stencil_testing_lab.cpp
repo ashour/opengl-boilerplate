@@ -4,7 +4,6 @@
 #include "registry/lab_registry.h"
 #include "rendering/transform.h"
 #include "stencil_testing_lab.h"
-#include "system/input.h"
 #include "system/time.h"
 
 namespace
@@ -68,30 +67,10 @@ StencilTestingLab::StencilTestingLab(const Window& window) : Lab(window)
         };
     }
 
-    Input::register_mouse_move_handler(
-        [this](auto current_mouse_position, auto last_mouse_position)
-        { _camera->look(current_mouse_position, last_mouse_position); });
+    register_mouse_look_on_hold_rmb(*_camera);
 }
 
-void StencilTestingLab::on_update()
-{
-    if (Input::key_pressed(Key::w))
-    {
-        _camera->strafe(Strafe::forward, Time::delta_time());
-    }
-    if (Input::key_pressed(Key::s))
-    {
-        _camera->strafe(Strafe::back, Time::delta_time());
-    }
-    if (Input::key_pressed(Key::a))
-    {
-        _camera->strafe(Strafe::left, Time::delta_time());
-    }
-    if (Input::key_pressed(Key::d))
-    {
-        _camera->strafe(Strafe::right, Time::delta_time());
-    }
-}
+void StencilTestingLab::on_update() { wasd_move_on_hold_rmb(*_camera); }
 
 void StencilTestingLab::on_render()
 {
