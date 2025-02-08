@@ -32,7 +32,6 @@ void Input::key_callback(GLFWwindow* window, int key, int scancode, int action, 
 
 void Input::mouse_button_callback(GLFWwindow* window, int button, int action, int mods)
 {
-    EO_LOG_INFO("Mouse button pressed {} {} {}", button, action, mods);
     if (button < 0 || button >= MOUSE_BUTTONS_SIZE)
     {
         return;

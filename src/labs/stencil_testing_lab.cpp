@@ -1,10 +1,22 @@
 #include "config.h"
 #include "lib/random.h"
 #include "objects/primitive.h"
+#include "registry/lab_registry.h"
 #include "rendering/transform.h"
 #include "stencil_testing_lab.h"
 #include "system/input.h"
 #include "system/time.h"
+
+namespace
+{
+const bool registered = []()
+{
+    eo::LabRegistry::register_lab("Stencil testing",
+                                  [](eo::Window& window) -> eo::Lab*
+                                  { return new eo::StencilTestingLab(window); });
+    return true;
+}();
+} // namespace
 
 namespace eo
 {

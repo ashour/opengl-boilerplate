@@ -14,7 +14,7 @@ class App
   private:
     std::unique_ptr<Window> _window;
     std::unique_ptr<UI> _ui;
-    std::unique_ptr<Lab> _lab;
+    Lab* _lab;
 
     void loop();
 };

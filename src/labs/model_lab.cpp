@@ -1,11 +1,22 @@
 #include "config.h"
 #include "model_lab.h"
 #include "objects/primitive.h"
+#include "registry/lab_registry.h"
 #include "rendering/lights/point_light.h"
 #include "rendering/transform.h"
 #include "system/input.h"
 #include "system/time.h"
 #include <format>
+
+namespace
+{
+const bool registered = []()
+{
+    eo::LabRegistry::register_lab(
+        "Model loading", [](eo::Window& window) -> eo::Lab* { return new eo::ModelLab(window); });
+    return true;
+}();
+} // namespace
 
 namespace eo
 {

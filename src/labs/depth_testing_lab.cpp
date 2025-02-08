@@ -2,9 +2,21 @@
 #include "depth_testing_lab.h"
 #include "lib/random.h"
 #include "objects/primitive.h"
+#include "registry/lab_registry.h"
 #include "rendering/transform.h"
 #include "system/input.h"
 #include "system/time.h"
+
+namespace
+{
+const bool registered = []()
+{
+    eo::LabRegistry::register_lab("Depth testing",
+                                  [](eo::Window& window) -> eo::Lab*
+                                  { return new eo::DepthTestingLab(window); });
+    return true;
+}();
+} // namespace
 
 namespace eo
 {

@@ -2,11 +2,22 @@
 #include "lib/random.h"
 #include "objects/primitive.h"
 #include "phong_lab.h"
+#include "registry/lab_registry.h"
 #include "rendering/lights/point_light.h"
 #include "rendering/transform.h"
 #include "system/input.h"
 #include "system/time.h"
 #include <format>
+
+namespace
+{
+const bool registered = []()
+{
+    eo::LabRegistry::register_lab(
+        "Phong shading", [](eo::Window& window) -> eo::Lab* { return new eo::PhongLab(window); });
+    return true;
+}();
+} // namespace
 
 namespace eo
 {
