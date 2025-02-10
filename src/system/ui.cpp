@@ -1,3 +1,4 @@
+#include "system/metrics.h"
 #include "system/time.h"
 #include "ui.h"
 
@@ -41,9 +42,8 @@ void UI::show_demo() { ImGui::ShowDemoWindow(); }
 void UI::show_metrics()
 {
     begin_window("Metrics");
-    auto delta_time = Time::delta_time();
-    float fps = (delta_time > 0.0f) ? (1.0f / delta_time) : 0.0f;
-    ImGui::Text("%.3f ms/frame (%.1f FPS)", delta_time * 1000, fps);
+    ImGui::Text(
+        "%.3f ms/frame (%.1f FPS)", Time::delta_time() * 1000, Metrics::frames_per_second());
     end_window();
 }
 
