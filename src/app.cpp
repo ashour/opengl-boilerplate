@@ -1,6 +1,6 @@
 #include "app.h"
 #include "config.h"
-#include "labs/blending_lab.h"
+#include "labs/face_culling_lab.h"
 #include "labs/registry/lab_registry.h"
 #include "system/input.h"
 #include "system/time.h"
@@ -15,8 +15,8 @@ void App::run()
     EO_LOG_INFO("Initializing OpenGL");
     _window = std::make_unique<Window>(
         WINDOW_WIDTH, WINDOW_HEIGHT, WINDOW_TITLE, OPENGL_MAJOR_VERSION, OPENGL_MINOR_VERSION);
-    _current_lab_name = "Blending";
-    _lab = new BlendingLab(*_window);
+    _current_lab_name = "Face culling";
+    _lab = new FaceCullingLab(*_window);
     EO_LOG_INFO("OpenGL version {}", (const char*)_window->opengl_version());
 
     EO_LOG_INFO("Initializing ImGui");
