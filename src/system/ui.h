@@ -18,7 +18,8 @@ class UI
     void render();
 
     void show_demo();
-    void show_metrics();
+    void show_metrics(const unsigned int rendered_fragment_count,
+                      const unsigned int rendered_vertex_count);
 
     bool begin_window(const std::string& name);
     void end_window();

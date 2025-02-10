@@ -1,5 +1,7 @@
+#include "config.h"
 #include "mesh.h"
 #include "rendering/rendering.h"
+#include "system/metrics.h"
 #include <vector>
 
 namespace eo
@@ -30,6 +32,11 @@ void Mesh::draw()
 {
     gldc(glBindVertexArray(_vao));
     gldc(glDrawElements(GL_TRIANGLES, _indices.size(), GL_UNSIGNED_INT, 0));
+
+    if (SHOW_UI_METRICS)
+    {
+        Metrics::add_to_drawn_vertex_count(_indices.size());
+    }
 }
 
 void Mesh::draw(Shader& shader)
@@ -38,6 +45,11 @@ void Mesh::draw(Shader& shader)
 
     gldc(glBindVertexArray(_vao));
     gldc(glDrawElements(GL_TRIANGLES, _indices.size(), GL_UNSIGNED_INT, 0));
+
+    if (SHOW_UI_METRICS)
+    {
+        Metrics::add_to_drawn_vertex_count(_indices.size());
+    }
 }
 
 void Mesh::init_vertex_array()

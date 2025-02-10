@@ -22,6 +22,8 @@ void App::run()
     EO_LOG_INFO("Initializing ImGui");
     _ui = std::make_unique<UI>(_window->native_window());
 
+    _metrics = std::make_unique<Metrics>();
+
     EO_LOG_HEADING("Initialization Complete");
 
     loop();
@@ -38,7 +40,20 @@ void App::loop()
         _lab->on_update();
         _ui->new_frame();
         _window->clear();
+
+        if (SHOW_UI_METRICS)
+        {
+            Metrics::clear_drawn_vertex_count();
+            _metrics->begin_fragment_count_query();
+        }
+
         _lab->on_render();
+
+        if (SHOW_UI_METRICS)
+        {
+            _fragment_count = _metrics->end_fragment_count_query();
+        }
+
         lab_selector();
         if (SHOW_UI_DEMO)
         {
@@ -46,7 +61,7 @@ void App::loop()
         }
         if (SHOW_UI_METRICS)
         {
-            _ui->show_metrics();
+            _ui->show_metrics(_fragment_count, Metrics::drawn_vertex_count());
         }
         _lab->on_ui_render(*_ui);
         _ui->render();

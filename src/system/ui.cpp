@@ -39,11 +39,13 @@ void UI::render()
 
 void UI::show_demo() { ImGui::ShowDemoWindow(); }
 
-void UI::show_metrics()
+void UI::show_metrics(const unsigned int fragment_count, const unsigned int vertex_count)
 {
     begin_window("Metrics");
     ImGui::Text(
         "%.3f ms/frame (%.1f FPS)", Time::delta_time() * 1000, Metrics::frames_per_second());
+    ImGui::Text("%d fragments", fragment_count);
+    ImGui::Text("%d vertices", vertex_count);
     end_window();
 }
 
