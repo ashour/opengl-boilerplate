@@ -21,6 +21,15 @@ class FaceCullingLab : public Lab
     void on_ui_render(UI& ui) override;
 
   private:
+    enum class Cull
+    {
+        none = -1,
+        front = GL_FRONT,
+        back = GL_BACK,
+        front_and_back = GL_FRONT_AND_BACK,
+    };
+    Cull _cull{Cull::back};
+
     std::unique_ptr<Camera> _camera;
     std::shared_ptr<Shader> _shader;
 
@@ -33,6 +42,6 @@ class FaceCullingLab : public Lab
 
     std::unique_ptr<Mesh> _ground;
 
-    bool _is_face_culling_enabled{false};
+    void culling_radio_button(UI& ui, const std::string& label, Cull type);
 };
 } // namespace eo

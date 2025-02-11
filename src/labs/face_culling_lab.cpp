@@ -59,13 +59,23 @@ void FaceCullingLab::on_update() { wasd_move_on_hold_rmb(*_camera); }
 
 void FaceCullingLab::on_render()
 {
-    if (_is_face_culling_enabled)
+    switch (_cull)
     {
-        gldc(glEnable(GL_CULL_FACE));
-    }
-    else
-    {
+    case Cull::none:
         gldc(glDisable(GL_CULL_FACE));
+        break;
+    case Cull::front:
+        gldc(glEnable(GL_CULL_FACE));
+        gldc(glCullFace(GL_FRONT));
+        break;
+    case Cull::back:
+        gldc(glEnable(GL_CULL_FACE));
+        gldc(glCullFace(GL_BACK));
+        break;
+    case Cull::front_and_back:
+        gldc(glEnable(GL_CULL_FACE));
+        gldc(glCullFace(GL_FRONT_AND_BACK));
+        break;
     }
 
     _shader->use();
@@ -92,8 +102,19 @@ void FaceCullingLab::on_render()
 void FaceCullingLab::on_ui_render(UI& ui)
 {
     ui.begin_window("Face culling");
-    ImGui::Checkbox("Enable", &_is_face_culling_enabled);
+    culling_radio_button(ui, "Disabled", Cull::none);
+    culling_radio_button(ui, "Front", Cull::front);
+    culling_radio_button(ui, "Back", Cull::back);
+    culling_radio_button(ui, "Front and back", Cull::front_and_back);
     ui.end_window();
+}
+
+void FaceCullingLab::culling_radio_button(UI& ui, const std::string& label, Cull type)
+{
+    if (ui.radio_button(label, _cull == type))
+    {
+        _cull = type;
+    }
 }
 
 } // namespace eo
