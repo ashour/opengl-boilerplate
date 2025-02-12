@@ -1,29 +1,14 @@
-#include "config.h"
-#include "framebuffer_lab.h"
+#include "fbl_render_texture_to_screen.h"
 #include "lib/random.h"
 #include "objects/primitive.h"
-#include "registry/lab_registry.h"
 #include "rendering/transform.h"
 #include "system/time.h"
-
-namespace
-{
-const bool registered = []()
-{
-    eo::LabRegistry::register_lab("Framebuffers",
-                                  [](eo::Window& window) -> eo::Lab*
-                                  { return new eo::FramebufferLab(window); });
-    return true;
-}();
-} // namespace
 
 namespace eo
 {
 
-FramebufferLab::FramebufferLab(const Window& window) : Lab(window)
+Fbl_RenderTextureToScreen::Fbl_RenderTextureToScreen(const Window& window) : Lab(window)
 {
-    _window.set_clear_color(SCENE_CLEAR_COLOR);
-
     _camera = std::make_unique<Camera>(
         static_cast<float>(_window.buffer_width() / static_cast<float>(_window.buffer_height())));
 
@@ -33,11 +18,10 @@ FramebufferLab::FramebufferLab(const Window& window) : Lab(window)
     _scene_shader->use();
     _scene_shader->set_uniform("u_projection", _camera->projection());
 
-    _quad_shader = std::make_shared<Shader>("resources/shaders/unlit_texture.vert",
+    _quad_shader = std::make_shared<Shader>("resources/shaders/screen.vert",
                                             "resources/shaders/unlit_texture.frag");
     _quad_shader->build();
     _quad_shader->use();
-    _quad_shader->set_uniform("u_projection", _camera->projection());
 
     Shader::unuse_all();
 
@@ -64,7 +48,14 @@ FramebufferLab::FramebufferLab(const Window& window) : Lab(window)
         };
     }
 
-    _quad = std::make_unique<Mesh>(Primitive::quad(), nullptr);
+    std::vector<Vertex> quad_vertices = {
+        {{-1.0f, 1.0f, 0.0f}, glm::vec3{0.0f}, {0.0f, 1.0f}},
+        {{-1.0f, -1.0f, 0.0f}, glm::vec3{0.0f}, {0.0f, 0.0f}},
+        {{1.0f, -1.0f, 0.0f}, glm::vec3{0.0f}, {1.0f, 0.0f}},
+        {{1.0f, 1.0f, 0.0f}, glm::vec3{0.0f}, {1.0f, 1.0f}},
+    };
+    std::vector<unsigned int> quad_indices = {0, 1, 2, 2, 3, 0};
+    _quad = std::make_unique<Mesh>(quad_vertices, quad_indices, nullptr);
 
     gldc(glGenFramebuffers(1, &_fbo));
     gldc(glBindFramebuffer(GL_FRAMEBUFFER, _fbo));
@@ -86,50 +77,54 @@ FramebufferLab::FramebufferLab(const Window& window) : Lab(window)
     gldc(glFramebufferTexture2D(
         GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, _tex_color_buffer, 0));
 
+    gldc(glGenRenderbuffers(1, &_rbo));
+    gldc(glBindRenderbuffer(GL_RENDERBUFFER, _rbo));
+    gldc(glRenderbufferStorage(
+        GL_RENDERBUFFER, GL_DEPTH24_STENCIL8, _window.buffer_width(), _window.buffer_height()));
+    gldc(glFramebufferRenderbuffer(
+        GL_FRAMEBUFFER, GL_DEPTH_STENCIL_ATTACHMENT, GL_RENDERBUFFER, _rbo));
+
     if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE)
     {
         EO_LOG_ERROR("[Framebuffer Error] Framebuffer is not complete!");
     }
 
+    // gldc(glPolygonMode(GL_FRONT_AND_BACK, GL_LINE));
+
     register_mouse_look_on_hold_rmb(*_camera);
 }
 
-FramebufferLab::~FramebufferLab()
+Fbl_RenderTextureToScreen::~Fbl_RenderTextureToScreen()
 {
     gldc(glDeleteFramebuffers(1, &_fbo));
+    gldc(glDeleteRenderbuffers(1, &_rbo));
     gldc(glDeleteTextures(1, &_tex_color_buffer));
 }
 
-void FramebufferLab::on_update() { wasd_move_on_hold_rmb(*_camera); }
+void Fbl_RenderTextureToScreen::on_update() { wasd_move_on_hold_rmb(*_camera); }
 
-void FramebufferLab::on_render()
+void Fbl_RenderTextureToScreen::on_render()
 {
     gldc(glBindFramebuffer(GL_FRAMEBUFFER, _fbo));
+    gldc(glEnable(GL_DEPTH_TEST));
     gldc(glClearColor(0.1f, 0.1f, 0.1f, 1.0f));
     gldc(glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT));
-    gldc(glEnable(GL_DEPTH_TEST));
     render_scene();
 
     gldc(glBindFramebuffer(GL_FRAMEBUFFER, 0));
-    render_scene();
 
-    Transform quad_transform{};
-    quad_transform.scale({16.0f, 1.0f, 9.0f});
-    quad_transform.rotation(glm::radians(90.0f), {1.0f, 0.0f, 0.0f});
-    quad_transform.position({0.0f, 3.5f, -10.0f});
+    gldc(glClearColor(1.0f, 1.0f, 1.0f, 1.0f));
+    gldc(glDisable(GL_DEPTH_TEST));
+    gldc(glClear(GL_COLOR_BUFFER_BIT));
 
     _quad_shader->use();
-
     gldc(glActiveTexture(GL_TEXTURE0));
     gldc(glBindTexture(GL_TEXTURE_2D, _tex_color_buffer));
     _quad_shader->set_uniform("u_material.diffuse_1", 0);
-
-    _quad_shader->set_uniform("u_view", _camera->view());
-    _quad_shader->set_uniform("u_model", quad_transform.matrix());
     _quad->draw();
 }
 
-void FramebufferLab::render_scene()
+void Fbl_RenderTextureToScreen::render_scene()
 {
     _scene_shader->use();
     _scene_shader->set_uniform("u_view", _camera->view());

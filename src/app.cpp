@@ -1,6 +1,6 @@
 #include "app.h"
 #include "config.h"
-#include "labs/framebuffer_lab.h"
+#include "labs/framebuffer_lab/framebuffer_lab.h"
 #include "labs/registry/lab_registry.h"
 #include "system/input.h"
 #include "system/time.h"

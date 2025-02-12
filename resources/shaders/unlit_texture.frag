@@ -23,5 +23,5 @@ void main()
     vec2 scaled_uv = v_uv * inverted_texture_scale;
     vec3 diffuse_sample = texture(u_material.diffuse_1, scaled_uv).rgb;
 
-    o_color = vec4(vec3(diffuse_sample), 1.0);
+    o_color = vec4(diffuse_sample, 1.0);
 }

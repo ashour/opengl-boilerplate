@@ -1,20 +1,15 @@
-#pragma once
-
 #include "labs/lab.h"
-#include "rendering/camera.h"
 #include "rendering/material.h"
 #include "rendering/mesh.h"
 #include "rendering/shader.h"
-#include "system/window.h"
 #include <memory>
-
 namespace eo
 {
-class FramebufferLab : public Lab
+class Fbl_RenderTextureToScreen : public Lab
 {
   public:
-    FramebufferLab(const Window& window);
-    ~FramebufferLab();
+    Fbl_RenderTextureToScreen(const Window& window);
+    ~Fbl_RenderTextureToScreen();
 
     void on_update() override;
     void on_render() override;
@@ -35,6 +30,7 @@ class FramebufferLab : public Lab
     std::unique_ptr<Mesh> _ground;
 
     unsigned int _fbo;
+    unsigned int _rbo;
     unsigned int _tex_color_buffer;
 
     void render_scene();
