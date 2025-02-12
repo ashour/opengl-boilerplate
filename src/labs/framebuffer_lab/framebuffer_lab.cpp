@@ -19,10 +19,8 @@ namespace eo
 
 FramebufferLab::FramebufferLab(const Window& window) : Lab(window)
 {
-    std::vector<float> kernel = {-1, -1, -1, -1, 9, -1, -1, -1, -1};
-    _sub_lab =
-        new Fbl_RenderTextureToScreen(_window, "resources/shaders/kernel.frag", true, &kernel);
-    _selected_lab = SubLab::sharpen;
+    _sub_lab = new Fbl_RenderTextureToWorld(_window);
+    _selected_lab = SubLab::render_texture_to_world;
 }
 
 FramebufferLab::~FramebufferLab() { delete _sub_lab; }
@@ -74,6 +72,30 @@ void FramebufferLab::on_ui_render(UI& ui)
         _sub_lab =
             new Fbl_RenderTextureToScreen(_window, "resources/shaders/kernel.frag", true, &kernel);
         _selected_lab = SubLab::sharpen;
+    }
+    if (ui.radio_button("RTS: (Kernel) Blur", _selected_lab == SubLab::blur))
+    {
+        delete _sub_lab;
+        std::vector<float> kernel = {1.0 / 16,
+                                     2.0 / 16,
+                                     1.0 / 16,
+                                     2.0 / 16,
+                                     4.0 / 16,
+                                     2.0 / 16,
+                                     1.0 / 16,
+                                     2.0 / 16,
+                                     1.0 / 16};
+        _sub_lab =
+            new Fbl_RenderTextureToScreen(_window, "resources/shaders/kernel.frag", true, &kernel);
+        _selected_lab = SubLab::blur;
+    }
+    if (ui.radio_button("RTS: (Kernel) Edge detection", _selected_lab == SubLab::edge_detection))
+    {
+        delete _sub_lab;
+        std::vector<float> kernel = {1, 1, 1, 1, -8, 1, 1, 1, 1};
+        _sub_lab =
+            new Fbl_RenderTextureToScreen(_window, "resources/shaders/kernel.frag", true, &kernel);
+        _selected_lab = SubLab::edge_detection;
     }
     ui.end_window();
 }

@@ -25,6 +25,8 @@ class FramebufferLab : public Lab
         greyscale,
         weighted_greyscale,
         sharpen,
+        blur,
+        edge_detection,
     };
     SubLab _selected_lab;
 };
