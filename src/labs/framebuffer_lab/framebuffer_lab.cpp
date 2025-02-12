@@ -19,8 +19,8 @@ namespace eo
 
 FramebufferLab::FramebufferLab(const Window& window) : Lab(window)
 {
-    _sub_lab = new Fbl_RenderTextureToScreen(window);
-    _selected_lab = SubLab::render_texture_to_screen;
+    _sub_lab = new Fbl_RenderTextureToWorld(window);
+    _selected_lab = SubLab::render_texture_to_world;
 }
 
 FramebufferLab::~FramebufferLab() { delete _sub_lab; }

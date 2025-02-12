@@ -30,6 +30,7 @@ class Fbl_RenderTextureToWorld : public Lab
     std::unique_ptr<Mesh> _ground;
 
     unsigned int _fbo;
+    unsigned int _rbo;
     unsigned int _tex_color_buffer;
 
     void render_scene();

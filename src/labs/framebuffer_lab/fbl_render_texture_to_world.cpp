@@ -71,6 +71,13 @@ Fbl_RenderTextureToWorld::Fbl_RenderTextureToWorld(const Window& window) : Lab(w
     gldc(glFramebufferTexture2D(
         GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, _tex_color_buffer, 0));
 
+    gldc(glGenRenderbuffers(1, &_rbo));
+    gldc(glBindRenderbuffer(GL_RENDERBUFFER, _rbo));
+    gldc(glRenderbufferStorage(
+        GL_RENDERBUFFER, GL_DEPTH24_STENCIL8, _window.buffer_width(), _window.buffer_height()));
+    gldc(glFramebufferRenderbuffer(
+        GL_FRAMEBUFFER, GL_DEPTH_STENCIL_ATTACHMENT, GL_RENDERBUFFER, _rbo));
+
     if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE)
     {
         EO_LOG_ERROR("[Framebuffer Error] Framebuffer is not complete!");
