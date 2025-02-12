@@ -8,7 +8,10 @@ namespace eo
 {
 
 Fbl_RenderTextureToScreen::Fbl_RenderTextureToScreen(
-    const Window& window, const std::string& screen_fragment_shader_file_path)
+    const Window& window,
+    const std::string& screen_fragment_shader_file_path,
+    const bool upload_screen_dimensions,
+    const std::vector<float>* kernel)
     : Lab(window)
 {
     _camera = std::make_unique<Camera>(
@@ -24,6 +27,16 @@ Fbl_RenderTextureToScreen::Fbl_RenderTextureToScreen(
         std::make_shared<Shader>("resources/shaders/screen.vert", screen_fragment_shader_file_path);
     _quad_shader->build();
     _quad_shader->use();
+    if (upload_screen_dimensions)
+    {
+        _quad_shader->set_uniform("u_screen_dimensions",
+                                  glm::vec2{static_cast<float>(_window.buffer_width()),
+                                            static_cast<float>(_window.buffer_height())});
+    }
+    if (kernel)
+    {
+        _quad_shader->set_uniform("u_kernel", *kernel);
+    }
 
     Shader::unuse_all();
 

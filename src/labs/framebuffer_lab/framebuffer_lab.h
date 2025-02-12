@@ -24,6 +24,7 @@ class FramebufferLab : public Lab
         negative,
         greyscale,
         weighted_greyscale,
+        sharpen,
     };
     SubLab _selected_lab;
 };

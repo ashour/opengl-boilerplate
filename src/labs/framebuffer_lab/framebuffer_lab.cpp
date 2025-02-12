@@ -19,8 +19,10 @@ namespace eo
 
 FramebufferLab::FramebufferLab(const Window& window) : Lab(window)
 {
-    _sub_lab = new Fbl_RenderTextureToScreen(_window, "resources/shaders/negative.frag");
-    _selected_lab = SubLab::negative;
+    std::vector<float> kernel = {-1, -1, -1, -1, 9, -1, -1, -1, -1};
+    _sub_lab =
+        new Fbl_RenderTextureToScreen(_window, "resources/shaders/kernel.frag", true, &kernel);
+    _selected_lab = SubLab::sharpen;
 }
 
 FramebufferLab::~FramebufferLab() { delete _sub_lab; }
@@ -64,6 +66,14 @@ void FramebufferLab::on_ui_render(UI& ui)
         _sub_lab =
             new Fbl_RenderTextureToScreen(_window, "resources/shaders/weighted_greyscale.frag");
         _selected_lab = SubLab::weighted_greyscale;
+    }
+    if (ui.radio_button("RTS: (Kernel) Sharpen", _selected_lab == SubLab::sharpen))
+    {
+        delete _sub_lab;
+        std::vector<float> kernel = {-1, -1, -1, -1, 9, -1, -1, -1, -1};
+        _sub_lab =
+            new Fbl_RenderTextureToScreen(_window, "resources/shaders/kernel.frag", true, &kernel);
+        _selected_lab = SubLab::sharpen;
     }
     ui.end_window();
 }

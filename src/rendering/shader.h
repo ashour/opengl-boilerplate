@@ -33,6 +33,10 @@ class Shader
         {
             gldc(glUniform1f(location, value));
         }
+        else if constexpr (std::is_same_v<T, glm::vec2>)
+        {
+            gldc(glUniform2f(location, value.x, value.y));
+        }
         else if constexpr (std::is_same_v<T, glm::vec3>)
         {
             gldc(glUniform3f(location, value.x, value.y, value.z));
@@ -40,6 +44,10 @@ class Shader
         else if constexpr (std::is_same_v<T, glm::mat4>)
         {
             gldc(glUniformMatrix4fv(location, 1, GL_FALSE, glm::value_ptr(value)));
+        }
+        else if constexpr (std::is_same_v<T, std::vector<float>>)
+        {
+            gldc(glUniform1fv(location, static_cast<GLsizei>(value.size()), value.data()));
         }
         else
         {
