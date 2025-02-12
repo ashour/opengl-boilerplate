@@ -94,6 +94,12 @@ FramebufferLab::FramebufferLab(const Window& window) : Lab(window)
     register_mouse_look_on_hold_rmb(*_camera);
 }
 
+FramebufferLab::~FramebufferLab()
+{
+    gldc(glDeleteFramebuffers(1, &_fbo));
+    gldc(glDeleteTextures(1, &_tex_color_buffer));
+}
+
 void FramebufferLab::on_update() { wasd_move_on_hold_rmb(*_camera); }
 
 void FramebufferLab::on_render()

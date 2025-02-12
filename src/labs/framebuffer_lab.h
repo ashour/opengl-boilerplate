@@ -14,6 +14,7 @@ class FramebufferLab : public Lab
 {
   public:
     FramebufferLab(const Window& window);
+    ~FramebufferLab();
 
     void on_update() override;
     void on_render() override;
