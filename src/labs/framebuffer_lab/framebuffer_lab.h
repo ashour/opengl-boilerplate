@@ -21,6 +21,9 @@ class FramebufferLab : public Lab
     {
         render_texture_to_world,
         render_texture_to_screen,
+        negative,
+        greyscale,
+        weighted_greyscale,
     };
     SubLab _selected_lab;
 };

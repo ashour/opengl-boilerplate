@@ -19,8 +19,8 @@ namespace eo
 
 FramebufferLab::FramebufferLab(const Window& window) : Lab(window)
 {
-    _sub_lab = new Fbl_RenderTextureToWorld(window);
-    _selected_lab = SubLab::render_texture_to_world;
+    _sub_lab = new Fbl_RenderTextureToScreen(_window, "resources/shaders/negative.frag");
+    _selected_lab = SubLab::negative;
 }
 
 FramebufferLab::~FramebufferLab() { delete _sub_lab; }
@@ -39,12 +39,31 @@ void FramebufferLab::on_ui_render(UI& ui)
         _sub_lab = new Fbl_RenderTextureToWorld(_window);
         _selected_lab = SubLab::render_texture_to_world;
     }
-    if (ui.radio_button("Render texture to screen",
+    if (ui.radio_button("Render texture to screen (RTS)",
                         _selected_lab == SubLab::render_texture_to_screen))
     {
         delete _sub_lab;
-        _sub_lab = new Fbl_RenderTextureToScreen(_window);
+        _sub_lab = new Fbl_RenderTextureToScreen(_window, "resources/shaders/unlit_texture.frag");
         _selected_lab = SubLab::render_texture_to_screen;
+    }
+    if (ui.radio_button("RTS: Negative", _selected_lab == SubLab::negative))
+    {
+        delete _sub_lab;
+        _sub_lab = new Fbl_RenderTextureToScreen(_window, "resources/shaders/negative.frag");
+        _selected_lab = SubLab::negative;
+    }
+    if (ui.radio_button("RTS: Greyscale", _selected_lab == SubLab::greyscale))
+    {
+        delete _sub_lab;
+        _sub_lab = new Fbl_RenderTextureToScreen(_window, "resources/shaders/greyscale.frag");
+        _selected_lab = SubLab::greyscale;
+    }
+    if (ui.radio_button("RTS: Weighted Greyscale", _selected_lab == SubLab::weighted_greyscale))
+    {
+        delete _sub_lab;
+        _sub_lab =
+            new Fbl_RenderTextureToScreen(_window, "resources/shaders/weighted_greyscale.frag");
+        _selected_lab = SubLab::weighted_greyscale;
     }
     ui.end_window();
 }

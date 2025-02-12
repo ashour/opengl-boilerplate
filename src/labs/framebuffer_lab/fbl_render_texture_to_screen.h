@@ -8,7 +8,8 @@ namespace eo
 class Fbl_RenderTextureToScreen : public Lab
 {
   public:
-    Fbl_RenderTextureToScreen(const Window& window);
+    Fbl_RenderTextureToScreen(const Window& window,
+                              const std::string& screen_fragment_shader_file_path);
     ~Fbl_RenderTextureToScreen();
 
     void on_update() override;
