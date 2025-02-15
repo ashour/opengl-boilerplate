@@ -6,6 +6,7 @@
 #include "rendering/shader.h"
 #include "system/window.h"
 #include <memory>
+#include <array>
 
 namespace eo
 {

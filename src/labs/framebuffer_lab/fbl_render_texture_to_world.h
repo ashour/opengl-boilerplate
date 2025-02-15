@@ -3,6 +3,8 @@
 #include "rendering/mesh.h"
 #include "rendering/shader.h"
 #include <memory>
+#include <array>
+
 namespace eo
 {
 class Fbl_RenderTextureToWorld : public Lab
