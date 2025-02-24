@@ -39,9 +39,12 @@ void Mesh::draw()
     }
 }
 
-void Mesh::draw(Shader& shader)
+void Mesh::draw(Shader& shader, bool use_material)
 {
-    _material->bind(shader);
+    if (use_material)
+    {
+        _material->bind(shader);
+    }
 
     gldc(glBindVertexArray(_vao));
     gldc(glDrawElements(GL_TRIANGLES, _indices.size(), GL_UNSIGNED_INT, 0));

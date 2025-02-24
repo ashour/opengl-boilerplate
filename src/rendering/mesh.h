@@ -19,7 +19,7 @@ class Mesh
     ~Mesh();
 
     void draw();
-    void draw(Shader& shader);
+    void draw(Shader& shader, bool use_material = true);
 
     const std::vector<Vertex>& vertices() const { return _vertices; }
     const std::vector<unsigned int>& indices() const { return _indices; }
