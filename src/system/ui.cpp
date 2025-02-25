@@ -53,9 +53,19 @@ bool UI::begin_window(const std::string& name) { return ImGui::Begin(name.c_str(
 
 void UI::end_window() { ImGui::End(); }
 
+void UI::push_item_full_width() { ImGui::PushItemWidth(ImGui::GetContentRegionAvail().x); }
+
+void UI::pop_item_full_width() { ImGui::PopItemWidth(); }
+
 bool UI::radio_button(const std::string& label, bool is_selected)
 {
     return ImGui::RadioButton(label.c_str(), is_selected);
+}
+
+void UI::drag_float(const std::string& label, float* value)
+{
+    ImGui::DragFloat(
+        label.c_str(), value, 0.005f, -FLT_MAX, +FLT_MAX, "%.3f", ImGuiSliderFlags_None);
 }
 
 } // namespace eo

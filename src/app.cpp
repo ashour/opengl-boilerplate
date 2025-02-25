@@ -1,6 +1,6 @@
 #include "app.h"
 #include "config.h"
-#include "labs/framebuffer_lab/framebuffer_lab.h"
+#include "labs/cubemap_lab.h"
 #include "labs/registry/lab_registry.h"
 #include "system/input.h"
 #include "system/time.h"
@@ -15,8 +15,8 @@ void App::run()
     EO_LOG_INFO("Initializing OpenGL");
     _window = std::make_unique<Window>(
         WINDOW_WIDTH, WINDOW_HEIGHT, WINDOW_TITLE, OPENGL_MAJOR_VERSION, OPENGL_MINOR_VERSION);
-    _current_lab_name = "Framebuffers";
-    _lab = new FramebufferLab(*_window);
+    _current_lab_name = "Cubemaps";
+    _lab = new CubemapLab(*_window);
     EO_LOG_INFO("OpenGL version {}", (const char*)_window->opengl_version());
 
     EO_LOG_INFO("Initializing ImGui");

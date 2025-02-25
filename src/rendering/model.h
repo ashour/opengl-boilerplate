@@ -14,7 +14,7 @@ class Model
   public:
     Model(const std::string& file_path);
 
-    void draw(Shader& shader);
+    void draw(Shader& shader, bool use_materials = true);
     void unbind_materials(Shader& shader);
 
   private:

@@ -48,6 +48,8 @@ Texture::Texture(const Type type, const std::string& file_path, const Wrap wrap)
         EO_LOG_ERROR("Failed to load texture ({})", file_path);
     }
     stbi_image_free(data);
+
+    stbi_set_flip_vertically_on_load(false);
 }
 
 Texture::Texture(const void* color_data, const int width, const int height, const std::string& path)
