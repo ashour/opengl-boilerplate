@@ -84,7 +84,13 @@ CubemapLab::CubemapLab(const Window& window) : Lab(window)
     register_mouse_look_on_hold_rmb(*_camera);
 }
 
-CubemapLab::~CubemapLab() {}
+CubemapLab::~CubemapLab()
+{
+    gldc(glBindTexture(GL_TEXTURE_CUBE_MAP, 0));
+    gldc(glDeleteTextures(1, &_skybox_texture));
+    gldc(glDepthFunc(GL_LESS));
+    gldc(glEnable(GL_CULL_FACE));
+}
 
 void CubemapLab::on_update() { wasd_move_on_hold_rmb(*_camera); }
 
