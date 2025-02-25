@@ -13,11 +13,11 @@ namespace eo
 
 Model::Model(const std::string& file_path) { load_model(file_path); }
 
-void Model::draw(Shader& shader)
+void Model::draw(Shader& shader, bool use_materials)
 {
     for (const auto& mesh : _meshes)
     {
-        mesh->draw(shader);
+        mesh->draw(shader, use_materials);
     }
 }
 

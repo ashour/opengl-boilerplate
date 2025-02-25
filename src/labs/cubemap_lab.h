@@ -4,6 +4,7 @@
 #include "rendering/camera.h"
 #include "rendering/material.h"
 #include "rendering/mesh.h"
+#include "rendering/model.h"
 #include "rendering/shader.h"
 #include "system/window.h"
 #include <array>
@@ -23,11 +24,14 @@ class CubemapLab : public Lab
   private:
     std::unique_ptr<Camera> _camera;
     std::shared_ptr<Shader> _skybox_reflection_shader;
+    std::shared_ptr<Shader> _skybox_refraction_shader;
 
     std::shared_ptr<Material> _mat_box;
 
     std::unique_ptr<Mesh> _cube;
     std::array<glm::vec3, 180> _cube_positions{};
+
+    std::unique_ptr<Model> _backpack;
 
     std::unique_ptr<Mesh> _skybox;
     std::shared_ptr<Shader> _skybox_shader;

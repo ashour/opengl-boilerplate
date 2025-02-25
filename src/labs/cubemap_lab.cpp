@@ -29,6 +29,10 @@ CubemapLab::CubemapLab(const Window& window) : Lab(window)
         "resources/shaders/skybox_reflection.vert", "resources/shaders/skybox_reflection.frag");
     _skybox_reflection_shader->build();
 
+    _skybox_refraction_shader = std::make_shared<Shader>(
+        "resources/shaders/skybox_refraction.vert", "resources/shaders/skybox_refraction.frag");
+    _skybox_refraction_shader->build();
+
     _skybox_shader =
         std::make_shared<Shader>("resources/shaders/skybox.vert", "resources/shaders/skybox.frag");
     _skybox_shader->build();
@@ -38,6 +42,9 @@ CubemapLab::CubemapLab(const Window& window) : Lab(window)
 
     _skybox_reflection_shader->use();
     _skybox_reflection_shader->set_uniform("u_projection", _camera->projection());
+
+    _skybox_refraction_shader->use();
+    _skybox_refraction_shader->set_uniform("u_projection", _camera->projection());
 
     _skybox_shader->use();
     _skybox_shader->set_uniform("u_projection", _camera->projection());
@@ -59,6 +66,8 @@ CubemapLab::CubemapLab(const Window& window) : Lab(window)
             random_float(-90.0f, 90.0f),
         };
     }
+
+    _backpack = std::make_unique<Model>("resources/models/backpack/backpack.obj");
 
     std::vector<const std::string> cubemap_texture_face_filepaths{
         "resources/textures/skybox/right.jpg",
@@ -85,6 +94,17 @@ void CubemapLab::on_render()
     gldc(glBindTexture(GL_TEXTURE_CUBE_MAP, _skybox_texture));
 
     gldc(glDepthFunc(GL_LESS));
+    _skybox_refraction_shader->use();
+    _skybox_refraction_shader->set_uniform("u_view", _camera->view());
+    _skybox_refraction_shader->set_uniform("u_camera_position", _camera->position());
+    _skybox_refraction_shader->set_uniform("u_skybox", 0);
+
+    Transform backpack_transform{};
+    backpack_transform.position({0.0f, 3.0f, 4.0f});
+    backpack_transform.scale(glm::vec3{2.0f});
+    _skybox_refraction_shader->set_uniform("u_model", backpack_transform.matrix());
+    _backpack->draw(*_skybox_refraction_shader, false);
+
     _skybox_reflection_shader->use();
     _skybox_reflection_shader->set_uniform("u_view", _camera->view());
     _skybox_reflection_shader->set_uniform("u_camera_position", _camera->position());
