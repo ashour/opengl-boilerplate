@@ -98,6 +98,7 @@ void CubemapLab::on_render()
     _skybox_refraction_shader->set_uniform("u_view", _camera->view());
     _skybox_refraction_shader->set_uniform("u_camera_position", _camera->position());
     _skybox_refraction_shader->set_uniform("u_skybox", 0);
+    _skybox_refraction_shader->set_uniform("u_refractive_index", _refractive_index);
 
     Transform backpack_transform{};
     backpack_transform.position({0.0f, 3.0f, 4.0f});
@@ -125,6 +126,21 @@ void CubemapLab::on_render()
     _skybox_shader->set_uniform("u_skybox", 0);
     _skybox_shader->set_uniform("u_view", glm::mat4(glm::mat3(_camera->view())));
     _skybox->draw(*_skybox_shader, false);
+}
+
+void CubemapLab::on_ui_render(UI& ui)
+{
+    ui.begin_window("Refractive index");
+    ImGui::PushItemWidth(ImGui::GetContentRegionAvail().x);
+    ImGui::DragFloat("##refactive_index",
+                     &_refractive_index,
+                     0.005f,
+                     -FLT_MAX,
+                     +FLT_MAX,
+                     "%.3f",
+                     ImGuiSliderFlags_None);
+    ImGui::PopItemWidth();
+    ui.end_window();
 }
 
 unsigned int CubemapLab::load_cubemap(std::vector<const std::string>& face_texture_filepaths)

@@ -20,11 +20,20 @@ class CubemapLab : public Lab
 
     void on_update() override;
     void on_render() override;
+    void on_ui_render(UI& ui) override;
 
   private:
+    const float REFRACTIVE_INDEX_AIR = 1.00f;
+    const float REFRACTIVE_INDEX_WATER = 1.33f;
+    const float REFRACTIVE_INDEX_ICE = 1.309f;
+    const float REFRACTIVE_INDEX_GLASS = 1.52f;
+    const float REFRACTIVE_INDEX_DIAMOND = 2.42f;
+
     std::unique_ptr<Camera> _camera;
     std::shared_ptr<Shader> _skybox_reflection_shader;
     std::shared_ptr<Shader> _skybox_refraction_shader;
+
+    float _refractive_index{1.00};
 
     std::shared_ptr<Material> _mat_box;
 
