@@ -131,15 +131,9 @@ void CubemapLab::on_render()
 void CubemapLab::on_ui_render(UI& ui)
 {
     ui.begin_window("Refractive index");
-    ImGui::PushItemWidth(ImGui::GetContentRegionAvail().x);
-    ImGui::DragFloat("##refactive_index",
-                     &_refractive_index,
-                     0.005f,
-                     -FLT_MAX,
-                     +FLT_MAX,
-                     "%.3f",
-                     ImGuiSliderFlags_None);
-    ImGui::PopItemWidth();
+    ui.push_item_full_width();
+    ui.drag_float("##refactive_index", &_refractive_index);
+    ui.pop_item_full_width();
     ui.end_window();
 }
 
