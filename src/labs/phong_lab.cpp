@@ -163,4 +163,6 @@ void PhongLab::on_render()
     _mat_box->unbind(*_shader);
 }
 
+void PhongLab::on_ui_render(UI& ui) { movement_help_ui(ui); }
+
 } // namespace eo

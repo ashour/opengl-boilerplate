@@ -105,6 +105,8 @@ void FaceCullingLab::on_render()
 
 void FaceCullingLab::on_ui_render(UI& ui)
 {
+    movement_help_ui(ui);
+
     ui.begin_window("Face culling");
     culling_radio_button(ui, "Disabled", Cull::none);
     culling_radio_button(ui, "Front", Cull::front);

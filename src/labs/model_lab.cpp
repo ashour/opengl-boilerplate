@@ -155,4 +155,6 @@ void ModelLab::on_render()
     _backpack->unbind_materials(*_shader);
 }
 
+void ModelLab::on_ui_render(UI& ui) { movement_help_ui(ui); }
+
 } // namespace eo

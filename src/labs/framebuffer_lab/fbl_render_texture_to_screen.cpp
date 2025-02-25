@@ -143,6 +143,8 @@ void Fbl_RenderTextureToScreen::on_render()
     _quad->draw();
 }
 
+void Fbl_RenderTextureToScreen::on_ui_render(UI& ui) { movement_help_ui(ui); }
+
 void Fbl_RenderTextureToScreen::render_scene()
 {
     _scene_shader->use();

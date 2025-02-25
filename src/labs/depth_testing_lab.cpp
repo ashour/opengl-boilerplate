@@ -81,4 +81,6 @@ void DepthTestingLab::on_render()
     _ground->draw();
 }
 
+void DepthTestingLab::on_ui_render(UI& ui) { movement_help_ui(ui); }
+
 } // namespace eo

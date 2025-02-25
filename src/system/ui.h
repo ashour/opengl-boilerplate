@@ -27,6 +27,7 @@ class UI
     void push_item_full_width();
     void pop_item_full_width();
 
+    void text(const std::string& label);
     bool radio_button(const std::string& label, bool is_selected);
     void drag_float(const std::string& label, float* value);
 };

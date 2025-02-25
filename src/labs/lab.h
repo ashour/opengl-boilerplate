@@ -24,5 +24,7 @@ class Lab
     static void toggle_movement();
     static void register_mouse_look(Camera& camera);
     static void strafe(Camera& camera);
+
+    static void movement_help_ui(UI& ui);
 };
 } // namespace eo

@@ -125,6 +125,8 @@ void Fbl_RenderTextureToWorld::on_render()
     _quad->draw();
 }
 
+void Fbl_RenderTextureToWorld::on_ui_render(UI& ui) { movement_help_ui(ui); }
+
 void Fbl_RenderTextureToWorld::render_scene()
 {
     _scene_shader->use();

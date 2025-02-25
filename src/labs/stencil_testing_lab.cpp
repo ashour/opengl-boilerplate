@@ -127,4 +127,6 @@ void StencilTestingLab::on_render()
     gldc(glEnable(GL_DEPTH_TEST));
 }
 
+void StencilTestingLab::on_ui_render(UI& ui) { movement_help_ui(ui); }
+
 } // namespace eo

@@ -168,4 +168,6 @@ void BlendingLab::on_render()
     gldc(glDisable(GL_BLEND));
     gldc(glEnable(GL_CULL_FACE));
 }
+
+void BlendingLab::on_ui_render(UI& ui) { movement_help_ui(ui); }
 } // namespace eo

@@ -140,6 +140,8 @@ void CubemapLab::on_render()
 
 void CubemapLab::on_ui_render(UI& ui)
 {
+    movement_help_ui(ui);
+
     ui.begin_window("Refractive index");
     ui.push_item_full_width();
     ui.drag_float("##refactive_index", &_refractive_index);

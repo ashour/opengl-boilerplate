@@ -1,6 +1,7 @@
 #include "lab.h"
 #include "system/input.h"
 #include "system/time.h"
+#include <format>
 
 namespace eo
 {
@@ -49,6 +50,14 @@ void Lab::strafe(Camera& camera)
     {
         camera.strafe(Strafe::right, Time::delta_time());
     }
+}
+
+void Lab::movement_help_ui(UI& ui)
+{
+    ui.begin_window(std::format("Movement controls ({})", _is_moving ? "On" : "Off"));
+    ui.text("[Tab] to toggle movement controls on/off.");
+    ui.text("[W][A][S][D] to strafe. Mouse to look.");
+    ui.end_window();
 }
 
 } // namespace eo
