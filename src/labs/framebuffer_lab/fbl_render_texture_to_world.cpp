@@ -83,7 +83,7 @@ Fbl_RenderTextureToWorld::Fbl_RenderTextureToWorld(const Window& window) : Lab(w
         EO_LOG_ERROR("[Framebuffer Error] Framebuffer is not complete!");
     }
 
-    register_mouse_look_on_hold_rmb(*_camera);
+    register_mouse_look(*_camera);
 }
 
 Fbl_RenderTextureToWorld::~Fbl_RenderTextureToWorld()
@@ -92,7 +92,11 @@ Fbl_RenderTextureToWorld::~Fbl_RenderTextureToWorld()
     gldc(glDeleteTextures(1, &_tex_color_buffer));
 }
 
-void Fbl_RenderTextureToWorld::on_update() { wasd_move_on_hold_rmb(*_camera); }
+void Fbl_RenderTextureToWorld::on_update()
+{
+    toggle_movement();
+    strafe(*_camera);
+}
 
 void Fbl_RenderTextureToWorld::on_render()
 {

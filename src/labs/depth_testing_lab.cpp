@@ -52,10 +52,14 @@ DepthTestingLab::DepthTestingLab(const Window& window) : Lab(window)
         };
     }
 
-    register_mouse_look_on_hold_rmb(*_camera);
+    register_mouse_look(*_camera);
 }
 
-void DepthTestingLab::on_update() { wasd_move_on_hold_rmb(*_camera); }
+void DepthTestingLab::on_update()
+{
+    toggle_movement();
+    strafe(*_camera);
+}
 
 void DepthTestingLab::on_render()
 {

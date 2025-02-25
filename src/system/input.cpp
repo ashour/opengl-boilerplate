@@ -5,7 +5,8 @@
 
 namespace eo
 {
-std::array<bool, Input::KEYS_SIZE> Input::_keys{};
+std::array<bool, Input::KEYS_SIZE> Input::_keys_pressed{};
+std::array<bool, Input::KEYS_SIZE> Input::_keys_just_pressed{};
 std::array<bool, Input::MOUSE_BUTTONS_SIZE> Input::_mouse_buttons{};
 std::function<void(glm::vec2, glm::vec2)> Input::_on_mouse_moved{};
 
@@ -22,11 +23,12 @@ void Input::key_callback(GLFWwindow* window, int key, int scancode, int action, 
 
     if (action == GLFW_PRESS)
     {
-        _keys[key] = true;
+        _keys_pressed[key] = true;
+        _keys_just_pressed[key] = true;
     }
     else if (action == GLFW_RELEASE)
     {
-        _keys[key] = false;
+        _keys_pressed[key] = false;
     }
 }
 
@@ -52,7 +54,18 @@ bool Input::mouse_button_pressed(MouseButton button)
     return _mouse_buttons[static_cast<int>(button)];
 }
 
-bool Input::key_pressed(Key action) { return _keys[static_cast<int>(action)]; }
+bool Input::key_pressed(Key action) { return _keys_pressed[static_cast<int>(action)]; }
+
+bool Input::key_just_pressed(Key action)
+{
+    int key = static_cast<int>(action);
+    if (_keys_just_pressed[key])
+    {
+        _keys_just_pressed[key] = false;
+        return true;
+    }
+    return false;
+}
 
 void Input::register_mouse_move_handler(std::function<void(glm::vec2, glm::vec2)> on_mouse_moved)
 {

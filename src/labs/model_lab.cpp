@@ -106,10 +106,14 @@ ModelLab::ModelLab(const Window& window) : Lab(window)
                                   "resources/textures/container2_specular.png"),
     };
 
-    register_mouse_look_on_hold_rmb(*_camera);
+    register_mouse_look(*_camera);
 }
 
-void ModelLab::on_update() { wasd_move_on_hold_rmb(*_camera); }
+void ModelLab::on_update()
+{
+    toggle_movement();
+    strafe(*_camera);
+}
 
 void ModelLab::on_render()
 {

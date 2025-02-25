@@ -4,22 +4,31 @@
 
 namespace eo
 {
+bool Lab::_is_moving{false};
 
-void Lab::register_mouse_look_on_hold_rmb(Camera& camera)
+void Lab::toggle_movement()
+{
+    if (Input::key_just_pressed(Key::tab))
+    {
+        _is_moving = !_is_moving;
+    }
+}
+
+void Lab::register_mouse_look(Camera& camera)
 {
     Input::register_mouse_move_handler(
         [&camera](auto current_mouse_position, auto last_mouse_position)
         {
-            if (Input::mouse_button_pressed(MouseButton::right))
+            if (_is_moving)
             {
                 camera.look(current_mouse_position, last_mouse_position);
             }
         });
 }
 
-void Lab::wasd_move_on_hold_rmb(Camera& camera)
+void Lab::strafe(Camera& camera)
 {
-    if (!Input::mouse_button_pressed(MouseButton::right))
+    if (!_is_moving)
     {
         return;
     }

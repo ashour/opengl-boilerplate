@@ -67,10 +67,14 @@ StencilTestingLab::StencilTestingLab(const Window& window) : Lab(window)
         };
     }
 
-    register_mouse_look_on_hold_rmb(*_camera);
+    register_mouse_look(*_camera);
 }
 
-void StencilTestingLab::on_update() { wasd_move_on_hold_rmb(*_camera); }
+void StencilTestingLab::on_update()
+{
+    toggle_movement();
+    strafe(*_camera);
+}
 
 void StencilTestingLab::on_render()
 {

@@ -106,7 +106,7 @@ Fbl_RenderTextureToScreen::Fbl_RenderTextureToScreen(
 
     // gldc(glPolygonMode(GL_FRONT_AND_BACK, GL_LINE));
 
-    register_mouse_look_on_hold_rmb(*_camera);
+    register_mouse_look(*_camera);
 }
 
 Fbl_RenderTextureToScreen::~Fbl_RenderTextureToScreen()
@@ -116,7 +116,11 @@ Fbl_RenderTextureToScreen::~Fbl_RenderTextureToScreen()
     gldc(glDeleteTextures(1, &_tex_color_buffer));
 }
 
-void Fbl_RenderTextureToScreen::on_update() { wasd_move_on_hold_rmb(*_camera); }
+void Fbl_RenderTextureToScreen::on_update()
+{
+    toggle_movement();
+    strafe(*_camera);
+}
 
 void Fbl_RenderTextureToScreen::on_render()
 {

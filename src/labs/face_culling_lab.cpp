@@ -50,12 +50,16 @@ FaceCullingLab::FaceCullingLab(const Window& window) : Lab(window)
     _mat_box = std::make_shared<Material>(mat_box_textures, 400.0f);
     _cube = std::make_unique<Mesh>(Primitive::cube(), _mat_box);
 
-    register_mouse_look_on_hold_rmb(*_camera);
+    register_mouse_look(*_camera);
 }
 
 FaceCullingLab::~FaceCullingLab() {}
 
-void FaceCullingLab::on_update() { wasd_move_on_hold_rmb(*_camera); }
+void FaceCullingLab::on_update()
+{
+    toggle_movement();
+    strafe(*_camera);
+}
 
 void FaceCullingLab::on_render()
 {
