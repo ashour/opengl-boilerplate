@@ -25,9 +25,9 @@ CubemapLab::CubemapLab(const Window& window) : Lab(window)
     gldc(glDisable(GL_CULL_FACE));
     _window.set_clear_color(SCENE_CLEAR_COLOR);
 
-    _unlit_tex_shader = std::make_shared<Shader>("resources/shaders/unlit_texture.vert",
-                                                 "resources/shaders/unlit_texture.frag");
-    _unlit_tex_shader->build();
+    _skybox_reflection_shader = std::make_shared<Shader>(
+        "resources/shaders/skybox_reflection.vert", "resources/shaders/skybox_reflection.frag");
+    _skybox_reflection_shader->build();
 
     _skybox_shader =
         std::make_shared<Shader>("resources/shaders/skybox.vert", "resources/shaders/skybox.frag");
@@ -36,8 +36,8 @@ CubemapLab::CubemapLab(const Window& window) : Lab(window)
     _camera = std::make_unique<Camera>(
         static_cast<float>(_window.buffer_width() / static_cast<float>(_window.buffer_height())));
 
-    _unlit_tex_shader->use();
-    _unlit_tex_shader->set_uniform("u_projection", _camera->projection());
+    _skybox_reflection_shader->use();
+    _skybox_reflection_shader->set_uniform("u_projection", _camera->projection());
 
     _skybox_shader->use();
     _skybox_shader->set_uniform("u_projection", _camera->projection());
@@ -81,28 +81,29 @@ void CubemapLab::on_update() { wasd_move_on_hold_rmb(*_camera); }
 
 void CubemapLab::on_render()
 {
+    gldc(glActiveTexture(GL_TEXTURE0));
+    gldc(glBindTexture(GL_TEXTURE_CUBE_MAP, _skybox_texture));
+
     gldc(glDepthFunc(GL_LESS));
-    _unlit_tex_shader->use();
-    _unlit_tex_shader->set_uniform("u_view", _camera->view());
+    _skybox_reflection_shader->use();
+    _skybox_reflection_shader->set_uniform("u_view", _camera->view());
+    _skybox_reflection_shader->set_uniform("u_camera_position", _camera->position());
+    _skybox_reflection_shader->set_uniform("u_skybox", 0);
 
     Transform cube_transform{};
     cube_transform.rotation(Time::current_time() * glm::radians(50.0f), {0.5f, 1.0f, 0.0f});
-    _unlit_tex_shader->set_uniform("u_texture_scale", 1.0f);
-    _mat_box->bind(*_unlit_tex_shader);
+
     for (glm::vec3 position : _cube_positions)
     {
         cube_transform.position(position);
-        _unlit_tex_shader->set_uniform("u_model", cube_transform.matrix());
-        _cube->draw();
+        _skybox_reflection_shader->set_uniform("u_model", cube_transform.matrix());
+        _cube->draw(*_skybox_reflection_shader, false);
     }
-    _mat_box->unbind(*_unlit_tex_shader);
 
     gldc(glDepthFunc(GL_LEQUAL));
     _skybox_shader->use();
     _skybox_shader->set_uniform("u_skybox", 0);
     _skybox_shader->set_uniform("u_view", glm::mat4(glm::mat3(_camera->view())));
-    gldc(glActiveTexture(GL_TEXTURE0));
-    gldc(glBindTexture(GL_TEXTURE_CUBE_MAP, _skybox_texture));
     _skybox->draw(*_skybox_shader, false);
 }
 

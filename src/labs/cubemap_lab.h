@@ -22,7 +22,7 @@ class CubemapLab : public Lab
 
   private:
     std::unique_ptr<Camera> _camera;
-    std::shared_ptr<Shader> _unlit_tex_shader;
+    std::shared_ptr<Shader> _skybox_reflection_shader;
 
     std::shared_ptr<Material> _mat_box;
 
