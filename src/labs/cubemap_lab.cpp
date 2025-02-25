@@ -22,6 +22,7 @@ namespace eo
 
 CubemapLab::CubemapLab(const Window& window) : Lab(window)
 {
+    gldc(glDisable(GL_CULL_FACE));
     _window.set_clear_color(SCENE_CLEAR_COLOR);
 
     _unlit_tex_shader = std::make_shared<Shader>("resources/shaders/unlit_texture.vert",
@@ -80,17 +81,7 @@ void CubemapLab::on_update() { wasd_move_on_hold_rmb(*_camera); }
 
 void CubemapLab::on_render()
 {
-    gldc(glDisable(GL_CULL_FACE));
-    gldc(glDepthMask(GL_FALSE));
-    _skybox_shader->use();
-    _skybox_shader->set_uniform("u_skybox", 0);
-    _skybox_shader->set_uniform("u_view", glm::mat4(glm::mat3(_camera->view())));
-    gldc(glActiveTexture(GL_TEXTURE0));
-    gldc(glBindTexture(GL_TEXTURE_CUBE_MAP, _skybox_texture));
-    _skybox->draw(*_skybox_shader, false);
-
-    gldc(glDepthMask(GL_TRUE));
-
+    gldc(glDepthFunc(GL_LESS));
     _unlit_tex_shader->use();
     _unlit_tex_shader->set_uniform("u_view", _camera->view());
 
@@ -105,6 +96,14 @@ void CubemapLab::on_render()
         _cube->draw();
     }
     _mat_box->unbind(*_unlit_tex_shader);
+
+    gldc(glDepthFunc(GL_LEQUAL));
+    _skybox_shader->use();
+    _skybox_shader->set_uniform("u_skybox", 0);
+    _skybox_shader->set_uniform("u_view", glm::mat4(glm::mat3(_camera->view())));
+    gldc(glActiveTexture(GL_TEXTURE0));
+    gldc(glBindTexture(GL_TEXTURE_CUBE_MAP, _skybox_texture));
+    _skybox->draw(*_skybox_shader, false);
 }
 
 unsigned int CubemapLab::load_cubemap(std::vector<const std::string>& face_texture_filepaths)

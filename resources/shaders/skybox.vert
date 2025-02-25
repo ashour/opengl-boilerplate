@@ -10,5 +10,6 @@ uniform mat4 u_view;
 void main()
 {
     v_uv = a_position;
-    gl_Position = u_projection * u_view * vec4(a_position, 1.0);
+    vec4 clip_space_position = u_projection * u_view * vec4(a_position, 1.0);
+    gl_Position = clip_space_position.xyww;
 }
