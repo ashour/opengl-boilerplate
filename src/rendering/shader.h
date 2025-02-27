@@ -19,6 +19,7 @@ class Shader
     unsigned int id() const { return _shader_program_id; }
 
     int uniform_location_for(const std::string& variable);
+    void uniform_block_binding(const std::string& block_name, unsigned int block_index);
 
     template <typename T>
     void set_uniform(const unsigned int location, const T& value) const

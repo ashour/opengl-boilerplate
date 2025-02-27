@@ -57,6 +57,13 @@ int Shader::uniform_location_for(const std::string& variable)
     return it->second;
 }
 
+void Shader::uniform_block_binding(const std::string& block_name, unsigned int buffer_block_index)
+{
+    gldc(unsigned int uniform_block_index =
+             glGetUniformBlockIndex(_shader_program_id, block_name.c_str()));
+    gldc(glUniformBlockBinding(_shader_program_id, uniform_block_index, buffer_block_index));
+}
+
 unsigned int Shader::create_shader(const GLenum type,
                                    const std::string& filepath,
                                    char* log_buffer,

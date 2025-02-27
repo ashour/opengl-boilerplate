@@ -30,37 +30,22 @@ UniformBuffersLab::UniformBuffersLab(const Window& window) : Lab(window)
     _red_shader = std::make_shared<Shader>("resources/shaders/uniform_buffer_red.vert",
                                            "resources/shaders/uniform_buffer_red.frag");
     _red_shader->build();
-    _red_shader->use();
-
-    gldc(unsigned int uniform_block_index_red =
-             glGetUniformBlockIndex(_red_shader->id(), "Matrices"));
-    gldc(glUniformBlockBinding(_red_shader->id(), uniform_block_index_red, 0));
+    _red_shader->uniform_block_binding("Matrices", 0);
 
     _blue_shader = std::make_shared<Shader>("resources/shaders/uniform_buffer_blue.vert",
                                             "resources/shaders/uniform_buffer_blue.frag");
     _blue_shader->build();
-    _blue_shader->use();
-    gldc(unsigned int uniform_block_index_blue =
-             glGetUniformBlockIndex(_blue_shader->id(), "Matrices"));
-    gldc(glUniformBlockBinding(_blue_shader->id(), uniform_block_index_blue, 0));
+    _blue_shader->uniform_block_binding("Matrices", 0);
 
     _green_shader = std::make_shared<Shader>("resources/shaders/uniform_buffer_green.vert",
                                              "resources/shaders/uniform_buffer_green.frag");
     _green_shader->build();
-    _green_shader->use();
-    gldc(unsigned int uniform_block_index_green =
-             glGetUniformBlockIndex(_green_shader->id(), "Matrices"));
-    gldc(glUniformBlockBinding(_green_shader->id(), uniform_block_index_green, 0));
+    _green_shader->uniform_block_binding("Matrices", 0);
 
     _yellow_shader = std::make_shared<Shader>("resources/shaders/uniform_buffer_yellow.vert",
                                               "resources/shaders/uniform_buffer_yellow.frag");
     _yellow_shader->build();
-    _yellow_shader->use();
-    gldc(unsigned int uniform_block_index_yellow =
-             glGetUniformBlockIndex(_yellow_shader->id(), "Matrices"));
-    gldc(glUniformBlockBinding(_yellow_shader->id(), uniform_block_index_yellow, 0));
-
-    Shader::unuse_all();
+    _yellow_shader->uniform_block_binding("Matrices", 0);
 
     gldc(glGenBuffers(1, &_matrices_ubo));
     gldc(glBindBuffer(GL_UNIFORM_BUFFER, _matrices_ubo));
