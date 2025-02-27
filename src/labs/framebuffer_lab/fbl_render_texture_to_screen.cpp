@@ -106,7 +106,7 @@ Fbl_RenderTextureToScreen::Fbl_RenderTextureToScreen(
 
     // gldc(glPolygonMode(GL_FRONT_AND_BACK, GL_LINE));
 
-    register_mouse_look_on_hold_rmb(*_camera);
+    register_mouse_look(*_camera);
 }
 
 Fbl_RenderTextureToScreen::~Fbl_RenderTextureToScreen()
@@ -116,7 +116,11 @@ Fbl_RenderTextureToScreen::~Fbl_RenderTextureToScreen()
     gldc(glDeleteTextures(1, &_tex_color_buffer));
 }
 
-void Fbl_RenderTextureToScreen::on_update() { wasd_move_on_hold_rmb(*_camera); }
+void Fbl_RenderTextureToScreen::on_update()
+{
+    toggle_movement();
+    strafe_and_fly(*_camera);
+}
 
 void Fbl_RenderTextureToScreen::on_render()
 {
@@ -138,6 +142,8 @@ void Fbl_RenderTextureToScreen::on_render()
     _quad_shader->set_uniform("u_material.diffuse_1", 0);
     _quad->draw();
 }
+
+void Fbl_RenderTextureToScreen::on_ui_render(UI& ui) { movement_help_ui(ui); }
 
 void Fbl_RenderTextureToScreen::render_scene()
 {

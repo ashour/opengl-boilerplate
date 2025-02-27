@@ -60,12 +60,16 @@ UnlitLab::UnlitLab(const Window& window) : Lab(window)
         };
     }
 
-    register_mouse_look_on_hold_rmb(*_camera);
+    register_mouse_look(*_camera);
 }
 
 UnlitLab::~UnlitLab() {}
 
-void UnlitLab::on_update() { wasd_move_on_hold_rmb(*_camera); }
+void UnlitLab::on_update()
+{
+    toggle_movement();
+    strafe_and_fly(*_camera);
+}
 
 void UnlitLab::on_render()
 {
@@ -92,5 +96,7 @@ void UnlitLab::on_render()
     }
     _mat_box->unbind(*_shader);
 }
+
+void UnlitLab::on_ui_render(UI& ui) { movement_help_ui(ui); }
 
 } // namespace eo

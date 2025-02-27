@@ -19,7 +19,12 @@ class Lab
   protected:
     const Window& _window;
 
-    static void register_mouse_look_on_hold_rmb(Camera& camera);
-    static void wasd_move_on_hold_rmb(Camera& camera);
+    static bool _is_moving;
+
+    static void toggle_movement();
+    static void register_mouse_look(Camera& camera);
+    static void strafe_and_fly(Camera& camera);
+
+    static void movement_help_ui(UI& ui);
 };
 } // namespace eo

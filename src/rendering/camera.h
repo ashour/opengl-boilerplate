@@ -4,12 +4,14 @@
 
 namespace eo
 {
-enum class Strafe
+enum class Move
 {
     forward,
     back,
     left,
-    right
+    right,
+    up,
+    down,
 };
 
 class Camera
@@ -17,7 +19,7 @@ class Camera
   public:
     explicit Camera(const float aspect_ratio);
 
-    void strafe(Strafe direction, float delta_time);
+    void move(Move direction, float delta_time);
     void look(glm::vec2 current_mouse_position, glm::vec2 last_mouse_position);
 
     glm::vec3 position() const { return _position; }

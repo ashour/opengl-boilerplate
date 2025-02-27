@@ -94,12 +94,16 @@ BlendingLab::BlendingLab(const Window& window) : Lab(window)
     _mat_window = std::make_shared<Material>(mat_window_textures);
     _transparent_window = std::make_unique<Mesh>(Primitive::quad(), _mat_window);
 
-    register_mouse_look_on_hold_rmb(*_camera);
+    register_mouse_look(*_camera);
 }
 
 BlendingLab::~BlendingLab() {}
 
-void BlendingLab::on_update() { wasd_move_on_hold_rmb(*_camera); }
+void BlendingLab::on_update()
+{
+    toggle_movement();
+    strafe_and_fly(*_camera);
+}
 
 void BlendingLab::on_render()
 {
@@ -164,4 +168,6 @@ void BlendingLab::on_render()
     gldc(glDisable(GL_BLEND));
     gldc(glEnable(GL_CULL_FACE));
 }
+
+void BlendingLab::on_ui_render(UI& ui) { movement_help_ui(ui); }
 } // namespace eo

@@ -8,8 +8,8 @@
 #include "rendering/mesh.h"
 #include "rendering/shader.h"
 #include "system/window.h"
-#include <memory>
 #include <array>
+#include <memory>
 
 namespace eo
 {
@@ -21,6 +21,7 @@ class PhongLab : public Lab
 
     void on_update() override;
     void on_render() override;
+    void on_ui_render(UI& ui) override;
 
   private:
     std::unique_ptr<Camera> _camera;

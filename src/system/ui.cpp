@@ -57,6 +57,8 @@ void UI::push_item_full_width() { ImGui::PushItemWidth(ImGui::GetContentRegionAv
 
 void UI::pop_item_full_width() { ImGui::PopItemWidth(); }
 
+void UI::text(const std::string& label) { ImGui::Text("%s", label.c_str()); }
+
 bool UI::radio_button(const std::string& label, bool is_selected)
 {
     return ImGui::RadioButton(label.c_str(), is_selected);

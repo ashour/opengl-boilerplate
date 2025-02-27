@@ -52,10 +52,14 @@ DepthTestingLab::DepthTestingLab(const Window& window) : Lab(window)
         };
     }
 
-    register_mouse_look_on_hold_rmb(*_camera);
+    register_mouse_look(*_camera);
 }
 
-void DepthTestingLab::on_update() { wasd_move_on_hold_rmb(*_camera); }
+void DepthTestingLab::on_update()
+{
+    toggle_movement();
+    strafe_and_fly(*_camera);
+}
 
 void DepthTestingLab::on_render()
 {
@@ -76,5 +80,7 @@ void DepthTestingLab::on_render()
     _shader->set_uniform("u_model", ground_transform.matrix());
     _ground->draw();
 }
+
+void DepthTestingLab::on_ui_render(UI& ui) { movement_help_ui(ui); }
 
 } // namespace eo

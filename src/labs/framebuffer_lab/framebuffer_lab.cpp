@@ -31,6 +31,8 @@ void FramebufferLab::on_render() { _sub_lab->on_render(); }
 
 void FramebufferLab::on_ui_render(UI& ui)
 {
+    movement_help_ui(ui);
+
     ui.begin_window("Framebuffers");
     if (ui.radio_button("Render texture in world",
                         _selected_lab == SubLab::render_texture_to_world))

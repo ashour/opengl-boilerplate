@@ -7,11 +7,14 @@ namespace eo
 {
 enum class Key
 {
+    tab = GLFW_KEY_TAB,
     escape = GLFW_KEY_ESCAPE,
-    w = GLFW_KEY_W,
     a = GLFW_KEY_A,
+    d = GLFW_KEY_D,
+    e = GLFW_KEY_E,
+    q = GLFW_KEY_Q,
     s = GLFW_KEY_S,
-    d = GLFW_KEY_D
+    w = GLFW_KEY_W,
 };
 
 enum class MouseButton
@@ -27,6 +30,7 @@ class Input
 
     static void key_callback(GLFWwindow* window, int key, int scancode, int action, int mods);
     static bool key_pressed(Key action);
+    static bool key_just_pressed(Key action);
 
     static void mouse_button_callback(GLFWwindow* window, int button, int action, int mods);
     static bool mouse_button_pressed(MouseButton button);
@@ -37,7 +41,8 @@ class Input
 
   private:
     static constexpr size_t KEYS_SIZE = 1024;
-    static std::array<bool, KEYS_SIZE> _keys;
+    static std::array<bool, KEYS_SIZE> _keys_pressed;
+    static std::array<bool, KEYS_SIZE> _keys_just_pressed;
 
     static constexpr size_t MOUSE_BUTTONS_SIZE = 8;
     static std::array<bool, MOUSE_BUTTONS_SIZE> _mouse_buttons;

@@ -81,7 +81,7 @@ CubemapLab::CubemapLab(const Window& window) : Lab(window)
 
     _skybox = std::make_unique<Mesh>(Primitive::cube(), _mat_box);
 
-    register_mouse_look_on_hold_rmb(*_camera);
+    register_mouse_look(*_camera);
 }
 
 CubemapLab::~CubemapLab()
@@ -92,7 +92,11 @@ CubemapLab::~CubemapLab()
     gldc(glEnable(GL_CULL_FACE));
 }
 
-void CubemapLab::on_update() { wasd_move_on_hold_rmb(*_camera); }
+void CubemapLab::on_update()
+{
+    toggle_movement();
+    strafe_and_fly(*_camera);
+}
 
 void CubemapLab::on_render()
 {
@@ -136,6 +140,8 @@ void CubemapLab::on_render()
 
 void CubemapLab::on_ui_render(UI& ui)
 {
+    movement_help_ui(ui);
+
     ui.begin_window("Refractive index");
     ui.push_item_full_width();
     ui.drag_float("##refactive_index", &_refractive_index);
