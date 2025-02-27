@@ -26,6 +26,8 @@ class Window
     void swap_buffers() const;
     void poll_events() const;
 
+    void enable_vsync(bool enable) const;
+
     const unsigned char* opengl_version() const;
 
   private:

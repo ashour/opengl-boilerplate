@@ -21,7 +21,7 @@ namespace eo
 
 UniformBuffersLab::UniformBuffersLab(const Window& window) : Lab(window)
 {
-    glfwSwapInterval(0);
+    _window.enable_vsync(false);
     _window.set_clear_color(SCENE_CLEAR_COLOR);
 
     _camera = std::make_unique<Camera>(
@@ -57,7 +57,7 @@ UniformBuffersLab::UniformBuffersLab(const Window& window) : Lab(window)
     register_mouse_look(*_camera);
 }
 
-UniformBuffersLab::~UniformBuffersLab() {}
+UniformBuffersLab::~UniformBuffersLab() { _window.enable_vsync(true); }
 
 void UniformBuffersLab::on_update()
 {
