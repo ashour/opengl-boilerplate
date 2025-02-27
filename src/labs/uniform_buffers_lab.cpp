@@ -31,31 +31,51 @@ UniformBuffersLab::UniformBuffersLab(const Window& window) : Lab(window)
                                            "resources/shaders/uniform_buffer_red.frag");
     _red_shader->build();
     _red_shader->use();
-    _red_shader->set_uniform("u_projection", _camera->projection());
-    _red_shader->set_uniform("u_view", _camera->view());
+
+    gldc(unsigned int uniform_block_index_red =
+             glGetUniformBlockIndex(_red_shader->id(), "Matrices"));
+    gldc(glUniformBlockBinding(_red_shader->id(), uniform_block_index_red, 0));
 
     _blue_shader = std::make_shared<Shader>("resources/shaders/uniform_buffer_blue.vert",
                                             "resources/shaders/uniform_buffer_blue.frag");
     _blue_shader->build();
     _blue_shader->use();
-    _blue_shader->set_uniform("u_projection", _camera->projection());
-    _blue_shader->set_uniform("u_view", _camera->view());
+    gldc(unsigned int uniform_block_index_blue =
+             glGetUniformBlockIndex(_blue_shader->id(), "Matrices"));
+    gldc(glUniformBlockBinding(_blue_shader->id(), uniform_block_index_blue, 0));
 
     _green_shader = std::make_shared<Shader>("resources/shaders/uniform_buffer_green.vert",
                                              "resources/shaders/uniform_buffer_green.frag");
     _green_shader->build();
     _green_shader->use();
-    _green_shader->set_uniform("u_projection", _camera->projection());
-    _green_shader->set_uniform("u_view", _camera->view());
+    gldc(unsigned int uniform_block_index_green =
+             glGetUniformBlockIndex(_green_shader->id(), "Matrices"));
+    gldc(glUniformBlockBinding(_green_shader->id(), uniform_block_index_green, 0));
 
     _yellow_shader = std::make_shared<Shader>("resources/shaders/uniform_buffer_yellow.vert",
                                               "resources/shaders/uniform_buffer_yellow.frag");
     _yellow_shader->build();
     _yellow_shader->use();
-    _yellow_shader->set_uniform("u_projection", _camera->projection());
-    _yellow_shader->set_uniform("u_view", _camera->view());
+    gldc(unsigned int uniform_block_index_yellow =
+             glGetUniformBlockIndex(_yellow_shader->id(), "Matrices"));
+    gldc(glUniformBlockBinding(_yellow_shader->id(), uniform_block_index_yellow, 0));
 
     Shader::unuse_all();
+
+    unsigned int ubo_matrices;
+    gldc(glGenBuffers(1, &ubo_matrices));
+    gldc(glBindBuffer(GL_UNIFORM_BUFFER, ubo_matrices));
+    gldc(glBufferData(GL_UNIFORM_BUFFER, 2 * sizeof(glm::mat4), NULL, GL_STATIC_DRAW));
+    gldc(glBindBuffer(GL_UNIFORM_BUFFER, 0));
+
+    gldc(glBindBufferRange(GL_UNIFORM_BUFFER, 0, ubo_matrices, 0, 2 * sizeof(glm::mat4)));
+
+    gldc(glBindBuffer(GL_UNIFORM_BUFFER, ubo_matrices));
+    gldc(glBufferSubData(
+        GL_UNIFORM_BUFFER, 0, sizeof(glm::mat4), glm::value_ptr(_camera->projection())));
+    gldc(glBufferSubData(
+        GL_UNIFORM_BUFFER, sizeof(glm::mat4), sizeof(glm::mat4), glm::value_ptr(_camera->view())));
+    gldc(glBindBuffer(GL_UNIFORM_BUFFER, 0));
 
     _cube = std::make_unique<Mesh>(Primitive::cube());
 

@@ -16,6 +16,8 @@ class Shader
     void use() const;
     static void unuse_all();
 
+    unsigned int id() const { return _shader_program_id; }
+
     int uniform_location_for(const std::string& variable);
 
     template <typename T>
@@ -64,7 +66,7 @@ class Shader
   private:
     const std::string _vertex_shader_filepath;
     const std::string _fragment_shader_filepath;
-    unsigned int _shader_program;
+    unsigned int _shader_program_id;
 
     unsigned int create_shader(const GLenum type,
                                const std::string& filepath,
