@@ -12,6 +12,7 @@ namespace eo
 class Mesh
 {
   public:
+    Mesh(const Object& object);
     explicit Mesh(const Object& object, std::shared_ptr<Material> material);
     Mesh(std::vector<Vertex> vertices,
          std::vector<unsigned int> indices,

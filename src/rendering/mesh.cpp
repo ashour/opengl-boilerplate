@@ -6,6 +6,7 @@
 
 namespace eo
 {
+Mesh::Mesh(const Object& object) : Mesh(object.vertices, object.indices, nullptr) {}
 Mesh::Mesh(const Object& object, std::shared_ptr<Material> material)
     : Mesh(object.vertices, object.indices, material)
 {
@@ -41,7 +42,7 @@ void Mesh::draw()
 
 void Mesh::draw(Shader& shader, bool use_material)
 {
-    if (use_material)
+    if (use_material && _material)
     {
         _material->bind(shader);
     }
