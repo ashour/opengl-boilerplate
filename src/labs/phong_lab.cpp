@@ -123,7 +123,7 @@ PhongLab::~PhongLab() {}
 void PhongLab::on_update()
 {
     toggle_movement();
-    strafe(*_camera);
+    strafe_and_fly(*_camera);
 }
 
 void PhongLab::on_render()

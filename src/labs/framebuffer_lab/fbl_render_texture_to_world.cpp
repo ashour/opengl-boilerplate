@@ -95,7 +95,7 @@ Fbl_RenderTextureToWorld::~Fbl_RenderTextureToWorld()
 void Fbl_RenderTextureToWorld::on_update()
 {
     toggle_movement();
-    strafe(*_camera);
+    strafe_and_fly(*_camera);
 }
 
 void Fbl_RenderTextureToWorld::on_render()

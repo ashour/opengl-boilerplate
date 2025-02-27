@@ -119,7 +119,7 @@ Fbl_RenderTextureToScreen::~Fbl_RenderTextureToScreen()
 void Fbl_RenderTextureToScreen::on_update()
 {
     toggle_movement();
-    strafe(*_camera);
+    strafe_and_fly(*_camera);
 }
 
 void Fbl_RenderTextureToScreen::on_render()

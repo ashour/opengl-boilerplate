@@ -9,10 +9,12 @@ enum class Key
 {
     tab = GLFW_KEY_TAB,
     escape = GLFW_KEY_ESCAPE,
-    w = GLFW_KEY_W,
     a = GLFW_KEY_A,
+    d = GLFW_KEY_D,
+    e = GLFW_KEY_E,
+    q = GLFW_KEY_Q,
     s = GLFW_KEY_S,
-    d = GLFW_KEY_D
+    w = GLFW_KEY_W,
 };
 
 enum class MouseButton

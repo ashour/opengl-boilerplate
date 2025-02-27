@@ -58,7 +58,7 @@ DepthTestingLab::DepthTestingLab(const Window& window) : Lab(window)
 void DepthTestingLab::on_update()
 {
     toggle_movement();
-    strafe(*_camera);
+    strafe_and_fly(*_camera);
 }
 
 void DepthTestingLab::on_render()

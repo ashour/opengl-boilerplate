@@ -73,7 +73,7 @@ StencilTestingLab::StencilTestingLab(const Window& window) : Lab(window)
 void StencilTestingLab::on_update()
 {
     toggle_movement();
-    strafe(*_camera);
+    strafe_and_fly(*_camera);
 }
 
 void StencilTestingLab::on_render()

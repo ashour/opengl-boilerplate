@@ -27,7 +27,7 @@ void Lab::register_mouse_look(Camera& camera)
         });
 }
 
-void Lab::strafe(Camera& camera)
+void Lab::strafe_and_fly(Camera& camera)
 {
     if (!_is_moving)
     {
@@ -36,19 +36,29 @@ void Lab::strafe(Camera& camera)
 
     if (Input::key_pressed(Key::w))
     {
-        camera.strafe(Strafe::forward, Time::delta_time());
+        camera.move(Move::forward, Time::delta_time());
     }
-    if (Input::key_pressed(Key::s))
+    else if (Input::key_pressed(Key::s))
     {
-        camera.strafe(Strafe::back, Time::delta_time());
+        camera.move(Move::back, Time::delta_time());
     }
+
     if (Input::key_pressed(Key::a))
     {
-        camera.strafe(Strafe::left, Time::delta_time());
+        camera.move(Move::left, Time::delta_time());
     }
-    if (Input::key_pressed(Key::d))
+    else if (Input::key_pressed(Key::d))
     {
-        camera.strafe(Strafe::right, Time::delta_time());
+        camera.move(Move::right, Time::delta_time());
+    }
+
+    if (Input::key_pressed(Key::e))
+    {
+        camera.move(Move::up, Time::delta_time());
+    }
+    else if (Input::key_pressed(Key::q))
+    {
+        camera.move(Move::down, Time::delta_time());
     }
 }
 
@@ -56,7 +66,9 @@ void Lab::movement_help_ui(UI& ui)
 {
     ui.begin_window(std::format("Movement controls ({})", _is_moving ? "On" : "Off"));
     ui.text("[Tab] to toggle movement controls on/off.");
-    ui.text("[W][A][S][D] to strafe. Mouse to look.");
+    ui.text("[W][A][S][D] to strafe.");
+    ui.text("Mouse to look.");
+    ui.text("[E] to fly up. [Q] to fly down.");
     ui.end_window();
 }
 

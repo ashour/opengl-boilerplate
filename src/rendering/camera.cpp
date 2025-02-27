@@ -10,21 +10,27 @@ Camera::Camera(const float aspect_ratio)
 {
 }
 
-void Camera::strafe(Strafe direction, float delta_time)
+void Camera::move(Move direction, float delta_time)
 {
     switch (direction)
     {
-    case Strafe::forward:
+    case Move::forward:
         _position += _front * _speed * delta_time;
         break;
-    case Strafe::back:
+    case Move::back:
         _position -= _front * _speed * delta_time;
         break;
-    case Strafe::left:
+    case Move::left:
         _position -= glm::normalize(glm::cross(_front, _world_up)) * _speed * delta_time;
         break;
-    case Strafe::right:
+    case Move::right:
         _position += glm::normalize(glm::cross(_front, _world_up)) * _speed * delta_time;
+        break;
+    case Move::up:
+        _position.y += _speed * delta_time;
+        break;
+    case Move::down:
+        _position.y -= _speed * delta_time;
         break;
     }
 }

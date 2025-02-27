@@ -112,7 +112,7 @@ ModelLab::ModelLab(const Window& window) : Lab(window)
 void ModelLab::on_update()
 {
     toggle_movement();
-    strafe(*_camera);
+    strafe_and_fly(*_camera);
 }
 
 void ModelLab::on_render()

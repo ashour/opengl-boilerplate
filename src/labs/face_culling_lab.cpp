@@ -58,7 +58,7 @@ FaceCullingLab::~FaceCullingLab() {}
 void FaceCullingLab::on_update()
 {
     toggle_movement();
-    strafe(*_camera);
+    strafe_and_fly(*_camera);
 }
 
 void FaceCullingLab::on_render()
