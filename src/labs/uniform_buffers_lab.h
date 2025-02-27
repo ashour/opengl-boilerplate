@@ -4,6 +4,7 @@
 #include "rendering/camera.h"
 #include "rendering/mesh.h"
 #include "rendering/shader.h"
+#include "rendering/uniform_buffer.h"
 #include "system/window.h"
 #include <memory>
 
@@ -22,7 +23,7 @@ class UniformBuffersLab : public Lab
   private:
     std::unique_ptr<Camera> _camera;
 
-    unsigned int _matrices_ubo;
+    std::unique_ptr<UniformBuffer> _matrices_uniform_buffer;
 
     std::shared_ptr<Shader> _red_shader;
     std::shared_ptr<Shader> _blue_shader;

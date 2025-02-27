@@ -47,17 +47,10 @@ UniformBuffersLab::UniformBuffersLab(const Window& window) : Lab(window)
     _yellow_shader->build();
     _yellow_shader->uniform_block_binding("Matrices", 0);
 
-    gldc(glGenBuffers(1, &_matrices_ubo));
-    gldc(glBindBuffer(GL_UNIFORM_BUFFER, _matrices_ubo));
-    gldc(glBufferData(GL_UNIFORM_BUFFER, 2 * sizeof(glm::mat4), NULL, GL_STATIC_DRAW));
-    gldc(glBindBuffer(GL_UNIFORM_BUFFER, 0));
-
-    gldc(glBindBufferRange(GL_UNIFORM_BUFFER, 0, _matrices_ubo, 0, 2 * sizeof(glm::mat4)));
-
-    gldc(glBindBuffer(GL_UNIFORM_BUFFER, _matrices_ubo));
-    gldc(glBufferSubData(
-        GL_UNIFORM_BUFFER, 0, sizeof(glm::mat4), glm::value_ptr(_camera->projection())));
-    gldc(glBindBuffer(GL_UNIFORM_BUFFER, 0));
+    _matrices_uniform_buffer = std::make_unique<UniformBuffer>(2 * sizeof(glm::mat4), nullptr);
+    _matrices_uniform_buffer->bind_buffer_range(0, 0, 2 * sizeof(glm::mat4));
+    _matrices_uniform_buffer->buffer_sub_data(
+        0, sizeof(glm::mat4), glm::value_ptr(_camera->projection()));
 
     _cube = std::make_unique<Mesh>(Primitive::cube());
 
@@ -75,10 +68,8 @@ void UniformBuffersLab::on_update()
 void UniformBuffersLab::on_render()
 {
 
-    gldc(glBindBuffer(GL_UNIFORM_BUFFER, _matrices_ubo));
-    gldc(glBufferSubData(
-        GL_UNIFORM_BUFFER, sizeof(glm::mat4), sizeof(glm::mat4), glm::value_ptr(_camera->view())));
-    gldc(glBindBuffer(GL_UNIFORM_BUFFER, 0));
+    _matrices_uniform_buffer->buffer_sub_data(
+        sizeof(glm::mat4), sizeof(glm::mat4), glm::value_ptr(_camera->view()));
 
     Transform cube_transform{};
     cube_transform.rotation(Time::current_time() * glm::radians(50.0f), {0.5f, 1.0f, 0.0f});
