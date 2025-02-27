@@ -11,15 +11,15 @@ Shader::Shader(const std::string& vertex_shader_filepath,
                const std::string& fragment_shader_filepath)
     : _vertex_shader_filepath{vertex_shader_filepath},
       _fragment_shader_filepath{fragment_shader_filepath},
-      _shader_program{0},
+      _shader_program_id{0},
       _uniform_locations{}
 {
 }
 
 Shader::~Shader()
 {
-    gldc(glDeleteProgram(_shader_program));
-    _shader_program = 0;
+    gldc(glDeleteProgram(_shader_program_id));
+    _shader_program_id = 0;
 }
 
 void Shader::build()
@@ -33,13 +33,14 @@ void Shader::build()
     unsigned int fragment_shader =
         create_shader(GL_FRAGMENT_SHADER, _fragment_shader_filepath, log_buffer, log_buffer_size);
 
-    _shader_program = create_program(vertex_shader, fragment_shader, log_buffer, log_buffer_size);
+    _shader_program_id =
+        create_program(vertex_shader, fragment_shader, log_buffer, log_buffer_size);
 
     delete_shader(vertex_shader);
     delete_shader(fragment_shader);
 }
 
-void Shader::use() const { gldc(glUseProgram(_shader_program)); }
+void Shader::use() const { gldc(glUseProgram(_shader_program_id)); }
 
 void Shader::unuse_all() { gldc(glUseProgram(0)); }
 
@@ -48,12 +49,19 @@ int Shader::uniform_location_for(const std::string& variable)
     auto it = _uniform_locations.find(variable);
     if (it == _uniform_locations.end())
     {
-        gldc(int location = glGetUniformLocation(_shader_program, variable.c_str()));
+        gldc(int location = glGetUniformLocation(_shader_program_id, variable.c_str()));
         EO_ASSERT(location > -1);
         _uniform_locations[variable] = location;
         return location;
     }
     return it->second;
+}
+
+void Shader::uniform_block_binding(const std::string& block_name, unsigned int buffer_block_index)
+{
+    gldc(unsigned int uniform_block_index =
+             glGetUniformBlockIndex(_shader_program_id, block_name.c_str()));
+    gldc(glUniformBlockBinding(_shader_program_id, uniform_block_index, buffer_block_index));
 }
 
 unsigned int Shader::create_shader(const GLenum type,

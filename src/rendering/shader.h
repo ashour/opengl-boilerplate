@@ -16,7 +16,10 @@ class Shader
     void use() const;
     static void unuse_all();
 
+    unsigned int id() const { return _shader_program_id; }
+
     int uniform_location_for(const std::string& variable);
+    void uniform_block_binding(const std::string& block_name, unsigned int block_index);
 
     template <typename T>
     void set_uniform(const unsigned int location, const T& value) const
@@ -64,7 +67,7 @@ class Shader
   private:
     const std::string _vertex_shader_filepath;
     const std::string _fragment_shader_filepath;
-    unsigned int _shader_program;
+    unsigned int _shader_program_id;
 
     unsigned int create_shader(const GLenum type,
                                const std::string& filepath,

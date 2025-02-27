@@ -71,5 +71,7 @@ void Window::swap_buffers() const { glfwSwapBuffers(_glfw_window); }
 
 void Window::poll_events() const { glfwPollEvents(); }
 
+void Window::enable_vsync(bool enable) const { glfwSwapInterval(enable); }
+
 const unsigned char* Window::opengl_version() const { return glGetString(GL_VERSION); }
 } // namespace eo
