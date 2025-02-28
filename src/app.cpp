@@ -1,6 +1,6 @@
 #include "app.h"
 #include "config.h"
-#include "labs/geometry_shaders_lab.h"
+#include "labs/geometry_shaders_lab/geometry_shaders_lab.h"
 #include "labs/registry/lab_registry.h"
 #include "system/input.h"
 #include "system/time.h"

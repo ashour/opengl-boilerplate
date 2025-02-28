@@ -7,11 +7,11 @@
 
 namespace eo
 {
-class GeometryShadersLab : public Lab
+class Gsl_House : public Lab
 {
   public:
-    GeometryShadersLab(const Window& window);
-    ~GeometryShadersLab();
+    Gsl_House(const Window& window);
+    ~Gsl_House();
 
     void on_render() override;
 

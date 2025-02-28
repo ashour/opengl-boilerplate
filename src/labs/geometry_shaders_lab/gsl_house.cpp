@@ -1,22 +1,11 @@
 #include "config.h"
-#include "geometry_shaders_lab.h"
-#include "registry/lab_registry.h"
+#include "gsl_points.h"
 #include "system/metrics.h"
-namespace
-{
-const bool registered = []()
-{
-    eo::LabRegistry::register_lab("Geometry Shaders",
-                                  [](eo::Window& window) -> eo::Lab*
-                                  { return new eo::GeometryShadersLab(window); });
-    return true;
-}();
-} // namespace
 
 namespace eo
 {
 
-GeometryShadersLab::GeometryShadersLab(const Window& window) : Lab(window)
+Gsl_Points::Gsl_Points(const Window& window) : Lab(window)
 {
     _window.set_clear_color(glm::vec4(0.0f, 0.0f, 0.0f, 1.0f));
 
@@ -44,13 +33,13 @@ GeometryShadersLab::GeometryShadersLab(const Window& window) : Lab(window)
     gldc(glEnableVertexAttribArray(0));
 }
 
-GeometryShadersLab::~GeometryShadersLab()
+Gsl_Points::~Gsl_Points()
 {
     gldc(glDeleteVertexArrays(1, &_points_vao));
     gldc(glBindVertexArray(0));
 }
 
-void GeometryShadersLab::on_render()
+void Gsl_Points::on_render()
 {
     gldc(glDrawArrays(GL_POINTS, 0, 4));
     if (SHOW_UI_METRICS)
