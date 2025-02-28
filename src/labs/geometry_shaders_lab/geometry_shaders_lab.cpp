@@ -2,6 +2,7 @@
 #include "gsl_explode.h"
 #include "gsl_house.h"
 #include "gsl_points.h"
+#include "gsl_visualize_normals.h"
 #include "labs/registry/lab_registry.h"
 
 namespace
@@ -19,8 +20,8 @@ namespace eo
 {
 GeometryShadersLab::GeometryShadersLab(const Window& window) : Lab(window)
 {
-    _sub_lab = new Gsl_Explode(_window);
-    _selected_lab = SubLab::explode;
+    _sub_lab = new Gsl_VisualizeNormals(_window);
+    _selected_lab = SubLab::normals;
 }
 
 GeometryShadersLab::~GeometryShadersLab() { delete _sub_lab; }
@@ -49,6 +50,12 @@ void GeometryShadersLab::on_ui_render(UI& ui)
         delete _sub_lab;
         _sub_lab = new Gsl_Explode(_window);
         _selected_lab = SubLab::explode;
+    }
+    if (ui.radio_button("Visualize Normals", _selected_lab == SubLab::normals))
+    {
+        delete _sub_lab;
+        _sub_lab = new Gsl_VisualizeNormals(_window);
+        _selected_lab = SubLab::normals;
     }
     ui.end_window();
 

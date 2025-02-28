@@ -23,6 +23,7 @@ class GeometryShadersLab : public Lab
         points,
         house,
         explode,
+        normals
     };
     SubLab _selected_lab;
 };
