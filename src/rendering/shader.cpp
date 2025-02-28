@@ -8,9 +8,11 @@
 namespace eo
 {
 Shader::Shader(const std::string& vertex_shader_filepath,
-               const std::string& fragment_shader_filepath)
+               const std::string& fragment_shader_filepath,
+               const std::string& geometry_shader_filepath)
     : _vertex_shader_filepath{vertex_shader_filepath},
       _fragment_shader_filepath{fragment_shader_filepath},
+      _geometry_shader_filepath{geometry_shader_filepath},
       _shader_program_id{0},
       _uniform_locations{}
 {
@@ -27,17 +29,26 @@ void Shader::build()
     constexpr size_t log_buffer_size = 512;
     char log_buffer[log_buffer_size];
 
-    unsigned int vertex_shader =
-        create_shader(GL_VERTEX_SHADER, _vertex_shader_filepath, log_buffer, log_buffer_size);
+    std::vector<unsigned int> shaders{};
 
-    unsigned int fragment_shader =
-        create_shader(GL_FRAGMENT_SHADER, _fragment_shader_filepath, log_buffer, log_buffer_size);
+    shaders.push_back(
+        create_shader(GL_VERTEX_SHADER, _vertex_shader_filepath, log_buffer, log_buffer_size));
 
-    _shader_program_id =
-        create_program(vertex_shader, fragment_shader, log_buffer, log_buffer_size);
+    shaders.push_back(
+        create_shader(GL_FRAGMENT_SHADER, _fragment_shader_filepath, log_buffer, log_buffer_size));
 
-    delete_shader(vertex_shader);
-    delete_shader(fragment_shader);
+    if (!_geometry_shader_filepath.empty())
+    {
+        shaders.push_back(create_shader(
+            GL_GEOMETRY_SHADER, _geometry_shader_filepath, log_buffer, log_buffer_size));
+    }
+
+    _shader_program_id = create_program(shaders, log_buffer, log_buffer_size);
+
+    for (unsigned int shader : shaders)
+    {
+        delete_shader(shader);
+    }
 }
 
 void Shader::use() const { gldc(glUseProgram(_shader_program_id)); }
@@ -90,15 +101,16 @@ unsigned int Shader::create_shader(const GLenum type,
 
 void Shader::delete_shader(const unsigned int shader) const { gldc(glDeleteShader(shader)); }
 
-unsigned int Shader::create_program(const unsigned int vertex_shader,
-                                    const unsigned int fragment_shader,
+unsigned int Shader::create_program(const std::vector<unsigned int>& shaders,
                                     char* log_buffer,
                                     const size_t log_buffer_size) const
 {
     unsigned int program;
     gldc(program = glCreateProgram());
-    gldc(glAttachShader(program, vertex_shader));
-    gldc(glAttachShader(program, fragment_shader));
+    for (unsigned int shader : shaders)
+    {
+        gldc(glAttachShader(program, shader));
+    }
     gldc(glLinkProgram(program));
 
     int success;

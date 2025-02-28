@@ -8,8 +8,8 @@ inline constexpr unsigned int OPENGL_MAJOR_VERSION = 4;
 inline constexpr unsigned int OPENGL_MINOR_VERSION = 1;
 
 inline const std::string WINDOW_TITLE = "OpenGL Boilerplate";
-inline constexpr unsigned int WINDOW_WIDTH = 1920;
-inline constexpr unsigned int WINDOW_HEIGHT = 1080;
+inline constexpr unsigned int WINDOW_WIDTH = 1920 / 2;
+inline constexpr unsigned int WINDOW_HEIGHT = 1080 / 2;
 
 inline const std::string SHADER_DIR = "./resources/shaders/";
 inline const std::string DEFAULT_VERTEX_SHADER_FILEPATH = SHADER_DIR + "phong.vert";
