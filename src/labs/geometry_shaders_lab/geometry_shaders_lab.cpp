@@ -1,9 +1,9 @@
-#include "config.h"
 #include "geometry_shaders_lab.h"
-#include "labs/geometry_shaders_lab/gsl_house.h"
-#include "labs/geometry_shaders_lab/gsl_points.h"
+#include "gsl_explode.h"
+#include "gsl_house.h"
+#include "gsl_points.h"
 #include "labs/registry/lab_registry.h"
-#include "system/metrics.h"
+
 namespace
 {
 const bool registered = []()
@@ -19,8 +19,8 @@ namespace eo
 {
 GeometryShadersLab::GeometryShadersLab(const Window& window) : Lab(window)
 {
-    _sub_lab = new Gsl_House(_window);
-    _selected_lab = SubLab::house;
+    _sub_lab = new Gsl_Explode(_window);
+    _selected_lab = SubLab::explode;
 }
 
 GeometryShadersLab::~GeometryShadersLab() { delete _sub_lab; }
@@ -43,6 +43,12 @@ void GeometryShadersLab::on_ui_render(UI& ui)
         delete _sub_lab;
         _sub_lab = new Gsl_House(_window);
         _selected_lab = SubLab::house;
+    }
+    if (ui.radio_button("Explode model", _selected_lab == SubLab::explode))
+    {
+        delete _sub_lab;
+        _sub_lab = new Gsl_Explode(_window);
+        _selected_lab = SubLab::explode;
     }
     ui.end_window();
 }

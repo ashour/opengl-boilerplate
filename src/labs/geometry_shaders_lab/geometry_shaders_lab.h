@@ -22,6 +22,7 @@ class GeometryShadersLab : public Lab
     {
         points,
         house,
+        explode,
     };
     SubLab _selected_lab;
 };
