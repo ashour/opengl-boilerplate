@@ -19,8 +19,8 @@ namespace eo
 {
 GeometryShadersLab::GeometryShadersLab(const Window& window) : Lab(window)
 {
-    _sub_lab = new Gsl_Points(_window);
-    _selected_lab = SubLab::points;
+    _sub_lab = new Gsl_House(_window);
+    _selected_lab = SubLab::house;
 }
 
 GeometryShadersLab::~GeometryShadersLab() { delete _sub_lab; }

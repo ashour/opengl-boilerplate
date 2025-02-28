@@ -17,6 +17,7 @@ class Gsl_House : public Lab
 
   private:
     unsigned int _points_vao;
+    unsigned int _points_vbo;
 
     std::unique_ptr<Shader> _points_shader;
 };

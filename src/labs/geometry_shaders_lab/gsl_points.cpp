@@ -1,17 +1,17 @@
 #include "config.h"
-#include "gsl_house.h"
+#include "gsl_points.h"
 #include "system/metrics.h"
 
 namespace eo
 {
 
-Gsl_House::Gsl_House(const Window& window) : Lab(window)
+Gsl_Points::Gsl_Points(const Window& window) : Lab(window)
 {
     _window.set_clear_color(glm::vec4(0.0f, 0.0f, 0.0f, 1.0f));
 
-    _points_shader = std::make_unique<Shader>("resources/shaders/house.vert",
-                                              "resources/shaders/house.frag",
-                                              "resources/shaders/house.geom");
+    _points_shader = std::make_unique<Shader>("resources/shaders/points.vert",
+                                              "resources/shaders/points.frag",
+                                              "resources/shaders/points.geom");
     _points_shader->build();
     _points_shader->use();
 
@@ -33,13 +33,13 @@ Gsl_House::Gsl_House(const Window& window) : Lab(window)
     gldc(glEnableVertexAttribArray(0));
 }
 
-Gsl_House::~Gsl_House()
+Gsl_Points::~Gsl_Points()
 {
     gldc(glDeleteVertexArrays(1, &_points_vao));
     gldc(glBindVertexArray(0));
 }
 
-void Gsl_House::on_render()
+void Gsl_Points::on_render()
 {
     gldc(glDrawArrays(GL_POINTS, 0, 4));
     if (SHOW_UI_METRICS)
