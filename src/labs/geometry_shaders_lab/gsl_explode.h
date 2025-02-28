@@ -15,7 +15,9 @@ class Gsl_Explode : public Lab
     Gsl_Explode(const Window& window);
     ~Gsl_Explode();
 
+    void on_update() override;
     void on_render() override;
+    void on_ui_render(UI& ui) override;
 
   private:
     std::unique_ptr<Camera> _camera;

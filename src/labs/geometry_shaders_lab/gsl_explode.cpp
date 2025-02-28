@@ -19,15 +19,24 @@ Gsl_Explode::Gsl_Explode(const Window& window) : Lab(window)
     _explode_shader->use();
 
     _explode_shader->set_uniform("u_projection", _camera->projection());
-    _explode_shader->set_uniform("u_view", _camera->view());
 
     _backpack = std::make_unique<Model>("resources/models/backpack/backpack.obj");
+
+    register_mouse_look(*_camera);
 }
 
 Gsl_Explode::~Gsl_Explode() {}
 
+void Gsl_Explode::on_update()
+{
+    toggle_movement();
+    strafe_and_fly(*_camera);
+}
+
 void Gsl_Explode::on_render()
 {
+    _explode_shader->set_uniform("u_view", _camera->view());
+
     Transform backpack_transform{};
     backpack_transform.position({0.0f, 4.0f, 10.0f});
     backpack_transform.scale(glm::vec3{2.0f});
@@ -37,5 +46,7 @@ void Gsl_Explode::on_render()
     _backpack->draw(*_explode_shader);
     _backpack->unbind_materials(*_explode_shader);
 }
+
+void Gsl_Explode::on_ui_render(UI& ui) { movement_help_ui(ui); }
 
 } // namespace eo

@@ -51,6 +51,8 @@ void GeometryShadersLab::on_ui_render(UI& ui)
         _selected_lab = SubLab::explode;
     }
     ui.end_window();
+
+    _sub_lab->on_ui_render(ui);
 }
 
 } // namespace eo
