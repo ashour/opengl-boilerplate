@@ -69,7 +69,7 @@ CubemapLab::CubemapLab(const Window& window) : Lab(window)
 
     _backpack = std::make_unique<Model>("resources/models/backpack/backpack.obj");
 
-    std::vector<const std::string> cubemap_texture_face_filepaths{
+    std::vector<std::string> cubemap_texture_face_filepaths{
         "resources/textures/skybox/right.jpg",
         "resources/textures/skybox/left.jpg",
         "resources/textures/skybox/top.jpg",
@@ -149,7 +149,7 @@ void CubemapLab::on_ui_render(UI& ui)
     ui.end_window();
 }
 
-unsigned int CubemapLab::load_cubemap(std::vector<const std::string>& face_texture_filepaths)
+unsigned int CubemapLab::load_cubemap(const std::vector<std::string>& face_texture_filepaths)
 {
     unsigned int texture_id;
 

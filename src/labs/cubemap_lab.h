@@ -40,6 +40,6 @@ class CubemapLab : public Lab
     std::shared_ptr<Shader> _skybox_shader;
     unsigned int _skybox_texture;
 
-    unsigned int load_cubemap(std::vector<const std::string>& face_texture_filepaths);
+    unsigned int load_cubemap(const std::vector<std::string>& face_texture_filepaths);
 };
 } // namespace eo
