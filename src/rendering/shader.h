@@ -3,13 +3,16 @@
 #include "rendering/rendering.h"
 #include <string>
 #include <unordered_map>
+#include <vector>
 
 namespace eo
 {
 class Shader
 {
   public:
-    Shader(const std::string& vertex_shader_filepath, const std::string& fragment_shader_filepath);
+    Shader(const std::string& vertex_shader_filepath,
+           const std::string& fragment_shader_filepath,
+           const std::string& geometry_shader_filepath = "");
     ~Shader();
 
     void build();
@@ -67,6 +70,8 @@ class Shader
   private:
     const std::string _vertex_shader_filepath;
     const std::string _fragment_shader_filepath;
+    const std::string _geometry_shader_filepath;
+
     unsigned int _shader_program_id;
 
     unsigned int create_shader(const GLenum type,
@@ -76,8 +81,7 @@ class Shader
 
     void delete_shader(const unsigned int shader) const;
 
-    unsigned int create_program(const unsigned int vertex_shader,
-                                const unsigned int fragment_shader,
+    unsigned int create_program(const std::vector<unsigned int>& shaders,
                                 char* log_buffer,
                                 const size_t log_buffer_size) const;
 

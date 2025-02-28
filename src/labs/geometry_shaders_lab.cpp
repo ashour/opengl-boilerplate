@@ -20,8 +20,9 @@ GeometryShadersLab::GeometryShadersLab(const Window& window) : Lab(window)
 {
     _window.set_clear_color(glm::vec4(0.0f, 0.0f, 0.0f, 1.0f));
 
-    _points_shader =
-        std::make_unique<Shader>("resources/shaders/points.vert", "resources/shaders/points.frag");
+    _points_shader = std::make_unique<Shader>("resources/shaders/points.vert",
+                                              "resources/shaders/points.frag",
+                                              "resources/shaders/points.geom");
     _points_shader->build();
     _points_shader->use();
 
