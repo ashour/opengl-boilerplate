@@ -1,6 +1,7 @@
 #include "il_quads_instanced.h"
 #include "il_quads_instanced_arrays.h"
 #include "instancing_lab.h"
+#include "labs/instancing_lab/il_asteroids.h"
 #include "labs/registry/lab_registry.h"
 
 namespace
@@ -17,8 +18,8 @@ namespace eo
 {
 InstancingLab::InstancingLab(const Window& window) : Lab(window)
 {
-    _sub_lab = new IL_QuadsInstanced(_window);
-    _selected_lab = SubLab::quads_instanced;
+    _sub_lab = new IL_Asteroids(_window);
+    _selected_lab = SubLab::asteroids;
 }
 
 InstancingLab::~InstancingLab() { delete _sub_lab; }
@@ -36,11 +37,18 @@ void InstancingLab::on_ui_render(UI& ui)
         _sub_lab = new IL_QuadsInstanced(_window);
         _selected_lab = SubLab::quads_instanced;
     }
-    if (ui.radio_button("Quads (instance arrays)", _selected_lab == SubLab::quads_instanced_arrays))
+    if (ui.radio_button("Quads (instanced arrays)",
+                        _selected_lab == SubLab::quads_instanced_arrays))
     {
         delete _sub_lab;
         _sub_lab = new IL_QuadsInstancedArrays(_window);
         _selected_lab = SubLab::quads_instanced_arrays;
+    }
+    if (ui.radio_button("Asteroids (individual)", _selected_lab == SubLab::asteroids))
+    {
+        delete _sub_lab;
+        _sub_lab = new IL_Asteroids(_window);
+        _selected_lab = SubLab::asteroids;
     }
     ui.end_window();
 

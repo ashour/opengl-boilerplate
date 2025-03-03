@@ -21,7 +21,8 @@ class InstancingLab : public Lab
     enum class SubLab
     {
         quads_instanced,
-        quads_instanced_arrays
+        quads_instanced_arrays,
+        asteroids,
     };
     SubLab _selected_lab;
 };

@@ -10,6 +10,12 @@ Camera::Camera(const float aspect_ratio)
 {
 }
 
+Camera::Camera(const float aspect_ratio, glm::vec3 position)
+    : _projection{glm::perspective(glm::radians(_fov), aspect_ratio, _near_plane, _far_plane)},
+      _position{position}
+{
+}
+
 void Camera::move(Move direction, float delta_time)
 {
     switch (direction)
