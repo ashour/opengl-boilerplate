@@ -26,16 +26,10 @@ IL_InstancedQuads::IL_InstancedQuads(const Window& window) : Lab(window)
     };
     // clang-format on
 
-    gldc(glGenVertexArrays(1, &_quad_vao));
-    gldc(glBindVertexArray(_quad_vao));
-    gldc(glGenBuffers(1, &_quad_vbo));
-    gldc(glBindBuffer(GL_ARRAY_BUFFER, _quad_vbo));
-    gldc(glBufferData(GL_ARRAY_BUFFER, sizeof(quad_vertices), quad_vertices, GL_STATIC_DRAW));
-    gldc(glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)0));
-    gldc(glEnableVertexAttribArray(0));
-    gldc(glVertexAttribPointer(
-        1, 3, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)(2 * sizeof(float))));
-    gldc(glEnableVertexAttribArray(1));
+    _vertex_array = std::make_unique<VertexArray>(sizeof(quad_vertices), quad_vertices);
+    _vertex_array->attribute_pointer(0, 2, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)0);
+    _vertex_array->attribute_pointer(
+        1, 3, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)(2 * sizeof(float)));
 
     glm::vec2 translations[100];
     int index = 0;
@@ -56,14 +50,6 @@ IL_InstancedQuads::IL_InstancedQuads(const Window& window) : Lab(window)
     {
         _shader->set_uniform("offsets[" + std::to_string(i) + "]", translations[i]);
     }
-}
-
-IL_InstancedQuads::~IL_InstancedQuads()
-{
-    gldc(glDeleteVertexArrays(1, &_quad_vao));
-    gldc(glBindVertexArray(0));
-    gldc(glDeleteBuffers(1, &_quad_vbo));
-    gldc(glBindBuffer(GL_ARRAY_BUFFER, 0));
 }
 
 void IL_InstancedQuads::on_render()

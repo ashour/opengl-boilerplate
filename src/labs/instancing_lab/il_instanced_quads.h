@@ -2,6 +2,7 @@
 
 #include "labs/lab.h"
 #include "rendering/shader.h"
+#include "rendering/vertex_array.h"
 #include "system/window.h"
 #include <memory>
 
@@ -11,13 +12,11 @@ class IL_InstancedQuads : public Lab
 {
   public:
     IL_InstancedQuads(const Window& window);
-    ~IL_InstancedQuads();
 
     void on_render() override;
 
   private:
-    unsigned int _quad_vao;
-    unsigned int _quad_vbo;
+    std::unique_ptr<VertexArray> _vertex_array;
 
     std::unique_ptr<Shader> _shader;
 };

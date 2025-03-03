@@ -1,5 +1,6 @@
 #pragma once
 
+#include "labs/instancing_lab/il_instanced_quads.h"
 #include "labs/lab.h"
 #include "rendering/shader.h"
 #include "system/window.h"
@@ -11,13 +12,11 @@ class Gsl_House : public Lab
 {
   public:
     Gsl_House(const Window& window);
-    ~Gsl_House();
 
     void on_render() override;
 
   private:
-    unsigned int _points_vao;
-    unsigned int _points_vbo;
+    std::unique_ptr<VertexArray> _vertex_array;
 
     std::unique_ptr<Shader> _points_shader;
 };
