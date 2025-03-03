@@ -8,10 +8,10 @@
 
 namespace eo
 {
-class IL_InstancedQuads : public Lab
+class IL_QuadsInstancedArrays : public Lab
 {
   public:
-    IL_InstancedQuads(const Window& window);
+    IL_QuadsInstancedArrays(const Window& window);
 
     void on_render() override;
 

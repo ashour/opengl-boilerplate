@@ -20,7 +20,8 @@ class InstancingLab : public Lab
 
     enum class SubLab
     {
-        quads,
+        quads_instanced,
+        quads_instanced_arrays
     };
     SubLab _selected_lab;
 };

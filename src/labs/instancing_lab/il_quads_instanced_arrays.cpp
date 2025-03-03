@@ -1,11 +1,11 @@
 #include "config.h"
-#include "il_instanced_quads.h"
+#include "il_quads_instanced_arrays.h"
 #include "system/metrics.h"
 
 namespace eo
 {
 
-IL_InstancedQuads::IL_InstancedQuads(const Window& window) : Lab(window)
+IL_QuadsInstancedArrays::IL_QuadsInstancedArrays(const Window& window) : Lab(window)
 {
     _window.set_clear_color(glm::vec4(0.2f, 0.2f, 0.2f, 1.0f));
 
@@ -52,7 +52,7 @@ IL_InstancedQuads::IL_InstancedQuads(const Window& window) : Lab(window)
     }
 }
 
-void IL_InstancedQuads::on_render()
+void IL_QuadsInstancedArrays::on_render()
 {
     gldc(glDrawArraysInstanced(GL_TRIANGLES, 0, 6, 100));
     if (SHOW_UI_METRICS)

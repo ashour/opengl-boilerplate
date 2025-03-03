@@ -1,8 +1,8 @@
 #pragma once
 
-#include "labs/instancing_lab/il_instanced_quads.h"
 #include "labs/lab.h"
 #include "rendering/shader.h"
+#include "rendering/vertex_array.h"
 #include "system/window.h"
 #include <memory>
 

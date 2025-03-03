@@ -1,3 +1,5 @@
+#pragma once
+
 #include "rendering/rendering.h"
 
 namespace eo
