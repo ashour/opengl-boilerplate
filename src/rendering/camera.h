@@ -18,6 +18,7 @@ class Camera
 {
   public:
     explicit Camera(const float aspect_ratio);
+    Camera(const float aspect_ratio, glm::vec3 position);
 
     void move(Move direction, float delta_time);
     void look(glm::vec2 current_mouse_position, glm::vec2 last_mouse_position);

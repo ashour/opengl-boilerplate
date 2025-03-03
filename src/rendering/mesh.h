@@ -21,6 +21,9 @@ class Mesh
 
     void draw();
     void draw(Shader& shader, bool use_material = true);
+    void draw_instanced(Shader& shader, unsigned int count, bool use_material = true);
+
+    unsigned int vao() const { return _vao; }
 
     const std::vector<Vertex>& vertices() const { return _vertices; }
     const std::vector<unsigned int>& indices() const { return _indices; }

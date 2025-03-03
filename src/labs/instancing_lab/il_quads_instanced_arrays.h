@@ -8,16 +8,18 @@
 
 namespace eo
 {
-class Gsl_House : public Lab
+class IL_QuadsInstancedArrays : public Lab
 {
   public:
-    Gsl_House(const Window& window);
+    IL_QuadsInstancedArrays(const Window& window);
+    ~IL_QuadsInstancedArrays();
 
     void on_render() override;
 
   private:
     std::unique_ptr<VertexArray> _vertex_array;
+    unsigned int _instance_vbo;
 
-    std::unique_ptr<Shader> _points_shader;
+    std::unique_ptr<Shader> _shader;
 };
 } // namespace eo

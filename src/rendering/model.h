@@ -17,14 +17,16 @@ class Model
     void draw(Shader& shader, bool use_materials = true);
     void unbind_materials(Shader& shader);
 
+    constexpr const std::vector<std::shared_ptr<Mesh>>& meshes() const { return _meshes; }
+
   private:
-    std::vector<std::unique_ptr<Mesh>> _meshes;
+    std::vector<std::shared_ptr<Mesh>> _meshes;
     std::string _directory;
 
     void load_model(std::string file_path);
 
     void process_node(aiNode* node, const aiScene* scene);
-    std::unique_ptr<Mesh> process_mesh(aiMesh* mesh, const aiScene* scene);
+    std::shared_ptr<Mesh> process_mesh(aiMesh* mesh, const aiScene* scene);
 
     std::vector<std::shared_ptr<Texture>>
     load_textures_for(aiMaterial* material, aiTextureType ai_type, Texture::Type internal_type);

@@ -2,6 +2,7 @@
 
 #include "labs/lab.h"
 #include "rendering/shader.h"
+#include "rendering/vertex_array.h"
 #include "system/window.h"
 #include <memory>
 
@@ -11,12 +12,11 @@ class Gsl_Points : public Lab
 {
   public:
     Gsl_Points(const Window& window);
-    ~Gsl_Points();
 
     void on_render() override;
 
   private:
-    unsigned int _points_vao;
+    std::unique_ptr<VertexArray> _vertex_array;
 
     std::unique_ptr<Shader> _points_shader;
 };
