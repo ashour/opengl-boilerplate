@@ -2,6 +2,7 @@
 #include "il_quads_instanced_arrays.h"
 #include "instancing_lab.h"
 #include "labs/instancing_lab/il_asteroids.h"
+#include "labs/instancing_lab/il_asteroids_instanced.h"
 #include "labs/registry/lab_registry.h"
 
 namespace
@@ -49,6 +50,12 @@ void InstancingLab::on_ui_render(UI& ui)
         delete _sub_lab;
         _sub_lab = new IL_Asteroids(_window);
         _selected_lab = SubLab::asteroids;
+    }
+    if (ui.radio_button("Asteroids (instanced)", _selected_lab == SubLab::asteroids_instanced))
+    {
+        delete _sub_lab;
+        _sub_lab = new IL_AsteroidsInstanced(_window);
+        _selected_lab = SubLab::asteroids_instanced;
     }
     ui.end_window();
 

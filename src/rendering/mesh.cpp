@@ -56,6 +56,22 @@ void Mesh::draw(Shader& shader, bool use_material)
     }
 }
 
+void Mesh::draw_instanced(Shader& shader, unsigned int count, bool use_material)
+{
+    if (use_material && _material)
+    {
+        _material->bind(shader);
+    }
+
+    gldc(glBindVertexArray(_vao));
+    gldc(glDrawElementsInstanced(GL_TRIANGLES, _indices.size(), GL_UNSIGNED_INT, 0, count));
+
+    if (SHOW_UI_METRICS)
+    {
+        Metrics::add_to_drawn_vertex_count(_indices.size() * count);
+    }
+}
+
 void Mesh::init_vertex_array()
 {
     gldc(glGenVertexArrays(1, &_vao));

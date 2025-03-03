@@ -23,6 +23,7 @@ class InstancingLab : public Lab
         quads_instanced,
         quads_instanced_arrays,
         asteroids,
+        asteroids_instanced,
     };
     SubLab _selected_lab;
 };

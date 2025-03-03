@@ -62,7 +62,7 @@ void Model::process_node(aiNode* node, const aiScene* scene)
     }
 }
 
-std::unique_ptr<Mesh> Model::process_mesh(aiMesh* mesh, const aiScene* scene)
+std::shared_ptr<Mesh> Model::process_mesh(aiMesh* mesh, const aiScene* scene)
 {
     std::vector<Vertex> vertices;
     std::vector<unsigned int> indices;
@@ -119,7 +119,7 @@ std::unique_ptr<Mesh> Model::process_mesh(aiMesh* mesh, const aiScene* scene)
     }
 
     auto material = std::make_shared<Material>(textures, shininess);
-    return std::make_unique<Mesh>(std::move(vertices), std::move(indices), material);
+    return std::make_shared<Mesh>(std::move(vertices), std::move(indices), material);
 }
 
 std::vector<std::shared_ptr<Texture>>

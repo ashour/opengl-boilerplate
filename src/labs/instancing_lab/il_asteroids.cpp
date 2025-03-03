@@ -61,7 +61,7 @@ void IL_Asteroids::on_render()
     _shader->set_uniform("u_view", _camera->view());
 
     Transform planet_transform{};
-    planet_transform.position(glm::vec3(10.0f, -3.0f, 30.0f));
+    planet_transform.position(glm::vec3(10.0f, 3.0f, 30.0f));
     planet_transform.scale(glm::vec3{4.0f});
     _shader->set_uniform("u_model", planet_transform.matrix());
     _shader->set_uniform("u_texture_scale", 1.0f);
