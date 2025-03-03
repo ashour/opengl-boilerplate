@@ -9,8 +9,8 @@ IL_QuadsInstanced::IL_QuadsInstanced(const Window& window) : Lab(window)
 {
     _window.set_clear_color(glm::vec4(0.2f, 0.2f, 0.2f, 1.0f));
 
-    _shader = std::make_unique<Shader>("resources/shaders/instanced_quads.vert",
-                                       "resources/shaders/instanced_quads.frag");
+    _shader = std::make_unique<Shader>("resources/shaders/quads_instanced.vert",
+                                       "resources/shaders/quads_instanced.frag");
     _shader->build();
     _shader->use();
 

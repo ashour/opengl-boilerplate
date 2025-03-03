@@ -9,8 +9,8 @@ IL_QuadsInstancedArrays::IL_QuadsInstancedArrays(const Window& window) : Lab(win
 {
     _window.set_clear_color(glm::vec4(0.2f, 0.2f, 0.2f, 1.0f));
 
-    _shader = std::make_unique<Shader>("resources/shaders/instanced_quads.vert",
-                                       "resources/shaders/instanced_quads.frag");
+    _shader = std::make_unique<Shader>("resources/shaders/quads_instanced_arrays.vert",
+                                       "resources/shaders/quads_instanced_arrays.frag");
     _shader->build();
     _shader->use();
 
@@ -46,10 +46,19 @@ IL_QuadsInstancedArrays::IL_QuadsInstancedArrays(const Window& window) : Lab(win
         }
     }
 
-    for (unsigned int i = 0; i < 100; i += 1)
-    {
-        _shader->set_uniform("offsets[" + std::to_string(i) + "]", translations[i]);
-    }
+    gldc(glGenBuffers(1, &_instance_vbo));
+    gldc(glBindBuffer(GL_ARRAY_BUFFER, _instance_vbo));
+    gldc(glBufferData(GL_ARRAY_BUFFER, sizeof(glm::vec2) * 100, translations, GL_STATIC_DRAW));
+    gldc(glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 2 * sizeof(float), (void*)0));
+    gldc(glEnableVertexAttribArray(2));
+    gldc(glBindBuffer(GL_ARRAY_BUFFER, 0));
+    gldc(glVertexAttribDivisor(2, 1));
+}
+
+IL_QuadsInstancedArrays::~IL_QuadsInstancedArrays()
+{
+    gldc(glDeleteBuffers(1, &_instance_vbo));
+    gldc(glBindBuffer(GL_ARRAY_BUFFER, 0));
 }
 
 void IL_QuadsInstancedArrays::on_render()
