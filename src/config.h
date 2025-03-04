@@ -11,6 +11,8 @@ inline const std::string WINDOW_TITLE = "OpenGL Boilerplate";
 inline constexpr unsigned int WINDOW_WIDTH = 1920 / 2;
 inline constexpr unsigned int WINDOW_HEIGHT = 1080 / 2;
 
+inline constexpr int MULTISAMPLE_COUNT = 4;
+
 inline const std::string SHADER_DIR = "./resources/shaders/";
 inline const std::string DEFAULT_VERTEX_SHADER_FILEPATH = SHADER_DIR + "phong.vert";
 inline const std::string DEFAULT_FRAGMENT_SHADER_FILEPATH = SHADER_DIR + "phong.frag";

@@ -1,3 +1,4 @@
+#include "config.h"
 #include "input.h"
 #include "lib/log.h"
 #include "rendering/rendering.h"
@@ -19,6 +20,7 @@ Window::Window(const unsigned int width,
     glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, opengl_major_version);
     glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, opengl_minor_version);
     glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
+    glfwWindowHint(GLFW_SAMPLES, MULTISAMPLE_COUNT);
 
 #ifdef __APPLE__
     EO_LOG_INFO("Apple environment detected");
