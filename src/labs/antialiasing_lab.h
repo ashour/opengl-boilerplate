@@ -21,10 +21,17 @@ class AntialiasingLab : public Lab
 
   private:
     std::unique_ptr<Camera> _camera;
-    std::shared_ptr<Shader> _shader;
 
-    int _u_view_matrix;
-
+    std::shared_ptr<Shader> _scene_shader;
     std::unique_ptr<Mesh> _cube;
+
+    std::unique_ptr<Mesh> _screen_quad;
+    std::shared_ptr<Shader> _screen_shader;
+
+    unsigned int _multisampled_fbo;
+    unsigned int _color_buffer_multisampled_texture;
+    unsigned int _rbo;
+    unsigned int _intermediate_fbo;
+    unsigned int _screen_texture;
 };
 } // namespace eo

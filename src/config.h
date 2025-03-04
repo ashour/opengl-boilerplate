@@ -7,9 +7,9 @@
 inline constexpr unsigned int OPENGL_MAJOR_VERSION = 4;
 inline constexpr unsigned int OPENGL_MINOR_VERSION = 1;
 
-inline const std::string WINDOW_TITLE = "OpenGL Boilerplate";
-inline constexpr unsigned int WINDOW_WIDTH = 1920 / 2;
-inline constexpr unsigned int WINDOW_HEIGHT = 1080 / 2;
+inline const std::string WINDOW_TITLE = "OpenGL Labs";
+inline constexpr unsigned int WINDOW_WIDTH = 1440;
+inline constexpr unsigned int WINDOW_HEIGHT = 810;
 
 inline constexpr int MULTISAMPLE_COUNT = 4;
 
