@@ -10,7 +10,7 @@ namespace
 {
 const bool registered = []()
 {
-    eo::LabRegistry::register_lab("Depth testing",
+    eo::LabRegistry::register_lab("04. Depth testing",
                                   [](eo::Window& window) -> eo::Lab*
                                   { return new eo::DepthTestingLab(window); });
     return true;

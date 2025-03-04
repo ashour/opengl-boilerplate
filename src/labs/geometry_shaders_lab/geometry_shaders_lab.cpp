@@ -9,7 +9,7 @@ namespace
 {
 const bool registered = []()
 {
-    eo::LabRegistry::register_lab("Geometry Shaders",
+    eo::LabRegistry::register_lab("11. Geometry Shaders",
                                   [](eo::Window& window) -> eo::Lab*
                                   { return new eo::GeometryShadersLab(window); });
     return true;

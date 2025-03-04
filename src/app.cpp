@@ -19,7 +19,7 @@ void App::run()
                                        OPENGL_MAJOR_VERSION,
                                        OPENGL_MINOR_VERSION,
                                        MULTISAMPLE_COUNT);
-    _current_lab_name = "Antialiasing";
+    _current_lab_name = "13. Antialiasing";
     _lab = new AntialiasingLab(*_window);
     EO_LOG_INFO("OpenGL version {}", (const char*)_window->opengl_version());
 

@@ -11,8 +11,9 @@ namespace
 {
 const bool registered = []()
 {
-    eo::LabRegistry::register_lab(
-        "Model loading", [](eo::Window& window) -> eo::Lab* { return new eo::ModelLab(window); });
+    eo::LabRegistry::register_lab("03. Model loading",
+                                  [](eo::Window& window) -> eo::Lab*
+                                  { return new eo::ModelLab(window); });
     return true;
 }();
 } // namespace

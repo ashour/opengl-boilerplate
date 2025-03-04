@@ -9,7 +9,7 @@ namespace
 {
 const bool registered = []()
 {
-    eo::LabRegistry::register_lab("Uniform Buffers",
+    eo::LabRegistry::register_lab("10. Uniform Buffers",
                                   [](eo::Window& window) -> eo::Lab*
                                   { return new eo::UniformBuffersLab(window); });
     return true;

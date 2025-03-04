@@ -9,8 +9,9 @@ namespace
 {
 const bool registered = []()
 {
-    eo::LabRegistry::register_lab(
-        "Instancing", [](eo::Window& window) -> eo::Lab* { return new eo::InstancingLab(window); });
+    eo::LabRegistry::register_lab("12. Instancing",
+                                  [](eo::Window& window) -> eo::Lab*
+                                  { return new eo::InstancingLab(window); });
     return true;
 }();
 } // namespace

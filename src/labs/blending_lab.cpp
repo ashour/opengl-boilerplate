@@ -12,7 +12,7 @@ namespace
 const bool registered = []()
 {
     eo::LabRegistry::register_lab(
-        "Blending", [](eo::Window& window) -> eo::Lab* { return new eo::BlendingLab(window); });
+        "06. Blending", [](eo::Window& window) -> eo::Lab* { return new eo::BlendingLab(window); });
     return true;
 }();
 } // namespace
