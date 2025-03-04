@@ -8,7 +8,7 @@ namespace
 {
 const bool registered = []()
 {
-    eo::LabRegistry::register_lab("Antialiasing",
+    eo::LabRegistry::register_lab("13. Antialiasing",
                                   [](eo::Window& window) -> eo::Lab*
                                   { return new eo::AntialiasingLab(window); });
     return true;

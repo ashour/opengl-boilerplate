@@ -8,7 +8,7 @@ namespace
 {
 const bool registered = []()
 {
-    eo::LabRegistry::register_lab("Face culling",
+    eo::LabRegistry::register_lab("07. Face culling",
                                   [](eo::Window& window) -> eo::Lab*
                                   { return new eo::FaceCullingLab(window); });
     return true;

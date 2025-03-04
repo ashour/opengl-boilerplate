@@ -7,7 +7,7 @@ namespace
 {
 const bool registered = []()
 {
-    eo::LabRegistry::register_lab("Framebuffers",
+    eo::LabRegistry::register_lab("08. Framebuffers",
                                   [](eo::Window& window) -> eo::Lab*
                                   { return new eo::FramebufferLab(window); });
     return true;

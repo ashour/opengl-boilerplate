@@ -12,7 +12,7 @@ namespace
 const bool registered = []()
 {
     eo::LabRegistry::register_lab(
-        "Cubemaps", [](eo::Window& window) -> eo::Lab* { return new eo::CubemapLab(window); });
+        "09. Cubemaps", [](eo::Window& window) -> eo::Lab* { return new eo::CubemapLab(window); });
     return true;
 }();
 } // namespace

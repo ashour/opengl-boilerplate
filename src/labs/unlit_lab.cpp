@@ -11,7 +11,7 @@ namespace
 const bool registered = []()
 {
     eo::LabRegistry::register_lab(
-        "Unlit", [](eo::Window& window) -> eo::Lab* { return new eo::UnlitLab(window); });
+        "01. Unlit", [](eo::Window& window) -> eo::Lab* { return new eo::UnlitLab(window); });
     return true;
 }();
 } // namespace

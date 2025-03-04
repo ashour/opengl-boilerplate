@@ -12,8 +12,9 @@ namespace
 {
 const bool registered = []()
 {
-    eo::LabRegistry::register_lab(
-        "Phong shading", [](eo::Window& window) -> eo::Lab* { return new eo::PhongLab(window); });
+    eo::LabRegistry::register_lab("02. Phong shading",
+                                  [](eo::Window& window) -> eo::Lab*
+                                  { return new eo::PhongLab(window); });
     return true;
 }();
 } // namespace
