@@ -20,7 +20,6 @@ namespace eo
 
 AntialiasingLab::AntialiasingLab(const Window& window) : Lab(window)
 {
-    glEnable(GL_MULTISAMPLE);
     _window.set_clear_color(SCENE_CLEAR_COLOR);
 
     _camera = std::make_unique<Camera>(
