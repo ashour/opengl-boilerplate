@@ -1,6 +1,6 @@
 #include "app.h"
 #include "config.h"
-#include "labs/instancing_lab/instancing_lab.h"
+#include "labs/antialiasing_lab.h"
 #include "labs/registry/lab_registry.h"
 #include "system/input.h"
 #include "system/time.h"
@@ -13,10 +13,14 @@ namespace eo
 void App::run()
 {
     EO_LOG_INFO("Initializing OpenGL");
-    _window = std::make_unique<Window>(
-        WINDOW_WIDTH, WINDOW_HEIGHT, WINDOW_TITLE, OPENGL_MAJOR_VERSION, OPENGL_MINOR_VERSION);
-    _current_lab_name = "Instancing";
-    _lab = new InstancingLab(*_window);
+    _window = std::make_unique<Window>(WINDOW_WIDTH,
+                                       WINDOW_HEIGHT,
+                                       WINDOW_TITLE,
+                                       OPENGL_MAJOR_VERSION,
+                                       OPENGL_MINOR_VERSION,
+                                       MULTISAMPLE_COUNT);
+    _current_lab_name = "Antialiasing";
+    _lab = new AntialiasingLab(*_window);
     EO_LOG_INFO("OpenGL version {}", (const char*)_window->opengl_version());
 
     EO_LOG_INFO("Initializing ImGui");

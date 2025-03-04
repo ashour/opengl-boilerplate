@@ -12,7 +12,8 @@ class Window
            const unsigned int height,
            const std::string& title,
            const unsigned int opengl_major_version,
-           const unsigned int opengl_minor_version);
+           const unsigned int opengl_minor_version,
+           const unsigned int multisample_count);
     ~Window();
 
     const int buffer_width() const { return _buffer_width; }

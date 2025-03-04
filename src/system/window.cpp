@@ -9,7 +9,8 @@ Window::Window(const unsigned int width,
                const unsigned int height,
                const std::string& title,
                const unsigned int opengl_major_version,
-               const unsigned int opengl_minor_version)
+               const unsigned int opengl_minor_version,
+               const unsigned int multisample_count)
 {
     if (!glfwInit())
     {
@@ -19,6 +20,7 @@ Window::Window(const unsigned int width,
     glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, opengl_major_version);
     glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, opengl_minor_version);
     glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
+    glfwWindowHint(GLFW_SAMPLES, multisample_count);
 
 #ifdef __APPLE__
     EO_LOG_INFO("Apple environment detected");
@@ -47,6 +49,7 @@ Window::Window(const unsigned int width,
 
     gldc(glEnable(GL_DEPTH_TEST));
     gldc(glEnable(GL_CULL_FACE));
+    gldc(glEnable(GL_MULTISAMPLE));
 
     gldc(glViewport(0, 0, _buffer_width, _buffer_height));
 }
