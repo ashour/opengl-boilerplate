@@ -27,7 +27,11 @@ class Shader
     template <typename T>
     void set_uniform(const unsigned int location, const T& value) const
     {
-        if constexpr (std::is_same_v<T, int>)
+        if constexpr (std::is_same_v<T, bool>)
+        {
+            gldc(glUniform1i(location, value));
+        }
+        else if constexpr (std::is_same_v<T, int>)
         {
             gldc(glUniform1i(location, value));
         }

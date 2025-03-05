@@ -1,6 +1,6 @@
 #include "app.h"
 #include "config.h"
-#include "labs/antialiasing_lab.h"
+#include "labs/blinn_phong_lab.h"
 #include "labs/registry/lab_registry.h"
 #include "system/input.h"
 #include "system/time.h"
@@ -19,8 +19,8 @@ void App::run()
                                        OPENGL_MAJOR_VERSION,
                                        OPENGL_MINOR_VERSION,
                                        MULTISAMPLE_COUNT);
-    _current_lab_name = "13. Antialiasing";
-    _lab = new AntialiasingLab(*_window);
+    _current_lab_name = "14. Blinn-Phong shading";
+    _lab = new BlinnPhongLab(*_window);
     EO_LOG_INFO("OpenGL version {}", (const char*)_window->opengl_version());
 
     EO_LOG_INFO("Initializing ImGui");
