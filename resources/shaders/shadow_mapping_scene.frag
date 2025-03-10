@@ -2,10 +2,14 @@
 
 out vec4 o_color;
 
-in vec3 v_frag_position;
-in vec3 v_normal;
-in vec3 v_color;
-in vec2 v_uv;
+in VS_OUT
+{
+    vec3 frag_position;
+    vec2 uv;
+    vec3 normal;
+    vec4 frag_position_light_space;
+}
+fs_in;
 
 struct Light
 {
@@ -20,11 +24,13 @@ struct DirectionalLight
     vec3 direction;
 };
 uniform DirectionalLight u_directional_light;
+uniform vec3 u_light_position;
 
 uniform vec3 u_view_position;
 
 uniform sampler2D u_tex_diffuse_1;
 uniform sampler2D u_tex_specular_1;
+uniform sampler2D u_tex_shadow_map;
 struct Material
 {
     sampler2D diffuse_1;
@@ -36,31 +42,22 @@ uniform Material u_material;
 const float MIN_TEXTURE_SCALE = 0.0001;
 uniform float u_texture_scale = 1.0;
 
-vec3 phong_shading(Light light,
-                   vec3 light_direction,
-                   vec3 normal,
-                   vec3 view_direction,
-                   vec3 diffuse_sample,
-                   vec3 specular_sample,
-                   float shininess)
+vec3 blinn_phong_shading(Light light,
+                         vec3 normal,
+                         vec3 view_direction,
+                         vec3 diffuse_sample,
+                         vec3 specular_sample,
+                         float shininess)
 {
-    vec3 ambient = light.ambient_color * diffuse_sample;
-
+    vec3 light_direction = normalize(u_light_position - fs_in.frag_position);
     float diffuse_shading = max(dot(normal, light_direction), 0.0);
     vec3 diffuse = light.diffuse_color * diffuse_shading * diffuse_sample;
 
-    vec3 reflection_direction = reflect(-light_direction, normal);
-    float specular_shading = pow(max(dot(view_direction, reflection_direction), 0.0), shininess);
+    vec3 halfway_direction = normalize(light_direction + view_direction);
+    float specular_shading = pow(max(dot(view_direction, halfway_direction), 0.0), shininess);
     vec3 specular = light.specular_color * specular_sample * specular_shading;
 
-    return ambient + diffuse + specular;
-}
-
-float attentuation(
-    vec3 light_position, vec3 frag_position, float constant, float linear, float quadratic)
-{
-    float distance = length(light_position - frag_position);
-    return 1.0 / (constant + linear * distance + quadratic * distance * distance);
+    return diffuse + specular;
 }
 
 vec3 directional_light_component(DirectionalLight light,
@@ -70,28 +67,38 @@ vec3 directional_light_component(DirectionalLight light,
                                  vec3 specular_sample,
                                  float shininess)
 {
-    return phong_shading(light.base,
-                         normalize(-light.direction),
-                         normal,
-                         view_direction,
-                         diffuse_sample,
-                         specular_sample,
-                         shininess);
+    return blinn_phong_shading(
+        light.base, normal, view_direction, diffuse_sample, specular_sample, shininess);
+}
+
+float shadow(vec4 frag_position_light_space)
+{
+    vec3 projected_coords =
+        (frag_position_light_space.xyz / frag_position_light_space.w) * 0.5 + 0.5;
+    float closest_depth = texture(u_tex_shadow_map, projected_coords.xy).r;
+    float current_depth = projected_coords.z;
+
+    return current_depth > closest_depth ? 1.0 : 0.0;
 }
 
 void main()
 {
-    vec3 view_direction = normalize(u_view_position - v_frag_position);
+    vec3 view_direction = normalize(u_view_position - fs_in.frag_position);
 
     // stretch the uvs: as the uvs expand, the texture effectively
     // shrinks, and vice versa.
     float inverted_texture_scale = 1.0 / max(u_texture_scale, MIN_TEXTURE_SCALE);
-    vec2 scaled_uv = v_uv * inverted_texture_scale;
+    vec2 scaled_uv = fs_in.uv * inverted_texture_scale;
     vec3 diffuse_sample = texture(u_material.diffuse_1, scaled_uv).rgb;
     vec3 specular_sample = texture(u_material.specular_1, scaled_uv).rgb;
 
-    vec3 lit_diffuse_sample = directional_light_component(
-        u_directional_light, v_normal, view_direction, diffuse_sample, specular_sample, 32);
+    vec3 ambient = u_directional_light.base.ambient_color * diffuse_sample;
 
-    o_color = vec4(lit_diffuse_sample, 1.0);
+    vec3 diffuse_and_specular = directional_light_component(
+        u_directional_light, fs_in.normal, view_direction, diffuse_sample, specular_sample, 64);
+
+    float shadow = shadow(fs_in.frag_position_light_space);
+
+    o_color = vec4((ambient + (1.0 - shadow) * diffuse_and_specular), 1.0);
+    // o_color = vec4(vec3(shadow), 1.0);
 }

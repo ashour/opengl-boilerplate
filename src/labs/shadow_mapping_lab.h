@@ -24,7 +24,7 @@ class ShadowMappingLab : public Lab
 
   private:
     std::unique_ptr<Camera> _camera;
-    std::shared_ptr<Shader> _shader;
+    std::shared_ptr<Shader> _scene_shader;
     std::unique_ptr<DirectionalLight> _directional_light;
 
     bool _rotate_light{false};
@@ -39,5 +39,18 @@ class ShadowMappingLab : public Lab
     std::array<glm::vec3, 180> _cube_positions{};
 
     std::unique_ptr<Mesh> _ground;
+
+    const unsigned int SHADOW_WIDTH{1024};
+    const unsigned int SHADOW_HEIGHT{1024};
+    unsigned int _depth_map_fbo;
+    unsigned int _depth_map_tex;
+
+    std::unique_ptr<Shader> _simple_depth_shader;
+
+    bool _render_debug_quad{false};
+    std::unique_ptr<Mesh> _debug_quad;
+    std::unique_ptr<Shader> _debug_quad_shader;
+
+    void render_scene(Shader& shader, float use_materials);
 };
 } // namespace eo
