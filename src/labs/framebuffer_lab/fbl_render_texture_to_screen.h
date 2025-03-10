@@ -1,4 +1,5 @@
 #include "labs/lab.h"
+#include "rendering/frame_buffer.h"
 #include "rendering/material.h"
 #include "rendering/mesh.h"
 #include "rendering/shader.h"
@@ -35,9 +36,7 @@ class Fbl_RenderTextureToScreen : public Lab
 
     std::unique_ptr<Mesh> _ground;
 
-    unsigned int _fbo;
-    unsigned int _rbo;
-    unsigned int _tex_color_buffer;
+    std::unique_ptr<Framebuffer> _framebuffer;
 
     void render_scene();
 };
