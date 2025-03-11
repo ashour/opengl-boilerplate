@@ -91,7 +91,7 @@ float shadow(vec4 frag_position_light_space, vec3 normal, vec3 light_direction)
 
     vec2 texel_size = 1.0 / textureSize(u_tex_shadow_map, 0);
     float current_depth = projected_coords.z;
-    float bias = max(0.05 * (1.0 - dot(normal, light_direction)), 0.0005);
+    float bias = max(0.005 * (1.0 - dot(normal, light_direction)), 0.005);
 
     for (int x = -1; x <= 1; x += 1)
     {

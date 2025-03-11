@@ -51,6 +51,6 @@ class ShadowMappingLab : public Lab
     std::unique_ptr<Mesh> _debug_quad;
     std::unique_ptr<Shader> _debug_quad_shader;
 
-    void render_scene(Shader& shader, float use_materials);
+    void render_scene(Shader& shader, float use_materials, float time);
 };
 } // namespace eo

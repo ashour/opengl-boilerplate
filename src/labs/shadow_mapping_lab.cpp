@@ -67,7 +67,7 @@ ShadowMappingLab::ShadowMappingLab(const Window& window) : Lab(window)
     {
         _cube_positions[i] = {
             random_float(-90.0f, 90.0f),
-            random_float(2.0f, 20.0f),
+            random_float(2.0f, 15.0f),
             random_float(-90.0f, 90.0f),
         };
     }
@@ -155,12 +155,14 @@ void ShadowMappingLab::on_render()
 
     // render depth of scene to texture from light's perspective
     constexpr float near_plane = 0.1f;
-    constexpr float far_plane = 200.0f;
+    constexpr float far_plane = 400.0f;
     glm::mat4 light_projection =
-        glm::ortho(-200.0f, 200.0f, -200.0f, 200.0f, near_plane, far_plane);
-    glm::vec3 light_position = _directional_light->position_from_direction(-75.0f);
+        glm::ortho(-100.0f, 100.0f, -100.0f, 100.0f, near_plane, far_plane);
+    glm::vec3 light_position = _directional_light->position_from_direction(-100.0f);
     glm::mat4 light_view = glm::lookAt(light_position, glm::vec3(0.0f), {0.0f, 1.0f, 0.0f});
     glm::mat4 light_space_matrix = light_projection * light_view;
+
+    float current_time = Time::current_time();
 
     // render scene from light's point of view
     gldc(glCullFace(GL_FRONT));
@@ -170,7 +172,7 @@ void ShadowMappingLab::on_render()
     gldc(glViewport(0, 0, SHADOW_WIDTH, SHADOW_HEIGHT));
     gldc(glBindFramebuffer(GL_FRAMEBUFFER, _depth_map_fbo));
     gldc(glClear(GL_DEPTH_BUFFER_BIT));
-    render_scene(*_simple_depth_shader, false);
+    render_scene(*_simple_depth_shader, false, current_time);
     gldc(glBindFramebuffer(GL_FRAMEBUFFER, 0));
     gldc(glCullFace(GL_BACK));
 
@@ -186,7 +188,7 @@ void ShadowMappingLab::on_render()
     _scene_shader->set_uniform("u_light_position", light_position);
     gldc(glActiveTexture(GL_TEXTURE4));
     gldc(glBindTexture(GL_TEXTURE_2D, _depth_map_tex));
-    render_scene(*_scene_shader, true);
+    render_scene(*_scene_shader, true, current_time);
 
     // render debug quad
     if (_render_debug_quad)
@@ -213,7 +215,7 @@ void ShadowMappingLab::on_ui_render(UI& ui)
     ui.end_window();
 }
 
-void ShadowMappingLab::render_scene(Shader& shader, float use_materials)
+void ShadowMappingLab::render_scene(Shader& shader, float use_materials, float time)
 {
     Transform ground_transform{};
     ground_transform.scale(glm::vec3(200.0f, 1.0f, 200.0f));
@@ -230,7 +232,7 @@ void ShadowMappingLab::render_scene(Shader& shader, float use_materials)
     }
 
     Transform cube_transform{};
-    // cube_transform.rotation(Time::current_time() * glm::radians(50.0f), {0.5f, 1.0f, 0.0f});
+    cube_transform.rotation(time * glm::radians(50.0f), {0.5f, 1.0f, 0.0f});
     if (use_materials)
     {
         shader.set_uniform("u_texture_scale", 1.0f);
