@@ -51,46 +51,12 @@ Fbl_RenderTextureToWorld::Fbl_RenderTextureToWorld(const Window& window) : Lab(w
 
     _quad = std::make_unique<Mesh>(Primitive::quad(), nullptr);
 
-    gldc(glGenFramebuffers(1, &_fbo));
-    gldc(glBindFramebuffer(GL_FRAMEBUFFER, _fbo));
-
-    gldc(glGenTextures(1, &_tex_color_buffer));
-    gldc(glBindTexture(GL_TEXTURE_2D, _tex_color_buffer));
-    gldc(glTexImage2D(GL_TEXTURE_2D,
-                      0,
-                      GL_RGB,
-                      _window.buffer_width(),
-                      _window.buffer_height(),
-                      0,
-                      GL_RGB,
-                      GL_UNSIGNED_BYTE,
-                      NULL));
-    gldc(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR));
-    gldc(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR));
-    gldc(glBindTexture(GL_TEXTURE_2D, 0));
-    gldc(glFramebufferTexture2D(
-        GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, _tex_color_buffer, 0));
-
-    gldc(glGenRenderbuffers(1, &_rbo));
-    gldc(glBindRenderbuffer(GL_RENDERBUFFER, _rbo));
-    gldc(glRenderbufferStorage(
-        GL_RENDERBUFFER, GL_DEPTH24_STENCIL8, _window.buffer_width(), _window.buffer_height()));
-    gldc(glFramebufferRenderbuffer(
-        GL_FRAMEBUFFER, GL_DEPTH_STENCIL_ATTACHMENT, GL_RENDERBUFFER, _rbo));
-
-    if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE)
-    {
-        EO_LOG_ERROR("[Framebuffer Error] Framebuffer is not complete!");
-    }
+    _framebuffer = std::make_unique<Framebuffer>(_window.buffer_width(), _window.buffer_height());
 
     register_mouse_look(*_camera);
 }
 
-Fbl_RenderTextureToWorld::~Fbl_RenderTextureToWorld()
-{
-    gldc(glDeleteFramebuffers(1, &_fbo));
-    gldc(glDeleteTextures(1, &_tex_color_buffer));
-}
+Fbl_RenderTextureToWorld::~Fbl_RenderTextureToWorld() {}
 
 void Fbl_RenderTextureToWorld::on_update()
 {
@@ -100,13 +66,13 @@ void Fbl_RenderTextureToWorld::on_update()
 
 void Fbl_RenderTextureToWorld::on_render()
 {
-    gldc(glBindFramebuffer(GL_FRAMEBUFFER, _fbo));
+    _framebuffer->bind();
     gldc(glClearColor(0.1f, 0.1f, 0.1f, 1.0f));
     gldc(glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT));
     gldc(glEnable(GL_DEPTH_TEST));
     render_scene();
 
-    gldc(glBindFramebuffer(GL_FRAMEBUFFER, 0));
+    _framebuffer->unbind();
     render_scene();
 
     Transform quad_transform{};
@@ -117,7 +83,7 @@ void Fbl_RenderTextureToWorld::on_render()
     _quad_shader->use();
 
     gldc(glActiveTexture(GL_TEXTURE0));
-    gldc(glBindTexture(GL_TEXTURE_2D, _tex_color_buffer));
+    _framebuffer->bind_color_texture();
     _quad_shader->set_uniform("u_material.diffuse_1", 0);
 
     _quad_shader->set_uniform("u_view", _camera->view());
