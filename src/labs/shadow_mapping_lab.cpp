@@ -161,6 +161,7 @@ void ShadowMappingLab::on_render()
     glm::mat4 light_space_matrix = light_projection * light_view;
 
     // render scene from light's point of view
+    gldc(glCullFace(GL_FRONT));
     _simple_depth_shader->use();
     _simple_depth_shader->set_uniform("u_light_space_matrix", light_space_matrix);
 
@@ -169,6 +170,7 @@ void ShadowMappingLab::on_render()
     gldc(glClear(GL_DEPTH_BUFFER_BIT));
     render_scene(*_simple_depth_shader, false);
     gldc(glBindFramebuffer(GL_FRAMEBUFFER, 0));
+    gldc(glCullFace(GL_BACK));
 
     // reset viewport
     gldc(glViewport(0, 0, _window.buffer_width(), _window.buffer_height()));
