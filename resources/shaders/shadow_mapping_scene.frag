@@ -87,11 +87,23 @@ float shadow(vec4 frag_position_light_space, vec3 normal, vec3 light_direction)
         return 0.0;
     }
 
-    float closest_depth = texture(u_tex_shadow_map, projected_coords.xy).r;
-    float current_depth = projected_coords.z;
-    float bias = max(0.05 * (1.0 - dot(normal, light_direction)), 0.0025);
+    float result = 0.0;
 
-    return current_depth - bias > closest_depth ? 1.0 : 0.0;
+    vec2 texel_size = 1.0 / textureSize(u_tex_shadow_map, 0);
+    float current_depth = projected_coords.z;
+    float bias = max(0.05 * (1.0 - dot(normal, light_direction)), 0.0005);
+
+    for (int x = -1; x <= 1; x += 1)
+    {
+        for (int y = -1; y <= 1; y += 1)
+        {
+            float pcf_depth =
+                texture(u_tex_shadow_map, projected_coords.xy + vec2(x, y) * texel_size).r;
+            result += current_depth - bias > pcf_depth ? 1.0 : 0.0;
+        }
+    }
+
+    return result / 9.0;
 }
 
 void main()

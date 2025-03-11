@@ -40,8 +40,8 @@ class ShadowMappingLab : public Lab
 
     std::unique_ptr<Mesh> _ground;
 
-    const unsigned int SHADOW_WIDTH{1024};
-    const unsigned int SHADOW_HEIGHT{1024};
+    const unsigned int SHADOW_WIDTH{4096};
+    const unsigned int SHADOW_HEIGHT{4096};
     unsigned int _depth_map_fbo;
     unsigned int _depth_map_tex;
 
