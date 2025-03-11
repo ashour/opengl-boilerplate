@@ -81,9 +81,15 @@ float shadow(vec4 frag_position_light_space, vec3 normal, vec3 light_direction)
 {
     vec3 projected_coords =
         (frag_position_light_space.xyz / frag_position_light_space.w) * 0.5 + 0.5;
+
+    if (projected_coords.z > 1.0)
+    {
+        return 0.0;
+    }
+
     float closest_depth = texture(u_tex_shadow_map, projected_coords.xy).r;
     float current_depth = projected_coords.z;
-    float bias = max(0.05 * (1.0 - dot(normal, light_direction)), 0.005);
+    float bias = max(0.05 * (1.0 - dot(normal, light_direction)), 0.0025);
 
     return current_depth - bias > closest_depth ? 1.0 : 0.0;
 }
