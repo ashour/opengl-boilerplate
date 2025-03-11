@@ -45,11 +45,11 @@ uniform float u_texture_scale = 1.0;
 vec3 blinn_phong_shading(Light light,
                          vec3 normal,
                          vec3 view_direction,
+                         vec3 light_direction,
                          vec3 diffuse_sample,
                          vec3 specular_sample,
                          float shininess)
 {
-    vec3 light_direction = normalize(u_light_position - fs_in.frag_position);
     float diffuse_shading = max(dot(normal, light_direction), 0.0);
     vec3 diffuse = light.diffuse_color * diffuse_shading * diffuse_sample;
 
@@ -63,22 +63,29 @@ vec3 blinn_phong_shading(Light light,
 vec3 directional_light_component(DirectionalLight light,
                                  vec3 normal,
                                  vec3 view_direction,
+                                 vec3 light_direction,
                                  vec3 diffuse_sample,
                                  vec3 specular_sample,
                                  float shininess)
 {
-    return blinn_phong_shading(
-        light.base, normal, view_direction, diffuse_sample, specular_sample, shininess);
+    return blinn_phong_shading(light.base,
+                               normal,
+                               view_direction,
+                               light_direction,
+                               diffuse_sample,
+                               specular_sample,
+                               shininess);
 }
 
-float shadow(vec4 frag_position_light_space)
+float shadow(vec4 frag_position_light_space, vec3 normal, vec3 light_direction)
 {
     vec3 projected_coords =
         (frag_position_light_space.xyz / frag_position_light_space.w) * 0.5 + 0.5;
     float closest_depth = texture(u_tex_shadow_map, projected_coords.xy).r;
     float current_depth = projected_coords.z;
+    float bias = max(0.05 * (1.0 - dot(normal, light_direction)), 0.005);
 
-    return current_depth > closest_depth ? 1.0 : 0.0;
+    return current_depth - bias > closest_depth ? 1.0 : 0.0;
 }
 
 void main()
@@ -94,10 +101,17 @@ void main()
 
     vec3 ambient = u_directional_light.base.ambient_color * diffuse_sample;
 
-    vec3 diffuse_and_specular = directional_light_component(
-        u_directional_light, fs_in.normal, view_direction, diffuse_sample, specular_sample, 64);
+    vec3 light_direction = normalize(u_light_position - fs_in.frag_position);
 
-    float shadow = shadow(fs_in.frag_position_light_space);
+    vec3 diffuse_and_specular = directional_light_component(u_directional_light,
+                                                            fs_in.normal,
+                                                            view_direction,
+                                                            light_direction,
+                                                            diffuse_sample,
+                                                            specular_sample,
+                                                            64);
+
+    float shadow = shadow(fs_in.frag_position_light_space, fs_in.normal, light_direction);
 
     o_color = vec4((ambient + (1.0 - shadow) * diffuse_and_specular), 1.0);
     // o_color = vec4(vec3(shadow), 1.0);

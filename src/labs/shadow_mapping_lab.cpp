@@ -153,9 +153,9 @@ void ShadowMappingLab::on_render()
 
     // render depth of scene to texture from light's perspective
     constexpr float near_plane = 1.0f;
-    constexpr float far_plane = 100.0f;
+    constexpr float far_plane = 150.0f;
     glm::mat4 light_projection =
-        glm::ortho(-100.0f, 100.0f, -100.0f, 100.0f, near_plane, far_plane);
+        glm::ortho(-150.0f, 150.0f, -150.0f, 150.0f, near_plane, far_plane);
     glm::vec3 light_position = _directional_light->position_from_direction(-50.0f);
     glm::mat4 light_view = glm::lookAt(light_position, glm::vec3(0.0f), {0.0f, 1.0f, 0.0f});
     glm::mat4 light_space_matrix = light_projection * light_view;
